@@ -1,0 +1,901 @@
+<<<<<<< HEAD
+Month,Year,Department ,Category,Sub Category,Value
+01,2025,General,General,Expected Revenue,1200000
+01,2025,General,General,Actual Revenue,1150000
+01,2025,General,General,Expected Expense,650000
+01,2025,General,General,Actual Expense,620000
+01,2025,Diagnostics,Diagnostics,Expected Lab Tests,25000
+01,2025,Diagnostics,Diagnostics,Actual Lab Tests,24000
+01,2025,Diagnostics,Diagnostics,Expected Radiology Tests,18000
+01,2025,Diagnostics,Diagnostics,Actual Radiology Tests,17200
+01,2025,Admissions & Discharges,Admissions & Discharges,Expected Admissions,4500
+01,2025,Admissions & Discharges,Admissions & Discharges,Actual Admissions,4300
+01,2025,Admissions & Discharges,Admissions & Discharges,Expected Discharges,4400
+01,2025,Admissions & Discharges,Admissions & Discharges,Actual Discharges,4200
+01,2025,Workforce,Workforce,Expected Joinees,150
+01,2025,Workforce,Workforce,Actual Joinees,140
+01,2025,Workforce,Workforce,Expected Resignations,40
+01,2025,Workforce,Workforce,Actual Resignations,35
+01,2025,Pharmacy,Pharmacy,Expected Issued,120000
+01,2025,Pharmacy,Pharmacy,Actual Issued,115000
+01,2025,Pharmacy,Pharmacy,Expected Expired,2000
+01,2025,Pharmacy,Pharmacy,Actual Expired,1800
+01,2025,Feedback,Feedback,Expected IPDScore,9
+01,2025,Feedback,Feedback,Actual IPDScore,8.5
+01,2025,Feedback,Feedback,Expected OPDScore,9.2
+01,2025,Feedback,Feedback,Actual OPDScore,8.8
+01,2025,Maintenance,Maintenance,Expected Repair Cost,100000
+01,2025,Maintenance,Maintenance,Actual Repair Cost,95000
+01,2025,Maintenance,Maintenance,Expected Purchase Cost,250000
+01,2025,Maintenance,Maintenance,Actual Purchase Cost,240000
+01,2025,General Medicine,Departmental Metrics,Expected Revenue,250000
+01,2025,General Medicine,Departmental Metrics,Actual Revenue,240000
+01,2025,General Medicine,Departmental Metrics,Expected Patients,6000
+01,2025,General Medicine,Departmental Metrics,Actual Patients,4500
+01,2025,General Medicine,Departmental Metrics,Expected Profitability,70000
+01,2025,General Medicine,Departmental Metrics,Actual Profitability,65000
+01,2025,Orthopaedic,Departmental Metrics,Expected Revenue,320000
+01,2025,Orthopaedic,Departmental Metrics,Actual Revenue,310000
+01,2025,Orthopaedic,Departmental Metrics,Expected Patients,4800
+01,2025,Orthopaedic,Departmental Metrics,Actual Patients,7500
+01,2025,Orthopaedic,Departmental Metrics,Expected Profitability,90000
+01,2025,Orthopaedic,Departmental Metrics,Actual Profitability,85000
+01,2025,Dialysis,Departmental Metrics,Expected Revenue,200000
+01,2025,Dialysis,Departmental Metrics,Actual Revenue,195000
+01,2025,Dialysis,Departmental Metrics,Expected Patients,2400
+01,2025,Dialysis,Departmental Metrics,Actual Patients,4220
+01,2025,Dialysis,Departmental Metrics,Expected Profitability,50000
+01,2025,Dialysis,Departmental Metrics,Actual Profitability,42000
+01,2025,Pediatric,Departmental Metrics,Expected Revenue,280000
+01,2025,Pediatric,Departmental Metrics,Actual Revenue,270000
+01,2025,Pediatric,Departmental Metrics,Expected Patients,3000
+01,2025,Pediatric,Departmental Metrics,Actual Patients,1500
+01,2025,Pediatric,Departmental Metrics,Expected Profitability,75000
+01,2025,Pediatric,Departmental Metrics,Actual Profitability,72000
+01,2025,Ophthalmology,Departmental Metrics,Expected Revenue,160000
+01,2025,Ophthalmology,Departmental Metrics,Actual Revenue,155000
+01,2025,Ophthalmology,Departmental Metrics,Expected Patients,2200
+01,2025,Ophthalmology,Departmental Metrics,Actual Patients,1200
+01,2025,Ophthalmology,Departmental Metrics,Expected Profitability,40000
+01,2025,Ophthalmology,Departmental Metrics,Actual Profitability,31000
+01,2025,Homoeopathic,Departmental Metrics,Expected Revenue,100000
+01,2025,Homoeopathic,Departmental Metrics,Actual Revenue,95000
+01,2025,Homoeopathic,Departmental Metrics,Expected Patients,1800
+01,2025,Homoeopathic,Departmental Metrics,Actual Patients,2500
+01,2025,Homoeopathic,Departmental Metrics,Expected Profitability,20000
+01,2025,Homoeopathic,Departmental Metrics,Actual Profitability,18000
+01,2025,Geriatric,Departmental Metrics,Expected Revenue,190000
+01,2025,Geriatric,Departmental Metrics,Actual Revenue,185000
+01,2025,Geriatric,Departmental Metrics,Expected Patients,2000
+01,2025,Geriatric,Departmental Metrics,Actual Patients,990
+01,2025,Geriatric,Departmental Metrics,Expected Profitability,55000
+01,2025,Geriatric,Departmental Metrics,Actual Profitability,53000
+01,2025,Cardiology,Departmental Metrics,Expected Revenue,350000
+01,2025,Cardiology,Departmental Metrics,Actual Revenue,340000
+01,2025,Cardiology,Departmental Metrics,Expected Patients,2500
+01,2025,Cardiology,Departmental Metrics,Actual Patients,660
+01,2025,Cardiology,Departmental Metrics,Expected Profitability,100000
+01,2025,Cardiology,Departmental Metrics,Actual Profitability,77000
+01,2025,Surgery,Departmental Metrics,Expected Revenue,400000
+01,2025,Surgery,Departmental Metrics,Actual Revenue,390000
+01,2025,Surgery,Departmental Metrics,Expected Patients,2700
+01,2025,Surgery,Departmental Metrics,Actual Patients,2350
+01,2025,Surgery,Departmental Metrics,Expected Profitability,120000
+01,2025,Surgery,Departmental Metrics,Actual Profitability,115000
+01,2025,Gynaecology,Departmental Metrics,Expected Revenue,260000
+01,2025,Gynaecology,Departmental Metrics,Actual Revenue,250000
+01,2025,Gynaecology,Departmental Metrics,Expected Patients,3000
+01,2025,Gynaecology,Departmental Metrics,Actual Patients,2780
+01,2025,Gynaecology,Departmental Metrics,Expected Profitability,80000
+01,2025,Gynaecology,Departmental Metrics,Actual Profitability,77000
+01,2025,Neurology,Departmental Metrics,Expected Revenue,300000
+01,2025,Neurology,Departmental Metrics,Actual Revenue,290000
+01,2025,Neurology,Departmental Metrics,Expected Patients,2200
+01,2025,Neurology,Departmental Metrics,Actual Patients,1950
+01,2025,Neurology,Departmental Metrics,Expected Profitability,95000
+01,2025,Neurology,Departmental Metrics,Actual Profitability,90000
+01,2025,Urology,Departmental Metrics,Expected Revenue,240000
+01,2025,Urology,Departmental Metrics,Actual Revenue,230000
+01,2025,Urology,Departmental Metrics,Expected Patients,2000
+01,2025,Urology,Departmental Metrics,Actual Patients,1100
+01,2025,Urology,Departmental Metrics,Expected Profitability,60000
+01,2025,Urology,Departmental Metrics,Actual Profitability,46000
+01,2025,ENT,Departmental Metrics,Expected Revenue,170000
+01,2025,ENT,Departmental Metrics,Actual Revenue,165000
+01,2025,ENT,Departmental Metrics,Expected Patients,2300
+01,2025,ENT,Departmental Metrics,Actual Patients,3460
+01,2025,ENT,Departmental Metrics,Expected Profitability,45000
+01,2025,ENT,Departmental Metrics,Actual Profitability,88000
+01,2025,Gastroenterology,Departmental Metrics,Expected Revenue,290000
+01,2025,Gastroenterology,Departmental Metrics,Actual Revenue,280000
+01,2025,Gastroenterology,Departmental Metrics,Expected Patients,2400
+01,2025,Gastroenterology,Departmental Metrics,Actual Patients,2350
+01,2025,Gastroenterology,Departmental Metrics,Expected Profitability,85000
+01,2025,Gastroenterology,Departmental Metrics,Actual Profitability,80000
+02,2025,General,General,Expected Revenue,1350000
+02,2025,General,General,Actual Revenue,1320000
+02,2025,General,General,Expected Expense,720000
+02,2025,General,General,Actual Expense,710000
+02,2025,Diagnostics,Diagnostics,Expected Lab Tests,26500
+02,2025,Diagnostics,Diagnostics,Actual Lab Tests,25400
+02,2025,Diagnostics,Diagnostics,Expected Radiology Tests,19200
+02,2025,Diagnostics,Diagnostics,Actual Radiology Tests,18700
+02,2025,Admissions & Discharges,Admissions & Discharges,Expected Admissions,4800
+02,2025,Admissions & Discharges,Admissions & Discharges,Actual Admissions,4650
+02,2025,Admissions & Discharges,Admissions & Discharges,Expected Discharges,4700
+02,2025,Admissions & Discharges,Admissions & Discharges,Actual Discharges,4500
+02,2025,Workforce,Workforce,Expected Joinees,160
+02,2025,Workforce,Workforce,Actual Joinees,150
+02,2025,Workforce,Workforce,Expected Resignations,50
+02,2025,Workforce,Workforce,Actual Resignations,45
+02,2025,Pharmacy,Pharmacy,Expected Issued,125000
+02,2025,Pharmacy,Pharmacy,Actual Issued,122000
+02,2025,Pharmacy,Pharmacy,Expected Expired,2200
+02,2025,Pharmacy,Pharmacy,Actual Expired,2000
+02,2025,Feedback,Feedback,Expected IPDScore,9.1
+02,2025,Feedback,Feedback,Actual IPDScore,8.6
+02,2025,Feedback,Feedback,Expected OPDScore,9.3
+02,2025,Feedback,Feedback,Actual OPDScore,8.9
+02,2025,Maintenance,Maintenance,Expected Repair Cost,110000
+02,2025,Maintenance,Maintenance,Actual Repair Cost,105000
+02,2025,Maintenance,Maintenance,Expected Purchase Cost,270000
+02,2025,Maintenance,Maintenance,Actual Purchase Cost,260000
+02,2025,General Medicine,Departmental Metrics,Expected Revenue,270000
+02,2025,General Medicine,Departmental Metrics,Actual Revenue,260000
+02,2025,General Medicine,Departmental Metrics,Expected Patients,6200
+02,2025,General Medicine,Departmental Metrics,Actual Patients,6000
+02,2025,General Medicine,Departmental Metrics,Expected Profitability,72000
+02,2025,General Medicine,Departmental Metrics,Actual Profitability,68000
+02,2025,Orthopaedic,Departmental Metrics,Expected Revenue,340000
+02,2025,Orthopaedic,Departmental Metrics,Actual Revenue,325000
+02,2025,Orthopaedic,Departmental Metrics,Expected Patients,5000
+02,2025,Orthopaedic,Departmental Metrics,Actual Patients,4900
+02,2025,Orthopaedic,Departmental Metrics,Expected Profitability,95000
+02,2025,Orthopaedic,Departmental Metrics,Actual Profitability,90000
+02,2025,Dialysis,Departmental Metrics,Expected Revenue,210000
+02,2025,Dialysis,Departmental Metrics,Actual Revenue,200000
+02,2025,Dialysis,Departmental Metrics,Expected Patients,2600
+02,2025,Dialysis,Departmental Metrics,Actual Patients,2550
+02,2025,Dialysis,Departmental Metrics,Expected Profitability,53000
+02,2025,Dialysis,Departmental Metrics,Actual Profitability,50000
+02,2025,Pediatric,Departmental Metrics,Expected Revenue,300000
+02,2025,Pediatric,Departmental Metrics,Actual Revenue,285000
+02,2025,Pediatric,Departmental Metrics,Expected Patients,3200
+02,2025,Pediatric,Departmental Metrics,Actual Patients,3100
+02,2025,Pediatric,Departmental Metrics,Expected Profitability,78000
+02,2025,Pediatric,Departmental Metrics,Actual Profitability,75000
+02,2025,Ophthalmology,Departmental Metrics,Expected Revenue,175000
+02,2025,Ophthalmology,Departmental Metrics,Actual Revenue,165000
+02,2025,Ophthalmology,Departmental Metrics,Expected Patients,2400
+02,2025,Ophthalmology,Departmental Metrics,Actual Patients,2250
+02,2025,Ophthalmology,Departmental Metrics,Expected Profitability,42000
+02,2025,Ophthalmology,Departmental Metrics,Actual Profitability,40000
+02,2025,Homoeopathic,Departmental Metrics,Expected Revenue,110000
+02,2025,Homoeopathic,Departmental Metrics,Actual Revenue,100000
+02,2025,Homoeopathic,Departmental Metrics,Expected Patients,2000
+02,2025,Homoeopathic,Departmental Metrics,Actual Patients,1900
+02,2025,Homoeopathic,Departmental Metrics,Expected Profitability,22000
+02,2025,Homoeopathic,Departmental Metrics,Actual Profitability,20000
+02,2025,Geriatric,Departmental Metrics,Expected Revenue,210000
+02,2025,Geriatric,Departmental Metrics,Actual Revenue,200000
+02,2025,Geriatric,Departmental Metrics,Expected Patients,2200
+02,2025,Geriatric,Departmental Metrics,Actual Patients,2100
+02,2025,Geriatric,Departmental Metrics,Expected Profitability,58000
+02,2025,Geriatric,Departmental Metrics,Actual Profitability,55000
+02,2025,Cardiology,Departmental Metrics,Expected Revenue,370000
+02,2025,Cardiology,Departmental Metrics,Actual Revenue,350000
+02,2025,Cardiology,Departmental Metrics,Expected Patients,2700
+02,2025,Cardiology,Departmental Metrics,Actual Patients,2600
+02,2025,Cardiology,Departmental Metrics,Expected Profitability,105000
+02,2025,Cardiology,Departmental Metrics,Actual Profitability,100000
+02,2025,Surgery,Departmental Metrics,Expected Revenue,420000
+02,2025,Surgery,Departmental Metrics,Actual Revenue,410000
+02,2025,Surgery,Departmental Metrics,Expected Patients,2900
+02,2025,Surgery,Departmental Metrics,Actual Patients,2800
+02,2025,Surgery,Departmental Metrics,Expected Profitability,125000
+02,2025,Surgery,Departmental Metrics,Actual Profitability,118000
+02,2025,Gynaecology,Departmental Metrics,Expected Revenue,280000
+02,2025,Gynaecology,Departmental Metrics,Actual Revenue,265000
+02,2025,Gynaecology,Departmental Metrics,Expected Patients,265000
+02,2025,Gynaecology,Departmental Metrics,Actual Patients,3100
+02,2025,Gynaecology,Departmental Metrics,Expected Profitability,82000
+02,2025,Gynaecology,Departmental Metrics,Actual Profitability,78000
+02,2025,Neurology,Departmental Metrics,Expected Revenue,320000
+02,2025,Neurology,Departmental Metrics,Actual Revenue,310000
+02,2025,Neurology,Departmental Metrics,Expected Patients,2300
+02,2025,Neurology,Departmental Metrics,Actual Patients,2200
+02,2025,Neurology,Departmental Metrics,Expected Profitability,97000
+02,2025,Neurology,Departmental Metrics,Actual Profitability,92000
+02,2025,Urology,Departmental Metrics,Expected Revenue,260000
+02,2025,Urology,Departmental Metrics,Actual Revenue,250000
+02,2025,Urology,Departmental Metrics,Expected Patients,2200
+02,2025,Urology,Departmental Metrics,Actual Patients,2150
+02,2025,Urology,Departmental Metrics,Expected Profitability,62000
+02,2025,Urology,Departmental Metrics,Actual Profitability,59000
+02,2025,ENT,Departmental Metrics,Expected Revenue,190000
+02,2025,ENT,Departmental Metrics,Actual Revenue,180000
+02,2025,ENT,Departmental Metrics,Expected Patients,2400
+02,2025,ENT,Departmental Metrics,Actual Patients,2300
+02,2025,ENT,Departmental Metrics,Expected Profitability,47000
+02,2025,ENT,Departmental Metrics,Actual Profitability,44000
+02,2025,Gastroenterology,Departmental Metrics,Expected Revenue,310000
+02,2025,Gastroenterology,Departmental Metrics,Actual Revenue,300000
+02,2025,Gastroenterology,Departmental Metrics,Expected Patients,2600
+02,2025,Gastroenterology,Departmental Metrics,Actual Patients,2500
+02,2025,Gastroenterology,Departmental Metrics,Expected Profitability,88000
+02,2025,Gastroenterology,Departmental Metrics,Actual Profitability,83000
+03,2025,General,General,Expected Revenue,10000000
+03,2025,General,General,Actual Revenue,9800000
+03,2025,General,General,Expected Expense,8700000
+03,2025,General,General,Actual Expense,9200000
+03,2025,Diagnostics,Diagnostics,Expected Lab Tests,120000
+03,2025,Diagnostics,Diagnostics,Actual Lab Tests,115000
+03,2025,Diagnostics,Diagnostics,Expected Radiology Tests,95000
+03,2025,Diagnostics,Diagnostics,Actual Radiology Tests,91000
+03,2025,Admissions & Discharges,Admissions & Discharges,Expected Admissions,80000
+03,2025,Admissions & Discharges,Admissions & Discharges,Actual Admissions,78000
+03,2025,Admissions & Discharges,Admissions & Discharges,Expected Discharges,77000
+03,2025,Admissions & Discharges,Admissions & Discharges,Actual Discharges,76000
+03,2025,Workforce,Workforce,Expected Joinees,5000
+03,2025,Workforce,Workforce,Actual Joinees,4800
+03,2025,Workforce,Workforce,Expected Resignations,3000
+03,2025,Workforce,Workforce,Actual Resignations,3100
+03,2025,Pharmacy,Pharmacy,Expected Issued,250000
+03,2025,Pharmacy,Pharmacy,Actual Issued,240000
+03,2025,Pharmacy,Pharmacy,Expected Expired,5000
+03,2025,Pharmacy,Pharmacy,Actual Expired,5300
+03,2025,Feedback,Feedback,Expected IPDScore,9
+03,2025,Feedback,Feedback,Actual IPDScore,7.6
+03,2025,Feedback,Feedback,Expected OPDScore,9.5
+03,2025,Feedback,Feedback,Actual OPDScore,7.2
+03,2025,Maintenance,Maintenance,Expected Repair Cost,3000000
+03,2025,Maintenance,Maintenance,Actual Repair Cost,3200000
+03,2025,Maintenance,Maintenance,Expected Purchase Cost,4500000
+03,2025,Maintenance,Maintenance,Actual Purchase Cost,4600000
+03,2025,General Medicine,Departmental Metrics,Expected Revenue,5000000
+03,2025,General Medicine,Departmental Metrics,Actual Revenue,4800000
+03,2025,General Medicine,Departmental Metrics,Expected Patients,60000
+03,2025,General Medicine,Departmental Metrics,Actual Patients,58000
+03,2025,General Medicine,Departmental Metrics,Expected Profitability,1000000
+03,2025,General Medicine,Departmental Metrics,Actual Profitability,950000
+03,2025,Orthopaedic,Departmental Metrics,Expected Revenue,4000000
+03,2025,Orthopaedic,Departmental Metrics,Actual Revenue,3900000
+03,2025,Orthopaedic,Departmental Metrics,Expected Patients,55000
+03,2025,Orthopaedic,Departmental Metrics,Actual Patients,53000
+03,2025,Orthopaedic,Departmental Metrics,Expected Profitability,900000
+03,2025,Orthopaedic,Departmental Metrics,Actual Profitability,880000
+03,2025,Dialysis,Departmental Metrics,Expected Revenue,3500000
+03,2025,Dialysis,Departmental Metrics,Actual Revenue,3400000
+03,2025,Dialysis,Departmental Metrics,Expected Patients,40000
+03,2025,Dialysis,Departmental Metrics,Actual Patients,39000
+03,2025,Dialysis,Departmental Metrics,Expected Profitability,700000
+03,2025,Dialysis,Departmental Metrics,Actual Profitability,680000
+03,2025,Pediatric,Departmental Metrics,Expected Revenue,3000000
+03,2025,Pediatric,Departmental Metrics,Actual Revenue,2900000
+03,2025,Pediatric,Departmental Metrics,Expected Patients,45000
+03,2025,Pediatric,Departmental Metrics,Actual Patients,44000
+03,2025,Pediatric,Departmental Metrics,Expected Profitability,650000
+03,2025,Pediatric,Departmental Metrics,Actual Profitability,640000
+03,2025,Ophthalmology,Departmental Metrics,Expected Revenue,2800000
+03,2025,Ophthalmology,Departmental Metrics,Actual Revenue,2700000
+03,2025,Ophthalmology,Departmental Metrics,Expected Patients,42000
+03,2025,Ophthalmology,Departmental Metrics,Actual Patients,41000
+03,2025,Ophthalmology,Departmental Metrics,Expected Profitability,600000
+03,2025,Ophthalmology,Departmental Metrics,Actual Profitability,590000
+03,2025,Homoeopathic,Departmental Metrics,Expected Revenue,2200000
+03,2025,Homoeopathic,Departmental Metrics,Actual Revenue,2100000
+03,2025,Homoeopathic,Departmental Metrics,Expected Patients,35000
+03,2025,Homoeopathic,Departmental Metrics,Actual Patients,34000
+03,2025,Homoeopathic,Departmental Metrics,Expected Profitability,450000
+03,2025,Homoeopathic,Departmental Metrics,Actual Profitability,440000
+03,2025,Geriatric,Departmental Metrics,Expected Revenue,2400000
+03,2025,Geriatric,Departmental Metrics,Actual Revenue,2300000
+03,2025,Geriatric,Departmental Metrics,Expected Patients,37000
+03,2025,Geriatric,Departmental Metrics,Actual Patients,36000
+03,2025,Geriatric,Departmental Metrics,Expected Profitability,480000
+03,2025,Geriatric,Departmental Metrics,Actual Profitability,470000
+03,2025,Cardiology,Departmental Metrics,Expected Revenue,5200000
+03,2025,Cardiology,Departmental Metrics,Actual Revenue,5100000
+03,2025,Cardiology,Departmental Metrics,Expected Patients,63000
+03,2025,Cardiology,Departmental Metrics,Actual Patients,62000
+03,2025,Cardiology,Departmental Metrics,Expected Profitability,1050000
+03,2025,Cardiology,Departmental Metrics,Actual Profitability,1020000
+03,2025,Surgery,Departmental Metrics,Expected Revenue,5500000
+03,2025,Surgery,Departmental Metrics,Actual Revenue,5400000
+03,2025,Surgery,Departmental Metrics,Expected Patients,67000
+03,2025,Surgery,Departmental Metrics,Actual Patients,66000
+03,2025,Surgery,Departmental Metrics,Expected Profitability,1100000
+03,2025,Surgery,Departmental Metrics,Actual Profitability,1080000
+03,2025,Gynaecology,Departmental Metrics,Expected Revenue,4600000
+03,2025,Gynaecology,Departmental Metrics,Actual Revenue,4500000
+03,2025,Gynaecology,Departmental Metrics,Expected Patients,58000
+03,2025,Gynaecology,Departmental Metrics,Actual Patients,57000
+03,2025,Gynaecology,Departmental Metrics,Expected Profitability,950000
+03,2025,Gynaecology,Departmental Metrics,Actual Profitability,940000
+03,2025,Neurology,Departmental Metrics,Expected Revenue,4800000
+03,2025,Neurology,Departmental Metrics,Actual Revenue,4700000
+03,2025,Neurology,Departmental Metrics,Expected Patients,60000
+03,2025,Neurology,Departmental Metrics,Actual Patients,59000
+03,2025,Neurology,Departmental Metrics,Expected Profitability,980000
+03,2025,Neurology,Departmental Metrics,Actual Profitability,970000
+03,2025,Urology,Departmental Metrics,Expected Revenue,4300000
+03,2025,Urology,Departmental Metrics,Actual Revenue,4200000
+03,2025,Urology,Departmental Metrics,Expected Patients,54000
+03,2025,Urology,Departmental Metrics,Actual Patients,53000
+03,2025,Urology,Departmental Metrics,Expected Profitability,890000
+03,2025,Urology,Departmental Metrics,Actual Profitability,880000
+03,2025,ENT,Departmental Metrics,Expected Revenue,3000000
+03,2025,ENT,Departmental Metrics,Actual Revenue,2900000
+03,2025,ENT,Departmental Metrics,Expected Patients,43000
+03,2025,ENT,Departmental Metrics,Actual Patients,42000
+03,2025,ENT,Departmental Metrics,Expected Profitability,600000
+03,2025,ENT,Departmental Metrics,Actual Profitability,590000
+03,2025,Gastroenterology,Departmental Metrics,Expected Revenue,4700000
+03,2025,Gastroenterology,Departmental Metrics,Actual Revenue,4600000
+03,2025,Gastroenterology,Departmental Metrics,Expected Patients,61000
+03,2025,Gastroenterology,Departmental Metrics,Actual Patients,60000
+03,2025,Gastroenterology,Departmental Metrics,Expected Profitability,950000
+03,2025,Gastroenterology,Departmental Metrics,Actual Profitability,940000
+03,2025,General,General,Expected Revenue,10000000
+03,2025,General,General,Actual Revenue,9800000
+03,2025,General,General,Expected Expense,8700000
+03,2025,General,General,Actual Expense,9200000
+03,2025,Diagnostics,Diagnostics,Expected Lab Tests,9200000
+03,2025,Diagnostics,Diagnostics,Actual Lab Tests,115000
+03,2025,Diagnostics,Diagnostics,Expected Radiology Tests,95000
+03,2025,Diagnostics,Diagnostics,Actual Radiology Tests,91000
+03,2025,Admissions & Discharges,Admissions & Discharges,Expected Admissions,
+03,2025,Admissions & Discharges,Admissions & Discharges,Actual Admissions,
+03,2025,Admissions & Discharges,Admissions & Discharges,Expected Discharges,
+03,2025,Admissions & Discharges,Admissions & Discharges,Actual Discharges,
+03,2025,Workforce,Workforce,Expected Joinees,
+03,2025,Workforce,Workforce,Actual Joinees,
+03,2025,Workforce,Workforce,Expected Resignations,
+03,2025,Workforce,Workforce,Actual Resignations,
+03,2025,Pharmacy,Pharmacy,Expected Issued,
+03,2025,Pharmacy,Pharmacy,Actual Issued,
+03,2025,Pharmacy,Pharmacy,Expected Expired,
+03,2025,Pharmacy,Pharmacy,Actual Expired,
+03,2025,Feedback,Feedback,Expected IPDScore,
+03,2025,Feedback,Feedback,Actual IPDScore,
+03,2025,Feedback,Feedback,Expected OPDScore,
+03,2025,Feedback,Feedback,Actual OPDScore,
+03,2025,Maintenance,Maintenance,Expected Repair Cost,
+03,2025,Maintenance,Maintenance,Actual Repair Cost,
+03,2025,Maintenance,Maintenance,Expected Purchase Cost,
+03,2025,Maintenance,Maintenance,Actual Purchase Cost,
+03,2025,General Medicine,Departmental Metrics,Expected Revenue,
+03,2025,General Medicine,Departmental Metrics,Actual Revenue,
+03,2025,General Medicine,Departmental Metrics,Expected Patients,
+03,2025,General Medicine,Departmental Metrics,Actual Patients,
+03,2025,General Medicine,Departmental Metrics,Expected Profitability,
+03,2025,General Medicine,Departmental Metrics,Actual Profitability,
+03,2025,Orthopaedic,Departmental Metrics,Expected Revenue,
+03,2025,Orthopaedic,Departmental Metrics,Actual Revenue,
+03,2025,Orthopaedic,Departmental Metrics,Expected Patients,
+03,2025,Orthopaedic,Departmental Metrics,Actual Patients,
+03,2025,Orthopaedic,Departmental Metrics,Expected Profitability,
+03,2025,Orthopaedic,Departmental Metrics,Actual Profitability,
+03,2025,Dialysis,Departmental Metrics,Expected Revenue,
+03,2025,Dialysis,Departmental Metrics,Actual Revenue,
+03,2025,Dialysis,Departmental Metrics,Expected Patients,
+03,2025,Dialysis,Departmental Metrics,Actual Patients,
+03,2025,Dialysis,Departmental Metrics,Expected Profitability,
+03,2025,Dialysis,Departmental Metrics,Actual Profitability,
+03,2025,Pediatric,Departmental Metrics,Expected Revenue,
+03,2025,Pediatric,Departmental Metrics,Actual Revenue,
+03,2025,Pediatric,Departmental Metrics,Expected Patients,
+03,2025,Pediatric,Departmental Metrics,Actual Patients,
+03,2025,Pediatric,Departmental Metrics,Expected Profitability,
+03,2025,Pediatric,Departmental Metrics,Actual Profitability,
+03,2025,Ophthalmology,Departmental Metrics,Expected Revenue,
+03,2025,Ophthalmology,Departmental Metrics,Actual Revenue,
+03,2025,Ophthalmology,Departmental Metrics,Expected Patients,
+03,2025,Ophthalmology,Departmental Metrics,Actual Patients,
+03,2025,Ophthalmology,Departmental Metrics,Expected Profitability,
+03,2025,Ophthalmology,Departmental Metrics,Actual Profitability,
+03,2025,Homoeopathic,Departmental Metrics,Expected Revenue,
+03,2025,Homoeopathic,Departmental Metrics,Actual Revenue,
+03,2025,Homoeopathic,Departmental Metrics,Expected Patients,
+03,2025,Homoeopathic,Departmental Metrics,Actual Patients,
+03,2025,Homoeopathic,Departmental Metrics,Expected Profitability,
+03,2025,Homoeopathic,Departmental Metrics,Actual Profitability,
+03,2025,Geriatric,Departmental Metrics,Expected Revenue,
+03,2025,Geriatric,Departmental Metrics,Actual Revenue,
+03,2025,Geriatric,Departmental Metrics,Expected Patients,
+03,2025,Geriatric,Departmental Metrics,Actual Patients,
+03,2025,Geriatric,Departmental Metrics,Expected Profitability,
+03,2025,Geriatric,Departmental Metrics,Actual Profitability,
+03,2025,Cardiology,Departmental Metrics,Expected Revenue,
+03,2025,Cardiology,Departmental Metrics,Actual Revenue,
+03,2025,Cardiology,Departmental Metrics,Expected Patients,
+03,2025,Cardiology,Departmental Metrics,Actual Patients,
+03,2025,Cardiology,Departmental Metrics,Expected Profitability,
+03,2025,Cardiology,Departmental Metrics,Actual Profitability,
+03,2025,Surgery,Departmental Metrics,Expected Revenue,
+03,2025,Surgery,Departmental Metrics,Actual Revenue,
+03,2025,Surgery,Departmental Metrics,Expected Patients,
+03,2025,Surgery,Departmental Metrics,Actual Patients,
+03,2025,Surgery,Departmental Metrics,Expected Profitability,
+03,2025,Surgery,Departmental Metrics,Actual Profitability,
+03,2025,Gynaecology,Departmental Metrics,Expected Revenue,
+03,2025,Gynaecology,Departmental Metrics,Actual Revenue,
+03,2025,Gynaecology,Departmental Metrics,Expected Patients,
+03,2025,Gynaecology,Departmental Metrics,Actual Patients,
+03,2025,Gynaecology,Departmental Metrics,Expected Profitability,
+03,2025,Gynaecology,Departmental Metrics,Actual Profitability,
+03,2025,Neurology,Departmental Metrics,Expected Revenue,
+03,2025,Neurology,Departmental Metrics,Actual Revenue,
+03,2025,Neurology,Departmental Metrics,Expected Patients,
+03,2025,Neurology,Departmental Metrics,Actual Patients,
+03,2025,Neurology,Departmental Metrics,Expected Profitability,
+03,2025,Neurology,Departmental Metrics,Actual Profitability,
+03,2025,Urology,Departmental Metrics,Expected Revenue,
+03,2025,Urology,Departmental Metrics,Actual Revenue,
+03,2025,Urology,Departmental Metrics,Expected Patients,
+03,2025,Urology,Departmental Metrics,Actual Patients,
+03,2025,Urology,Departmental Metrics,Expected Profitability,
+03,2025,Urology,Departmental Metrics,Actual Profitability,
+03,2025,ENT,Departmental Metrics,Expected Revenue,
+03,2025,ENT,Departmental Metrics,Actual Revenue,
+03,2025,ENT,Departmental Metrics,Expected Patients,
+03,2025,ENT,Departmental Metrics,Actual Patients,
+03,2025,ENT,Departmental Metrics,Expected Profitability,
+03,2025,ENT,Departmental Metrics,Actual Profitability,
+03,2025,Gastroenterology,Departmental Metrics,Expected Revenue,
+03,2025,Gastroenterology,Departmental Metrics,Actual Revenue,
+03,2025,Gastroenterology,Departmental Metrics,Expected Patients,
+03,2025,Gastroenterology,Departmental Metrics,Actual Patients,
+03,2025,Gastroenterology,Departmental Metrics,Expected Profitability,
+03,2025,Gastroenterology,Departmental Metrics,Actual Profitability,
+04,2025,General,General,Expected Revenue,950000
+04,2025,General,General,Actual Revenue,910000
+04,2025,General,General,Expected Expense,850000
+04,2025,General,General,Actual Expense,830000
+04,2025,Diagnostics,Diagnostics,Expected Lab Tests,12500
+04,2025,Diagnostics,Diagnostics,Actual Lab Tests,11980
+04,2025,Diagnostics,Diagnostics,Expected Radiology Tests,8430
+04,2025,Diagnostics,Diagnostics,Actual Radiology Tests,8430
+04,2025,Admissions & Discharges,Admissions & Discharges,Expected Admissions,5400
+04,2025,Admissions & Discharges,Admissions & Discharges,Actual Admissions,5225
+04,2025,Admissions & Discharges,Admissions & Discharges,Expected Discharges,5300
+04,2025,Admissions & Discharges,Admissions & Discharges,Actual Discharges,5090
+04,2025,Workforce,Workforce,Expected Joinees,1800
+04,2025,Workforce,Workforce,Actual Joinees,1172
+04,2025,Workforce,Workforce,Expected Resignations,950
+04,2025,Workforce,Workforce,Actual Resignations,880
+04,2025,Pharmacy,Pharmacy,Expected Issued,178000
+04,2025,Pharmacy,Pharmacy,Actual Issued,172500
+04,2025,Pharmacy,Pharmacy,Expected Expired,3200
+04,2025,Pharmacy,Pharmacy,Actual Expired,3050
+04,2025,Feedback,Feedback,Expected IPDScore,8.9
+04,2025,Feedback,Feedback,Actual IPDScore,8.6
+04,2025,Feedback,Feedback,Expected OPDScore,8.7
+04,2025,Feedback,Feedback,Actual OPDScore,8.4
+04,2025,Maintenance,Maintenance,Expected Repair Cost,145000
+04,2025,Maintenance,Maintenance,Actual Repair Cost,132500
+04,2025,Maintenance,Maintenance,Expected Purchase Cost,310000
+04,2025,Maintenance,Maintenance,Actual Purchase Cost,298000
+04,2025,GeneralMedicine,Departmental Metrics,Expected Revenue,170000
+04,2025,GeneralMedicine,Departmental Metrics,Actual Revenue,162000
+04,2025,GeneralMedicine,Departmental Metrics,Expected Patients,3400
+04,2025,GeneralMedicine,Departmental Metrics,Actual Patients,3300
+04,2025,GeneralMedicine,Departmental Metrics,Expected Profitability,65000
+04,2025,GeneralMedicine,Departmental Metrics,Actual Profitability,62000
+04,2025,Orthopaedic,Departmental Metrics,Expected Revenue,150000
+04,2025,Orthopaedic,Departmental Metrics,Actual Revenue,142500
+04,2025,Orthopaedic,Departmental Metrics,Expected Patients,3100
+04,2025,Orthopaedic,Departmental Metrics,Actual Patients,2975
+04,2025,Orthopaedic,Departmental Metrics,Expected Profitability,58000
+04,2025,Orthopaedic,Departmental Metrics,Actual Profitability,55000
+04,2025,Dialysis,Departmental Metrics,Expected Revenue,120000
+04,2025,Dialysis,Departmental Metrics,Actual Revenue,114000
+04,2025,Dialysis,Departmental Metrics,Expected Patients,2100
+04,2025,Dialysis,Departmental Metrics,Actual Patients,2050
+04,2025,Dialysis,Departmental Metrics,Expected Profitability,47000
+04,2025,Dialysis,Departmental Metrics,Actual Profitability,45000
+04,2025,Pediatric,Departmental Metrics,Expected Revenue,140000
+04,2025,Pediatric,Departmental Metrics,Actual Revenue,135000
+04,2025,Pediatric,Departmental Metrics,Expected Patients,2800
+04,2025,Pediatric,Departmental Metrics,Actual Patients,2725
+04,2025,Pediatric,Departmental Metrics,Expected Profitability,52000
+04,2025,Pediatric,Departmental Metrics,Actual Profitability,50000
+04,2025,Ophthalmology,Departmental Metrics,Expected Revenue,130000
+04,2025,Ophthalmology,Departmental Metrics,Actual Revenue,125000
+04,2025,Ophthalmology,Departmental Metrics,Expected Patients,2600
+04,2025,Ophthalmology,Departmental Metrics,Actual Patients,2550
+04,2025,Ophthalmology,Departmental Metrics,Expected Profitability,48000
+04,2025,Ophthalmology,Departmental Metrics,Actual Profitability,46000
+04,2025,Homoeopathic,Departmental Metrics,Expected Revenue,90000
+04,2025,Homoeopathic,Departmental Metrics,Actual Revenue,87000
+04,2025,Homoeopathic,Departmental Metrics,Expected Patients,1800
+04,2025,Homoeopathic,Departmental Metrics,Actual Patients,1740
+04,2025,Homoeopathic,Departmental Metrics,Expected Profitability,32000
+04,2025,Homoeopathic,Departmental Metrics,Actual Profitability,30000
+04,2025,Geriatric,Departmental Metrics,Expected Revenue,110000
+04,2025,Geriatric,Departmental Metrics,Actual Revenue,105000
+04,2025,Geriatric,Departmental Metrics,Expected Patients,2000
+04,2025,Geriatric,Departmental Metrics,Actual Patients,1950
+04,2025,Geriatric,Departmental Metrics,Expected Profitability,41000
+04,2025,Geriatric,Departmental Metrics,Actual Profitability,39500
+04,2025,Cardiology,Departmental Metrics,Expected Revenue,200000
+04,2025,Cardiology,Departmental Metrics,Actual Revenue,193000
+04,2025,Cardiology,Departmental Metrics,Expected Patients,3700
+04,2025,Cardiology,Departmental Metrics,Actual Patients,3600
+04,2025,Cardiology,Departmental Metrics,Expected Profitability,78000
+04,2025,Cardiology,Departmental Metrics,Actual Profitability,75000
+04,2025,Surgery,Departmental Metrics,Expected Revenue,220000
+04,2025,Surgery,Departmental Metrics,Actual Revenue,212000
+04,2025,Surgery,Departmental Metrics,Expected Patients,4000
+04,2025,Surgery,Departmental Metrics,Actual Patients,3880
+04,2025,Surgery,Departmental Metrics,Expected Profitability,81000
+04,2025,Surgery,Departmental Metrics,Actual Profitability,78000
+04,2025,Gynaecology,Departmental Metrics,Expected Revenue,160000
+04,2025,Gynaecology,Departmental Metrics,Actual Revenue,154000
+04,2025,Gynaecology,Departmental Metrics,Expected Patients,3000
+04,2025,Gynaecology,Departmental Metrics,Actual Patients,2900
+04,2025,Gynaecology,Departmental Metrics,Expected Profitability,60000
+04,2025,Gynaecology,Departmental Metrics,Actual Profitability,58000
+04,2025,Neurology,Departmental Metrics,Expected Revenue,175000
+04,2025,Neurology,Departmental Metrics,Actual Revenue,169000
+04,2025,Neurology,Departmental Metrics,Expected Patients,3200
+04,2025,Neurology,Departmental Metrics,Actual Patients,3100
+04,2025,Neurology,Departmental Metrics,Expected Profitability,67000
+04,2025,Neurology,Departmental Metrics,Actual Profitability,64500
+04,2025,Urology,Departmental Metrics,Expected Revenue,145000
+04,2025,Urology,Departmental Metrics,Actual Revenue,139000
+04,2025,Urology,Departmental Metrics,Expected Patients,2750
+04,2025,Urology,Departmental Metrics,Actual Patients,2650
+04,2025,Urology,Departmental Metrics,Expected Profitability,55000
+04,2025,Urology,Departmental Metrics,Actual Profitability,52500
+04,2025,ENT,Departmental Metrics,Expected Revenue,100000
+04,2025,ENT,Departmental Metrics,Actual Revenue,96000
+04,2025,ENT,Departmental Metrics,Expected Patients,2100
+04,2025,ENT,Departmental Metrics,Actual Patients,2050
+04,2025,ENT,Departmental Metrics,Expected Profitability,38000
+04,2025,ENT,Departmental Metrics,Actual Profitability,36000
+04,2025,Gastroenterology,Departmental Metrics,Expected Revenue,155000
+04,2025,Gastroenterology,Departmental Metrics,Actual Revenue,149000
+04,2025,Gastroenterology,Departmental Metrics,Expected Patients,2900
+04,2025,Gastroenterology,Departmental Metrics,Actual Patients,2900
+04,2025,Gastroenterology,Departmental Metrics,Expected Profitability,61000
+04,2025,Gastroenterology,Departmental Metrics,Actual Profitability,58500
+=======
+Month,Department ,Category,Sub Category,Value
+Jan-25,General,General,Expected Revenue,500000
+Jan-25,General,General,Actual Revenue,480000
+Jan-25,General,General,Expected Expense,480000
+Jan-25,General,General,Actual Expense,330000
+Jan-25,Diagnostics,Diagnostics,Expected Lab Tests,25000
+Jan-25,Diagnostics,Diagnostics,Actual Lab Tests,20000
+Jan-25,Diagnostics,Diagnostics,Expected Radiology Tests,19500
+Jan-25,Diagnostics,Diagnostics,Actual Radiology Tests,12000
+Jan-25,Admissions & Discharges,Admissions & Discharges,Expected Admissions,2000
+Jan-25,Admissions & Discharges,Admissions & Discharges,Actual Admissions,1900
+Jan-25,Admissions & Discharges,Admissions & Discharges,Expected Discharges,2000
+Jan-25,Admissions & Discharges,Admissions & Discharges,Actual Discharges,2200
+Jan-25,Workforce,Workforce,Expected Joinees,300
+Jan-25,Workforce,Workforce,Actual Joinees,290
+Jan-25,Workforce,Workforce,Expected Resignations,100
+Jan-25,Workforce,Workforce,Actual Resignations,120
+Jan-25,Pharmacy,Pharmacy,Expected Drug Issued,80000
+Jan-25,Pharmacy,Pharmacy,Actual Drug Issued,78000
+Jan-25,Pharmacy,Pharmacy,Expected Drug Expired,3000
+Jan-25,Pharmacy,Pharmacy,Actual Drug Expired,2800
+Jan-25,Feedback,Feedback,Expected IPDScore,9.2
+Jan-25,Feedback,Feedback,Actual IPDScore,9
+Jan-25,Feedback,Feedback,Expected OPDScore,8
+Jan-25,Feedback,Feedback,Actual OPDScore,7.8
+Jan-25,Maintenance,Maintenance,Expected Repair Cost,7000
+Jan-25,Maintenance,Maintenance,Actual Repair Cost,6900
+Jan-25,Maintenance,Maintenance,Expected Purchase Cost,80000
+Jan-25,Maintenance,Maintenance,Actual Purchase Cost,76550
+Jan-25,General Medicine,Departmental Metrics,Expected Revenue,100000
+Jan-25,General Medicine,Departmental Metrics,Actual Revenue,95000
+Jan-25,General Medicine,Departmental Metrics,Expected Patients,6000
+Jan-25,General Medicine,Departmental Metrics,Actual Patients,5700
+Jan-25,General Medicine,Departmental Metrics,Expected Profitability,40000
+Jan-25,General Medicine,Departmental Metrics,Actual Profitability,38000
+Jan-25,Orthopaedic,Departmental Metrics,Expected Revenue,90000
+Jan-25,Orthopaedic,Departmental Metrics,Actual Revenue,85000
+Jan-25,Orthopaedic,Departmental Metrics,Expected Patients,2500
+Jan-25,Orthopaedic,Departmental Metrics,Actual Patients,2400
+Jan-25,Orthopaedic,Departmental Metrics,Expected Profitability,32000
+Jan-25,Orthopaedic,Departmental Metrics,Actual Profitability,30000
+Jan-25,Dialysis,Departmental Metrics,Expected Revenue,70000
+Jan-25,Dialysis,Departmental Metrics,Actual Revenue,68000
+Jan-25,Dialysis,Departmental Metrics,Expected Patients,1800
+Jan-25,Dialysis,Departmental Metrics,Actual Patients,1750
+Jan-25,Dialysis,Departmental Metrics,Expected Profitability,25000
+Jan-25,Dialysis,Departmental Metrics,Actual Profitability,24000
+Jan-25,Pediatric,Departmental Metrics,Expected Revenue,50000
+Jan-25,Pediatric,Departmental Metrics,Actual Revenue,48000
+Jan-25,Pediatric,Departmental Metrics,Expected Patients,1500
+Jan-25,Pediatric,Departmental Metrics,Actual Patients,1450
+Jan-25,Pediatric,Departmental Metrics,Expected Profitability,18000
+Jan-25,Pediatric,Departmental Metrics,Actual Profitability,17500
+Jan-25,Ophthalmology,Departmental Metrics,Expected Revenue,60000
+Jan-25,Ophthalmology,Departmental Metrics,Actual Revenue,57000
+Jan-25,Ophthalmology,Departmental Metrics,Expected Patients,1200
+Jan-25,Ophthalmology,Departmental Metrics,Actual Patients,1150
+Jan-25,Ophthalmology,Departmental Metrics,Expected Profitability,22000
+Jan-25,Ophthalmology,Departmental Metrics,Actual Profitability,20000
+Jan-25,Homoeopathic,Departmental Metrics,Expected Revenue,40000
+Jan-25,Homoeopathic,Departmental Metrics,Actual Revenue,38000
+Jan-25,Homoeopathic,Departmental Metrics,Expected Patients,1000
+Jan-25,Homoeopathic,Departmental Metrics,Actual Patients,950
+Jan-25,Homoeopathic,Departmental Metrics,Expected Profitability,14000
+Jan-25,Homoeopathic,Departmental Metrics,Actual Profitability,13000
+Jan-25,Geriatric,Departmental Metrics,Expected Revenue,45000
+Jan-25,Geriatric,Departmental Metrics,Actual Revenue,43000
+Jan-25,Geriatric,Departmental Metrics,Expected Patients,1200
+Jan-25,Geriatric,Departmental Metrics,Actual Patients,1150
+Jan-25,Geriatric,Departmental Metrics,Expected Profitability,15000
+Jan-25,Geriatric,Departmental Metrics,Actual Profitability,14000
+Jan-25,Cardiology,Departmental Metrics,Expected Revenue,80000
+Jan-25,Cardiology,Departmental Metrics,Actual Revenue,77000
+Jan-25,Cardiology,Departmental Metrics,Expected Patients,1800
+Jan-25,Cardiology,Departmental Metrics,Actual Patients,1750
+Jan-25,Cardiology,Departmental Metrics,Expected Profitability,30000
+Jan-25,Cardiology,Departmental Metrics,Actual Profitability,29000
+Jan-25,Surgery,Departmental Metrics,Expected Revenue,100000
+Jan-25,Surgery,Departmental Metrics,Actual Revenue,95000
+Jan-25,Surgery,Departmental Metrics,Expected Patients,3000
+Jan-25,Surgery,Departmental Metrics,Actual Patients,2800
+Jan-25,Surgery,Departmental Metrics,Expected Profitability,35000
+Jan-25,Surgery,Departmental Metrics,Actual Profitability,34000
+Jan-25,Gynaecology,Departmental Metrics,Expected Revenue,50000
+Jan-25,Gynaecology,Departmental Metrics,Actual Revenue,48000
+Jan-25,Gynaecology,Departmental Metrics,Expected Patients,1500
+Jan-25,Gynaecology,Departmental Metrics,Actual Patients,1400
+Jan-25,Gynaecology,Departmental Metrics,Expected Profitability,20000
+Jan-25,Gynaecology,Departmental Metrics,Actual Profitability,19000
+Jan-25,Neurology,Departmental Metrics,Expected Revenue,60000
+Jan-25,Neurology,Departmental Metrics,Actual Revenue,58000
+Jan-25,Neurology,Departmental Metrics,Expected Patients,1200
+Jan-25,Neurology,Departmental Metrics,Actual Patients,1150
+Jan-25,Neurology,Departmental Metrics,Expected Profitability,22000
+Jan-25,Neurology,Departmental Metrics,Actual Profitability,21000
+Jan-25,Urology,Departmental Metrics,Expected Revenue,70000
+Jan-25,Urology,Departmental Metrics,Actual Revenue,67000
+Jan-25,Urology,Departmental Metrics,Expected Patients,1500
+Jan-25,Urology,Departmental Metrics,Actual Patients,1400
+Jan-25,Urology,Departmental Metrics,Expected Profitability,25000
+Jan-25,Urology,Departmental Metrics,Actual Profitability,24000
+Jan-25,ENT,Departmental Metrics,Expected Revenue,55000
+Jan-25,ENT,Departmental Metrics,Actual Revenue,52000
+Jan-25,ENT,Departmental Metrics,Expected Patients,1200
+Jan-25,ENT,Departmental Metrics,Actual Patients,800
+Jan-25,ENT,Departmental Metrics,Expected Profitability,20000
+Jan-25,ENT,Departmental Metrics,Actual Profitability,16500
+Jan-25,Gastroenterology,Departmental Metrics,Expected Revenue,60000
+Jan-25,Gastroenterology,Departmental Metrics,Actual Revenue,58000
+Jan-25,Gastroenterology,Departmental Metrics,Expected Patients,1300
+Jan-25,Gastroenterology,Departmental Metrics,Actual Patients,1200
+Jan-25,Gastroenterology,Departmental Metrics,Expected Profitability,23000
+Jan-25,Gastroenterology,Departmental Metrics,Actual Profitability,22000
+February,2025,General,General,Expected Revenue,1500000
+February,2025,General,General,Actual Revenue,1455000
+February,2025,General,General,Expected Expense,950000
+February,2025,General,General,Actual Expense,970000
+February,2025,Diagnostics,Diagnostics,Expected Lab Tests,85000
+February,2025,Diagnostics,Diagnostics,Actual Lab Tests,82500
+February,2025,Diagnostics,Diagnostics,Expected Radiology Tests,32000
+February,2025,Diagnostics,Diagnostics,Actual Radiology Tests,31000
+February,2025,Admissions & Discharges,Admissions & Discharges,Expected Admissions,18000
+February,2025,Admissions & Discharges,Admissions & Discharges,Actual Admissions,17400
+February,2025,Admissions & Discharges,Admissions & Discharges,Expected Discharges,17800
+February,2025,Admissions & Discharges,Admissions & Discharges,Actual Discharges,17250
+February,2025,Workforce,Workforce,Expected Joinees,1200
+February,2025,Workforce,Workforce,Actual Joinees,1100
+February,2025,Workforce,Workforce,Expected Resignations,300
+February,2025,Workforce,Workforce,Actual Resignations,320
+February,2025,Pharmacy,Pharmacy,Expected Drug Issued,230000
+February,2025,Pharmacy,Pharmacy,Actual Drug Issued,225000
+February,2025,Pharmacy,Pharmacy,Expected Drug Expired,15000
+February,2025,Pharmacy,Pharmacy,Actual Drug Expired,14000
+February,2025,Feedback,Feedback,Expected IPDScore,9.2
+February,2025,Feedback,Feedback,Actual IPDScore,8.9
+February,2025,Feedback,Feedback,Expected OPDScore,9.4
+February,2025,Feedback,Feedback,Actual OPDScore,9.1
+February,2025,Maintenance,Maintenance,Expected Repair Cost,250000
+February,2025,Maintenance,Maintenance,Actual Repair Cost,240000
+February,2025,Maintenance,Maintenance,Expected Purchase Cost,750000
+February,2025,Maintenance,Maintenance,Actual Purchase Cost,730000
+February,2025,General Medicine,Departmental Metrics,Expected Revenue,350000
+February,2025,General Medicine,Departmental Metrics,Actual Revenue,345000
+February,2025,General Medicine,Departmental Metrics,Expected Patients,5200
+February,2025,General Medicine,Departmental Metrics,Actual Patients,5100
+February,2025,General Medicine,Departmental Metrics,Expected Profitability,105000
+February,2025,General Medicine,Departmental Metrics,Actual Profitability,98000
+February,2025,Orthopaedic,Departmental Metrics,Expected Revenue,300000
+February,2025,Orthopaedic,Departmental Metrics,Actual Revenue,295000
+February,2025,Orthopaedic,Departmental Metrics,Expected Patients,4500
+February,2025,Orthopaedic,Departmental Metrics,Actual Patients,4400
+February,2025,Orthopaedic,Departmental Metrics,Expected Profitability,95000
+February,2025,Orthopaedic,Departmental Metrics,Actual Profitability,91000
+February,2025,Dialysis,Departmental Metrics,Expected Revenue,280000
+February,2025,Dialysis,Departmental Metrics,Actual Revenue,275000
+February,2025,Dialysis,Departmental Metrics,Expected Patients,4100
+February,2025,Dialysis,Departmental Metrics,Actual Patients,4000
+February,2025,Dialysis,Departmental Metrics,Expected Profitability,90000
+February,2025,Dialysis,Departmental Metrics,Actual Profitability,87000
+February,2025,Pediatric,Departmental Metrics,Expected Revenue,310000
+February,2025,Pediatric,Departmental Metrics,Actual Revenue,305000
+February,2025,Pediatric,Departmental Metrics,Expected Patients,4600
+February,2025,Pediatric,Departmental Metrics,Actual Patients,4500
+February,2025,Pediatric,Departmental Metrics,Expected Profitability,97000
+February,2025,Pediatric,Departmental Metrics,Actual Profitability,93000
+February,2025,Ophthalmology,Departmental Metrics,Expected Revenue,290000
+February,2025,Ophthalmology,Departmental Metrics,Actual Revenue,285000
+February,2025,Ophthalmology,Departmental Metrics,Expected Patients,4300
+February,2025,Ophthalmology,Departmental Metrics,Actual Patients,4200
+February,2025,Ophthalmology,Departmental Metrics,Expected Profitability,94000
+February,2025,Ophthalmology,Departmental Metrics,Actual Profitability,90000
+February,2025,Homoeopathic,Departmental Metrics,Expected Revenue,160000
+February,2025,Homoeopathic,Departmental Metrics,Actual Revenue,155000
+February,2025,Homoeopathic,Departmental Metrics,Expected Patients,2700
+February,2025,Homoeopathic,Departmental Metrics,Actual Patients,2600
+February,2025,Homoeopathic,Departmental Metrics,Expected Profitability,48000
+February,2025,Homoeopathic,Departmental Metrics,Actual Profitability,45000
+February,2025,Geriatric,Departmental Metrics,Expected Revenue,180000
+February,2025,Geriatric,Departmental Metrics,Actual Revenue,175000
+February,2025,Geriatric,Departmental Metrics,Expected Patients,3000
+February,2025,Geriatric,Departmental Metrics,Actual Patients,2900
+February,2025,Geriatric,Departmental Metrics,Expected Profitability,52000
+February,2025,Geriatric,Departmental Metrics,Actual Profitability,49000
+February,2025,Cardiology,Departmental Metrics,Expected Revenue,450000
+February,2025,Cardiology,Departmental Metrics,Actual Revenue,440000
+February,2025,Cardiology,Departmental Metrics,Expected Patients,6000
+February,2025,Cardiology,Departmental Metrics,Actual Patients,5900
+February,2025,Cardiology,Departmental Metrics,Expected Profitability,140000
+February,2025,Cardiology,Departmental Metrics,Actual Profitability,135000
+February,2025,Surgery,Departmental Metrics,Expected Revenue,550000
+February,2025,Surgery,Departmental Metrics,Actual Revenue,540000
+February,2025,Surgery,Departmental Metrics,Expected Patients,7000
+February,2025,Surgery,Departmental Metrics,Actual Patients,6900
+February,2025,Surgery,Departmental Metrics,Expected Profitability,160000
+February,2025,Surgery,Departmental Metrics,Actual Profitability,155000
+February,2025,Gynaecology,Departmental Metrics,Expected Revenue,320000
+February,2025,Gynaecology,Departmental Metrics,Actual Revenue,315000
+February,2025,Gynaecology,Departmental Metrics,Expected Patients,4700
+February,2025,Gynaecology,Departmental Metrics,Actual Patients,4600
+February,2025,Gynaecology,Departmental Metrics,Expected Profitability,99000
+February,2025,Gynaecology,Departmental Metrics,Actual Profitability,95000
+February,2025,Neurology,Departmental Metrics,Expected Revenue,370000
+February,2025,Neurology,Departmental Metrics,Actual Revenue,365000
+February,2025,Neurology,Departmental Metrics,Expected Patients,5100
+February,2025,Neurology,Departmental Metrics,Actual Patients,5000
+February,2025,Neurology,Departmental Metrics,Expected Profitability,110000
+February,2025,Neurology,Departmental Metrics,Actual Profitability,105000
+February,2025,Urology,Departmental Metrics,Expected Revenue,330000
+February,2025,Urology,Departmental Metrics,Actual Revenue,325000
+February,2025,Urology,Departmental Metrics,Expected Patients,4800
+February,2025,Urology,Departmental Metrics,Actual Patients,4700
+February,2025,Urology,Departmental Metrics,Expected Profitability,100000
+February,2025,Urology,Departmental Metrics,Actual Profitability,97000
+February,2025,ENT,Departmental Metrics,Expected Revenue,270000
+February,2025,ENT,Departmental Metrics,Actual Revenue,265000
+February,2025,ENT,Departmental Metrics,Expected Patients,3900
+February,2025,ENT,Departmental Metrics,Actual Patients,3800
+February,2025,ENT,Departmental Metrics,Expected Profitability,82000
+February,2025,ENT,Departmental Metrics,Actual Profitability,79000
+February,2025,Gastroenterology,Departmental Metrics,Expected Revenue,360000
+February,2025,Gastroenterology,Departmental Metrics,Actual Revenue,355000
+February,2025,Gastroenterology,Departmental Metrics,Expected Patients,5200
+February,2025,Gastroenterology,Departmental Metrics,Actual Patients,5200
+February,2025,Gastroenterology,Departmental Metrics,Expected Profitability,108000
+February,2025,Gastroenterology,Departmental Metrics,Actual Profitability,104000
+March,2025,General,General,Expected Revenue,1500000
+March,2025,General,General,Actual Revenue,1455000
+March,2025,General,General,Expected Expense,950000
+March,2025,General,General,Actual Expense,970000
+March,2025,Diagnostics,Diagnostics,Expected Lab Tests,85000
+March,2025,Diagnostics,Diagnostics,Actual Lab Tests,82500
+March,2025,Diagnostics,Diagnostics,Expected Radiology Tests,32000
+March,2025,Diagnostics,Diagnostics,Actual Radiology Tests,31000
+March,2025,Admissions & Discharges,Admissions & Discharges,Expected Admissions,18000
+March,2025,Admissions & Discharges,Admissions & Discharges,Actual Admissions,17400
+March,2025,Admissions & Discharges,Admissions & Discharges,Expected Discharges,17800
+March,2025,Admissions & Discharges,Admissions & Discharges,Actual Discharges,17250
+March,2025,Workforce,Workforce,Expected Joinees,1200
+March,2025,Workforce,Workforce,Actual Joinees,1100
+March,2025,Workforce,Workforce,Expected Resignations,300
+March,2025,Workforce,Workforce,Actual Resignations,320
+March,2025,Pharmacy,Pharmacy,Expected Drug Issued,230000
+March,2025,Pharmacy,Pharmacy,Actual Drug Issued,225000
+March,2025,Pharmacy,Pharmacy,Expected Drug Expired,15000
+March,2025,Pharmacy,Pharmacy,Actual Drug Expired,14000
+March,2025,Feedback,Feedback,Expected IPDScore,9.2
+March,2025,Feedback,Feedback,Actual IPDScore,8.9
+March,2025,Feedback,Feedback,Expected OPDScore,9.4
+March,2025,Feedback,Feedback,Actual OPDScore,9.1
+March,2025,Maintenance,Maintenance,Expected Repair Cost,250000
+March,2025,Maintenance,Maintenance,Actual Repair Cost,240000
+March,2025,Maintenance,Maintenance,Expected Purchase Cost,750000
+March,2025,Maintenance,Maintenance,Actual Purchase Cost,730000
+March,2025,General Medicine,Departmental Metrics,Expected Revenue,350000
+March,2025,General Medicine,Departmental Metrics,Actual Revenue,345000
+March,2025,General Medicine,Departmental Metrics,Expected Patients,5200
+March,2025,General Medicine,Departmental Metrics,Actual Patients,5100
+March,2025,General Medicine,Departmental Metrics,Expected Profitability,105000
+March,2025,General Medicine,Departmental Metrics,Actual Profitability,98000
+March,2025,Orthopaedic,Departmental Metrics,Expected Revenue,300000
+March,2025,Orthopaedic,Departmental Metrics,Actual Revenue,295000
+March,2025,Orthopaedic,Departmental Metrics,Expected Patients,4500
+March,2025,Orthopaedic,Departmental Metrics,Actual Patients,4400
+March,2025,Orthopaedic,Departmental Metrics,Expected Profitability,95000
+March,2025,Orthopaedic,Departmental Metrics,Actual Profitability,91000
+March,2025,Dialysis,Departmental Metrics,Expected Revenue,280000
+March,2025,Dialysis,Departmental Metrics,Actual Revenue,275000
+March,2025,Dialysis,Departmental Metrics,Expected Patients,4100
+March,2025,Dialysis,Departmental Metrics,Actual Patients,4000
+March,2025,Dialysis,Departmental Metrics,Expected Profitability,90000
+March,2025,Dialysis,Departmental Metrics,Actual Profitability,87000
+March,2025,Pediatric,Departmental Metrics,Expected Revenue,310000
+March,2025,Pediatric,Departmental Metrics,Actual Revenue,305000
+March,2025,Pediatric,Departmental Metrics,Expected Patients,4600
+March,2025,Pediatric,Departmental Metrics,Actual Patients,4500
+March,2025,Pediatric,Departmental Metrics,Expected Profitability,97000
+March,2025,Pediatric,Departmental Metrics,Actual Profitability,93000
+March,2025,Ophthalmology,Departmental Metrics,Expected Revenue,290000
+March,2025,Ophthalmology,Departmental Metrics,Actual Revenue,285000
+March,2025,Ophthalmology,Departmental Metrics,Expected Patients,4300
+March,2025,Ophthalmology,Departmental Metrics,Actual Patients,4200
+March,2025,Ophthalmology,Departmental Metrics,Expected Profitability,94000
+March,2025,Ophthalmology,Departmental Metrics,Actual Profitability,90000
+March,2025,Homoeopathic,Departmental Metrics,Expected Revenue,160000
+March,2025,Homoeopathic,Departmental Metrics,Actual Revenue,155000
+March,2025,Homoeopathic,Departmental Metrics,Expected Patients,2700
+March,2025,Homoeopathic,Departmental Metrics,Actual Patients,2600
+March,2025,Homoeopathic,Departmental Metrics,Expected Profitability,48000
+March,2025,Homoeopathic,Departmental Metrics,Actual Profitability,45000
+March,2025,Geriatric,Departmental Metrics,Expected Revenue,180000
+March,2025,Geriatric,Departmental Metrics,Actual Revenue,180000
+March,2025,Geriatric,Departmental Metrics,Expected Patients,3000
+March,2025,Geriatric,Departmental Metrics,Actual Patients,2900
+March,2025,Geriatric,Departmental Metrics,Expected Profitability,52000
+March,2025,Geriatric,Departmental Metrics,Actual Profitability,49000
+March,2025,Cardiology,Departmental Metrics,Expected Revenue,450000
+March,2025,Cardiology,Departmental Metrics,Actual Revenue,440000
+March,2025,Cardiology,Departmental Metrics,Expected Patients,6000
+March,2025,Cardiology,Departmental Metrics,Actual Patients,5900
+March,2025,Cardiology,Departmental Metrics,Expected Profitability,140000
+March,2025,Cardiology,Departmental Metrics,Actual Profitability,135000
+March,2025,Surgery,Departmental Metrics,Expected Revenue,550000
+March,2025,Surgery,Departmental Metrics,Actual Revenue,540000
+March,2025,Surgery,Departmental Metrics,Expected Patients,7000
+March,2025,Surgery,Departmental Metrics,Actual Patients,6900
+March,2025,Surgery,Departmental Metrics,Expected Profitability,160000
+March,2025,Surgery,Departmental Metrics,Actual Profitability,155000
+March,2025,Gynaecology,Departmental Metrics,Expected Revenue,320000
+March,2025,Gynaecology,Departmental Metrics,Actual Revenue,315000
+March,2025,Gynaecology,Departmental Metrics,Expected Patients,4700
+March,2025,Gynaecology,Departmental Metrics,Actual Patients,4600
+March,2025,Gynaecology,Departmental Metrics,Expected Profitability,99000
+March,2025,Gynaecology,Departmental Metrics,Actual Profitability,95000
+March,2025,Neurology,Departmental Metrics,Expected Revenue,370000
+March,2025,Neurology,Departmental Metrics,Actual Revenue,365000
+March,2025,Neurology,Departmental Metrics,Expected Patients,5100
+March,2025,Neurology,Departmental Metrics,Actual Patients,5000
+March,2025,Neurology,Departmental Metrics,Expected Profitability,110000
+March,2025,Neurology,Departmental Metrics,Actual Profitability,105000
+March,2025,Urology,Departmental Metrics,Expected Revenue,330000
+March,2025,Urology,Departmental Metrics,Actual Revenue,325000
+March,2025,Urology,Departmental Metrics,Expected Patients,4800
+March,2025,Urology,Departmental Metrics,Actual Patients,4700
+March,2025,Urology,Departmental Metrics,Expected Profitability,100000
+March,2025,Urology,Departmental Metrics,Actual Profitability,97000
+March,2025,ENT,Departmental Metrics,Expected Revenue,270000
+March,2025,ENT,Departmental Metrics,Actual Revenue,265000
+March,2025,ENT,Departmental Metrics,Expected Patients,3900
+March,2025,ENT,Departmental Metrics,Actual Patients,3800
+March,2025,ENT,Departmental Metrics,Expected Profitability,82000
+March,2025,ENT,Departmental Metrics,Actual Profitability,79000
+March,2025,Gastroenterology,Departmental Metrics,Expected Revenue,360000
+March,2025,Gastroenterology,Departmental Metrics,Actual Revenue,355000
+March,2025,Gastroenterology,Departmental Metrics,Expected Patients,5200
+March,2025,Gastroenterology,Departmental Metrics,Actual Patients,4800
+March,2025,Gastroenterology,Departmental Metrics,Expected Profitability,108000
+March,2025,Gastroenterology,Departmental Metrics,Actual Profitability,104000
+>>>>>>> 2b3e097 (Initial commit with new files)
