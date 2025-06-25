@@ -1,0 +1,28 @@
+.tab-container {
+    display: flex;
+    justify-content: flex-end; /* Right-align tabs */
+    align-items: center;
+    gap: 2rem; /* Increased spacing between tabs */
+    padding: 1rem 3rem 1rem 1rem; /* More right padding */
+    background-color: #143E85; /* Blue background */
+    border-bottom: none; /* Optional: remove bottom border */
+  }
+  .tab {
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    font-weight: 600;
+    cursor: pointer;
+    color: white; /* White text for contrast */
+    border-bottom: 3px solid transparent;
+    font-size: 1rem; /* Increase if needed */
+    transition: all 0.2s ease;
+  }
+  .tab.active {
+    border-bottom-color: white;
+    color: #e0e7ff; /* Light Indigo */
+  }
+  .tab-content {
+    padding: 20px;
+    text-align: center;
+  }

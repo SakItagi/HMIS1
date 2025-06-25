@@ -1,0 +1,304 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base layout */
+body, html, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: #f2f7fd;
+  font-family: 'Inter', sans-serif;
+  position: relative;
+}
+
+/* Top and Bottom Bars */
+    .top-bar,
+    .bottom-bar {
+      height: 30px;
+      width: 100vw; /* Full viewport width */
+  background-color: #143E85
+  ; /* Tailwind blue-500 */
+  margin: 0;
+  padding: 0;
+    }
+
+.top-bar {
+  position: fixed; /* or sticky */
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.bottom-bar {
+  bottom: 0;
+}
+
+/* Make room for the bars */
+.app-content {
+  padding-top: 100px;
+  padding-bottom: 100px;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* or 'center' */
+}
+/* Section container */
+.section {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Section divider */
+.section-divider {
+  border-bottom: 2px solid #e0e7ff;
+  margin: 2rem 0;
+}
+
+/* Center headings and labels */
+h1, h2, h3, label, p {
+  text-align: center;
+  color: #1e3a8a;
+}
+
+/* Headings */
+h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #1e3a8a;
+}
+
+h2, h3 {
+  color: #1e3a8a ;
+}
+
+/* Form styling */
+form {
+  width: 100%;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+form {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+
+.form-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* Centers input fields horizontally */
+  margin-bottom: 40px;
+}
+
+.input-group {
+  width: 100%;
+  max-width: 300px; /* Consistent size for each field */
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+/* Inputs and selects */
+input, select {
+  background-color: #ffffff;
+  border: 1px solid #cbd5e0;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  width: 100%;
+  max-width: 300px;
+  margin: 0.5rem 0;
+
+  }
+
+
+input:focus, select:focus {
+  outline: none;
+  border-color: #1e3a8a; /* indigo-500 */
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+/* Buttons */
+button {
+  background-color: #1e3a8a  ;
+  color: white;
+  padding: 0.5rem 1rem;
+  margin: 0.5rem;
+  transition: background-color 0.3s ease;
+  border: none;              /* <--- Remove borders */
+  box-shadow: none;          /* <--- Remove 3D or inset shadows */
+  outline: none; 
+  font-size: 1.250rem; /* Increased font size (e.g., 18px) */
+  font-weight: 500;
+  border-radius: 0.375rem;
+}
+
+button:hover {
+  background-color: #4338ca;
+}
+
+/* Grid alignment */
+.button-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 6rem; /* Now this works */
+  justify-content: end;
+  padding-right: 4rem;
+}
+
+.top-bar-buttons {
+  display: flex;
+  justify-content: space-evenly;  /* 👈 This centers the buttons horizontally */
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  gap: 2rem; /* Optional: adds spacing between buttons */
+}
+
+.top-bar-buttons button {
+  margin: 0 10px; /* space between buttons */
+}
+
+.bottom-bar {
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  z-index: 1000;
+}
+
+
+.tab-container {
+  display: flex;
+  justify-content: center;
+  gap: 1rem; /* spacing between tabs */
+  flex-wrap: wrap; /* allow wrapping on small screens */
+  padding: 1rem 0;
+}
+
+.tab {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  background-color: #f3f4f6; /* light gray */
+  transition: background-color 0.2s;
+  cursor: pointer;
+}
+
+.tab:hover {
+  background-color: #e5e7eb; /* slightly darker on hover */
+}
+
+.submit-button {
+  background-color: #28a745; /* Bootstrap green */
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: fit-content;
+  margin: auto;
+}
+
+.message {
+  color: #003366;
+  margin-bottom: 16px;
+  font-size: 16px;
+}
+
+.close-button {
+  background-color: #1f3f91;
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.modal-content {
+  width: 100%;
+}
+
+.sidebar-scroll::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+.sidebar-scroll {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+
+::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+  background: transparent;
+}
+
+* {
+  scrollbar-width: none;           /* Firefox */
+  -ms-overflow-style: none;        /* IE/Edge */
+}
+
+/* Stylized Border Around Image */
+.image-stroke-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.image-stroke-wrapper img {
+  border-radius: 1rem;
+  z-index: 10;
+  position: relative;
+}
+
+/* Pseudo-elements for the stylized strokes */
+.image-stroke-wrapper::before,
+.image-stroke-wrapper::after {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  width: 110%;
+  height: 110%;
+  border-radius: 50%;
+  border: 3px solid #2563eb; /* Tailwind blue-600 */
+  pointer-events: none;
+  transform: rotate(-5deg);
+}
+
+.image-stroke-wrapper::after {
+  border-color: #38bdf8; /* Tailwind sky-400 */
+  transform: rotate(8deg);
+  top: 8px;
+  left: 10px;
+}
+
+.hide-scroll::-webkit-scrollbar {
+  display: none;
+}
