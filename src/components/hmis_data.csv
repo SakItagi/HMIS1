@@ -1,0 +1,171 @@
+month,year,category,subCategory,metric,value
+01,2025,General,Expected,Revenue,1200000
+01,2025,General,Expected,Expense,750000
+01,2025,Diagnostic,Expected,Lab Tests,15000
+01,2025,Diagnostic,Expected,Radiology Tests,4000
+01,2025,Admissions and Discharges,Expected,Admissions,8500
+01,2025,Admissions and Discharges,Expected,Discharges,8200
+01,2025,Workforce,Expected,Joinees,120
+01,2025,Workforce,Expected,Resignations,45
+01,2025,Pharmacy,Expected,Issued,54000
+01,2025,Pharmacy,Expected,Expired,1200
+01,2025,Maintenance,Expected,Repair Cost,350000
+01,2025,Maintenance,Expected,Purchase Cost,980000
+01,2025,General Medicine,Expected,Revenue,2200000
+01,2025,General Medicine,Expected,Patients,10400
+01,2025,General Medicine,Expected,Profitability,1150000
+01,2025,Orthopaedic,Expected,Revenue,1850000
+01,2025,Orthopaedic,Expected,Patients,8900
+01,2025,Orthopaedic,Expected,Profitability,980000
+01,2025,Dialysis,Expected,Revenue,1600000
+01,2025,Dialysis,Expected,Patients,7600
+01,2025,Dialysis,Expected,Profitability,870000
+01,2025,Pediatric,Expected,Revenue,1400000
+01,2025,Pediatric,Expected,Patients,6800
+01,2025,Pediatric,Expected,Profitability,760000
+01,2025,Ophthalmology,Expected,Revenue,1250000
+01,2025,Ophthalmology,Expected,Patients,7200
+01,2025,Ophthalmology,Expected,Profitability,690000
+01,2025,Homoeopathic,Expected,Revenue,650000
+01,2025,Homoeopathic,Expected,Patients,5200
+01,2025,Homoeopathic,Expected,Profitability,350000
+01,2025,Geriatric,Expected,Revenue,1120000
+01,2025,Geriatric,Expected,Patients,6100
+01,2025,Geriatric,Expected,Profitability,600000
+01,2025,Cardiology,Expected,Revenue,2200000
+01,2025,Cardiology,Expected,Patients,10400
+01,2025,Cardiology,Expected,Profitability,1150000
+01,2025,Surgery,Expected,Revenue,2600000
+01,2025,Surgery,Expected,Patients,8500
+01,2025,Surgery,Expected,Profitability,1320000
+01,2025,Gynaecology,Expected,Revenue,1750000
+01,2025,Gynaecology,Expected,Patients,9100
+01,2025,Gynaecology,Expected,Profitability,950000
+01,2025,Neurology,Expected,Revenue,2200000
+01,2025,Neurology,Expected,Patients,10400
+01,2025,Neurology,Expected,Profitability,1150000
+01,2025,Urology,Expected,Revenue,1470000
+01,2025,Urology,Expected,Patients,6200
+01,2025,Urology,Expected,Profitability,780000
+01,2025,ENT,Expected,Revenue,1300000
+01,2025,ENT,Expected,Patients,6900
+01,2025,ENT,Expected,Profitability,720000
+01,2025,General,Actual,Revenue,2150000
+01,2025,General,Actual,Expense,1320000
+01,2025,Diagnostic,Actual,Lab Tests,18500
+01,2025,Diagnostic,Actual,Radiology Tests,5600
+01,2025,Admissions and Discharges,Actual,Admissions,8300
+01,2025,Admissions and Discharges,Actual,Discharges,1430
+01,2025,Workforce,Actual,Joinees,95
+01,2025,Workforce,Actual,Resignations,38
+01,2025,Pharmacy,Actual,Issued,47000
+01,2025,Pharmacy,Actual,Expired,900
+01,2025,Maintenance,Actual,Repair Cost,310000
+01,2025,Maintenance,Actual,Purchase Cost,870000
+01,2025,General Medicine,Actual,Revenue,2050000
+01,2025,General Medicine,Actual,Patients,9800
+01,2025,General Medicine,Actual,Profitability,1120000
+01,2025,Orthopaedic,Actual,Revenue,1780000
+01,2025,Orthopaedic,Actual,Patients,8300
+01,2025,Orthopaedic,Actual,Profitability,920000
+01,2025,Dialysis,Actual,Revenue,1150000
+01,2025,Dialysis,Actual,Patients,5400
+01,2025,Dialysis,Actual,Profitability,610000
+01,2025,Pediatric,Actual,Revenue,1380000
+01,2025,Pediatric,Actual,Patients,6700
+01,2025,Pediatric,Actual,Profitability,730000
+01,2025,Ophthalmology,Actual,Revenue,1220000
+01,2025,Ophthalmology,Actual,Patients,7100
+01,2025,Ophthalmology,Actual,Profitability,660000
+01,2025,Homoeopathic,Actual,Revenue,620000
+01,2025,Homoeopathic,Actual,Patients,5000
+01,2025,Homoeopathic,Actual,Profitability,340000
+01,2025,Geriatric,Actual,Revenue,1080000
+01,2025,Geriatric,Actual,Patients,5900
+01,2025,Geriatric,Actual,Profitability,570000
+01,2025,Cardiology,Actual,Revenue,2150000
+01,2025,Cardiology,Actual,Patients,10300
+01,2025,Cardiology,Actual,Profitability,1130000
+01,2025,Surgery,Actual,Revenue,2550000
+01,2025,Surgery,Actual,Patients,8300
+01,2025,Surgery,Actual,Profitability,1290000
+01,2025,Surgery,Actual,Revenue,2550000
+01,2025,Surgery,Actual,Patients,8300
+01,2025,Surgery,Actual,Profitability,1290000
+01,2025,Gynaecology,Actual,Revenue,1720000
+01,2025,Gynaecology,Actual,Patients,8800
+01,2025,Gynaecology,Actual,Profitability,930000
+01,2025,Neurology,Actual,Revenue,2150000
+01,2025,Neurology,Actual,Patients,10300
+01,2025,Neurology,Actual,Profitability,1130000
+01,2025,Urology,Actual,Revenue,1440000
+01,2025,Urology,Actual,Patients,6000
+01,2025,Urology,Actual,Profitability,760000
+01,2025,ENT,Actual,Revenue,1280000
+01,2025,ENT,Actual,Patients,6700
+01,2025,ENT,Actual,Profitability,710000
+01,2025,Gastroenterology,Actual,Revenue,1570000
+01,2025,Gastroenterology,Actual,Patients,7400
+01,2025,Gastroenterology,Actual,Profitability,850000
+02,2025,General,Actual,Actual Revenue,5600000
+02,2025,General,Actual,Actual Expense,2350000
+03,2025,General,Actual,Actual Revenue,2300000
+03,2025,General,Actual,Actual Expense,1250000
+02,2025,Diagnostic,Actual,Actual Lab Tests,25000
+02,2025,Diagnostic,Actual,Actual Radiology Tests,10000
+02,2025,Diagnostic,Expected,Expected Lab Tests,18000
+02,2025,Diagnostic,Expected,Expected Radiology Tests,12000
+02,2025,Workforce,Actual,Actual Joinees,123
+02,2025,Workforce,Actual,Actual Resignations,99
+02,2025,Workforce,Expected,Expected Joinees,150
+02,2025,Workforce,Expected,Expected Resignations,75
+02,2025,Pharmacy,Expected,Expected Issued,66000
+02,2025,Pharmacy,Expected,Expected Expired,6500
+02,2025,Pharmacy,Actual,Actual Issued,89000
+02,2025,Pharmacy,Actual,Actual Expired,15500
+02,2025,Maintenance,Expected,Expected Repair Cost,600000
+02,2025,Maintenance,Expected,Expected Purchase Cost,1200000
+02,2025,Maintenance,Actual,Actual Repair Cost,950000
+02,2025,Maintenance,Actual,Actual Purchase Cost,1005000
+02,2025,Admissions and Discharges,Expected,Expected Admissions,9900
+02,2025,Admissions and Discharges,Expected,Expected Discharges,7500
+02,2025,Admissions and Discharges,Actual,Actual Admissions,8700
+02,2025,Admissions and Discharges,Actual,Actual Discharges,6500
+02,2025,Patient Feedback,Expected,Expected IPD Score,9
+02,2025,Patient Feedback,Expected,Expected OPD Score,8
+02,2025,Patient Feedback,Actual,Actual IPD Score,8
+02,2025,Patient Feedback,Actual,Actual OPD Score,6
+01,2025,Patient Feedback,Expected,Expected IPD Score,9
+01,2025,Patient Feedback,Expected,Expected OPD Score,9
+01,2025,Patient Feedback,Actual,Actual IPD Score,7
+01,2025,Patient Feedback,Actual,Actual OPD Score,8
+02,2025,General,Expected,Expected Revenue,6600000
+02,2025,General,Expected,Expected Expense,3300000
+03,2025,Patient Feedback,Expected,Expected IPD Score,10
+03,2025,Patient Feedback,Expected,Expected OPD Score,9
+03,2025,Patient Feedback,Actual,Actual IPD Score,8
+03,2025,Patient Feedback,Actual,Actual OPD Score,9
+03,2025,Maintenance,Expected,Expected Repair Cost,650000
+03,2025,Maintenance,Expected,Expected Purchase Cost,1005000
+03,2025,Maintenance,Actual,Actual Repair Cost,850000
+03,2025,Maintenance,Actual,Actual Purchase Cost,1250000
+03,2025,Workforce,Expected,Expected Joinees,120
+03,2025,Workforce,Expected,Expected Resignations,35
+03,2025,Workforce,Actual,Actual Joinees,95
+03,2025,Workforce,Actual,Actual Resignations,78
+03,2025,General,Expected,Expected Revenue,1500000
+03,2025,General,Expected,Expected Expense,2700000
+02,2025,Pharmacy,Expected,Expected Issued,70000
+02,2025,Pharmacy,Expected,Expected Expired,12000
+02,2025,Pharmacy,Actual,Actual Issued,68000
+02,2025,Pharmacy,Actual,Actual Expired,6700
+04,2025,General,Expected,Expected Revenue,900000
+04,2025,General,Expected,Expected Expense,230000
+04,2025,General,Actual,Actual Revenue,1200000
+04,2025,General,Actual,Actual Expense,450000
+02,2025,Pharmacy,Expected,Expected Issued,90000
+02,2025,Pharmacy,Expected,Expected Expired,12000
+02,2025,Pharmacy,Actual,Actual Issued,120000
+02,2025,Pharmacy,Actual,Actual Expired,8900
+03,2025,Diagnostic,Actual,Actual Lab Tests,8900
+03,2025,Diagnostic,Actual,Actual Radiology Tests,670
