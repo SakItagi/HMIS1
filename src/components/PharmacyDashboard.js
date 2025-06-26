@@ -139,7 +139,7 @@ const PharmacyDashboard = ({ view = 'expected-vs-actual' }) => {
           : 'Actual Medications Issued & Expired Over Time'}
       </div>
 
-      <ResponsiveContainer width="100%" height={view === 'expected-vs-actual' ? 400 : 300}>
+      <ResponsiveContainer width="101%" height={view === 'expected-vs-actual' ? 400 : 300}>
         {view === 'expected-vs-actual' ? (
           <BarChart data={data} margin={{ top: 30, right: 30, left: 20, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" />

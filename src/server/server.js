@@ -1,55 +1,34 @@
 require('dotenv').config();
-
-console.log('🔍 Loaded ENV:', {
-  EMAIL_USER: process.env.EMAIL_USER,
-  EMAIL_PASS_PRESENT: !!process.env.EMAIL_PASS
-}); // ✅ Load environment variables
-
-const express = require('express'); 
+const express = require('express');
 const cors = require('cors');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 const fs = require('fs');
 const path = require('path');
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
+const bcrypt = require('bcryptjs');
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-// === MongoDB (Local) Connection ===
-mongoose.set('debug', true);
-mongoose.connect('mongodb://localhost:27017/hmis')
-  .then(() => console.log('✅ Connected to local MongoDB'))
-  .catch((err) => console.error('❌ MongoDB connection error:', err));
-
-// === Nodemailer Transporter ===
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER, // ✅ Secured via .env
-    pass: process.env.EMAIL_PASS  // ✅ Secured via .env
-  }
+// MongoDB Setup
+mongoose.connect('mongodb://127.0.0.1:27017/hmis', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 });
 
-// === User Schema ===
 const userSchema = new mongoose.Schema({
-  username: {
-    type: String,
-    required: true,
-    lowercase: true,
-    trim: true
-  },
-  password: {
-    type: String,
-    required: true
-  },
+  username: String,
+  password: String,
   resetToken: String,
-  resetTokenExpiry: Date
+  resetTokenExpiry: Date,
 });
+
 const User = mongoose.model('User', userSchema);
 
 // === CSV Setup ===
@@ -178,240 +157,144 @@ app.get('/api/hmis/export', (req, res) => {
   }
 });
 
-// === Registration Endpoint ===
-app.post('/api/register', async (req, res) => {
-  let { username, password } = req.body;
-  console.log('📨 Received registration body:', req.body);
+// Email Setup
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
 
-  if (!username || !password) {
-    console.log('❌ Missing username or password');
-    return res.status(400).json({ error: 'Username and password required' });
-  }
-
-  const normalizedUsername = username.trim().toLowerCase();
-  console.log('📝 Register attempt:', normalizedUsername);
-
-  try {
-    const existing = await User.findOne({ username: normalizedUsername });
-    console.log('🔍 Existing user:', existing);
-
-    if (existing) {
-      console.log('⚠️ User already exists');
-      return res.status(400).json({ error: 'User already exists' });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-    console.log('🔐 Hashed password generated');
-
-    const newUser = new User({ username: normalizedUsername, password: hashedPassword });
-
-    await newUser.save();
-    console.log('✅ User successfully saved:', newUser);
-    res.json({ message: 'You have been successfully registered' });
-
-  } catch (err) {
-    console.error('❌ Registration try-catch error:', err);
-    res.status(500).json({ error: 'Registration failed' });
+// ✅ Verify transporter setup
+transporter.verify((error, success) => {
+  if (error) {
+    console.error('🚫 Email transporter configuration error:', error);
+  } else {
+    console.log('✅ Email transporter is ready to send emails');
   }
 });
 
-// === Login Endpoint ===
+// ✅ Login Route
 app.post('/api/login', async (req, res) => {
+  const { username, password } = req.body;
+
   try {
-    let { username, password } = req.body;
-
-    if (!username || !password) {
-      console.log('❌ Username or password missing');
-      return res.status(400).json({ error: 'Username and password are required' });
-    }
-
-    const normalizedUsername = username.trim().toLowerCase();
-    console.log('🔐 Login attempt for:', normalizedUsername);
-
-    const user = await User.findOne({ username: normalizedUsername });
-
-    if (!user) {
-      console.log(`❌ No user found with username: ${normalizedUsername}`);
-      return res.status(401).json({ error: 'Invalid username or password' });
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-
-    if (!isMatch) {
-      console.log('❌ Incorrect password for:', normalizedUsername);
-      return res.status(401).json({ error: 'Invalid username or password' });
-    }
-
-    console.log('✅ Login successful for:', user.username);
-    return res.json({ message: 'Login successful' });
-
-  } catch (err) {
-    console.error('❌ Login error:', err);
-    return res.status(500).json({ error: 'Login failed' });
-  }
-});
-
-// === Reset Password Request Endpoint (via Email) ===
-app.post('/api/reset-password-request', async (req, res) => {
-  try {
-    const { email } = req.body;
-
-    if (!email) {
-      return res.status(400).json({ error: 'Email is required' });
-    }
-
-    const normalizedEmail = email.trim().toLowerCase();
-    const user = await User.findOne({ username: normalizedEmail });
-
+    const user = await User.findOne({ username });
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
 
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ error: 'Invalid password' });
+    }
+
+    console.log("✅ User logged in:", username);
+    res.status(200).json({ message: 'Login successful' });
+
+  } catch (err) {
+    console.error('❌ Login error:', err);
+    res.status(500).json({ error: 'Server error during login' });
+  }
+});
+
+// ✅ Password Reset Request Route
+app.post('/api/request-password-reset', async (req, res) => {
+  const { username } = req.body;
+  console.log('📨 Incoming reset request for:', username);
+
+  try {
+    const user = await User.findOne({ username });
+    if (!user) {
+      console.log('❌ No user found');
+      return res.status(404).json({ error: 'User not found' });
+    }
+
     const token = crypto.randomBytes(32).toString('hex');
-    const expiry = new Date(Date.now() + 3600000);
+    const expiry = Date.now() + 3600000;
 
     user.resetToken = token;
     user.resetTokenExpiry = expiry;
     await user.save();
+    console.log('🧾 Token saved to user:', { token, expiry });
 
     const resetLink = `http://localhost:3000/reset-password/${token}`;
+    console.log('📧 Attempting to send email to:', user.username);
+    console.log('🔗 Reset link:', resetLink);
 
-    const mailOptions = {
+    const info = await transporter.sendMail({
       from: process.env.EMAIL_USER,
-      to: normalizedEmail,
-      subject: 'Password Reset Link',
-      html: `
-        <p>Hello,</p>
-        <p>You requested to reset your password. Click the link below to proceed:</p>
-        <a href="${resetLink}">${resetLink}</a>
-        <p>If you didn’t request this, you can ignore this email.</p>
-      `
-    };
+      to: user.username,
+      subject: 'Password Reset',
+      text: `Hello,
 
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error('❌ Failed to send email:', error);
-        return res.status(500).json({ error: 'Failed to send reset email' });
-      } else {
-        console.log('📨 Email sent:', info.response);
-        return res.json({ message: 'Reset link sent to your email' });
-      }
-    });
-  } catch (err) {
-    console.error('❌ Error in reset-password-request:', err);
-    res.status(500).json({ error: 'Server error during password reset' });
-  }
-});
+You requested to reset your password. Click the link below to proceed:
 
-// === Test user save route ===
-app.get('/api/test-user-save', async (req, res) => {
-  try {
-    const username = 'demo@example.com';
-    const normalizedUsername = username.trim().toLowerCase();
+${resetLink}
 
-    const existing = await User.findOne({ username: normalizedUsername });
-    if (existing) {
-      console.log('⚠️ Test user already exists:', normalizedUsername);
-      return res.status(400).json({ error: 'Test user already exists' });
-    }
-
-    const hashedPassword = await bcrypt.hash('plaintext123', 10);
-
-    const testUser = new User({
-      username: normalizedUsername,
-      password: hashedPassword
+If you didn’t request this, you can ignore this email.`,
     });
 
-    await testUser.save();
-    console.log('✅ Test user saved:', testUser);
-    res.json({ message: 'Test user saved to MongoDB' });
+    console.log('✅ Email sent successfully:', info.response);
+    return res.status(200).json({ message: 'Password reset link sent' });
+
   } catch (err) {
-    console.error('❌ Error saving test user:', err);
-    res.status(500).json({ error: 'Failed to save test user' });
+    console.error('❌ Full error caught:', err);
+    return res.status(500).json({ error: 'Something went wrong', details: err.message });
   }
 });
 
-// === Debug route to list all users ===
-app.get('/api/users', async (req, res) => {
-  try {
-    const users = await User.find();
-    res.json(users);
-  } catch (err) {
-    console.error('❌ Error fetching users:', err);
-    res.status(500).json({ error: 'Failed to fetch users' });
-  }
-});
+// ✅ Reset Password Route
+app.post('/api/reset-password/:token', async (req, res) => {
+  const { token } = req.params;
+  const { password, confirmPassword } = req.body;
 
-// === UPDATED: Forgot Password by Username (with email) ===
-app.post('/api/forgot-password', async (req, res) => {
-  const { username } = req.body;
-  if (!username) {
-    return res.status(400).json({ error: 'Username is required' });
-  }
+  console.log('🔧 Reset password route hit:', token);
 
-  const user = await User.findOne({ username: username.trim().toLowerCase() });
-  if (!user) {
-    return res.status(404).json({ error: 'User not found' });
-  }
-
-  const token = crypto.randomBytes(32).toString('hex');
-  user.resetToken = token;
-  user.resetTokenExpiry = Date.now() + 15 * 60 * 1000; // 15 min expiry
-  await user.save();
-
-  const resetLink = `http://localhost:3000/reset-password/${token}`;
-
-  const mailOptions = {
-    from: process.env.EMAIL_USER,
-    to: user.username,
-    subject: 'Password Reset Link',
-    html: `
-      <p>Hello,</p>
-      <p>You requested to reset your password. Click the link below to proceed:</p>
-      <a href="${resetLink}">${resetLink}</a>
-      <p>If you didn’t request this, you can ignore this email.</p>
-    `
-  };
-
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.error('❌ Failed to send email:', error);
-      return res.status(500).json({ error: 'Failed to send reset email' });
-    } else {
-      console.log('📨 Email sent:', info.response);
-      return res.json({ message: 'Reset link sent to your email' });
-    }
-  });
-});
-
-app.post('/api/reset-password', async (req, res) => {
-  const { token, newPassword, confirmPassword } = req.body;
-
-  if (!token || !newPassword || !confirmPassword) {
+  if (!password || !confirmPassword) {
     return res.status(400).json({ error: 'All fields are required' });
   }
 
-  if (newPassword !== confirmPassword) {
+  if (password.length < 8) {
+    return res.status(400).json({ error: 'Password must be at least 8 characters long' });
+  }
+
+  if (password !== confirmPassword) {
     return res.status(400).json({ error: 'Passwords do not match' });
   }
 
-  const user = await User.findOne({
-    resetToken: token,
-    resetTokenExpiry: { $gt: Date.now() }
-  });
+  try {
+    const user = await User.findOne({
+      resetToken: token,
+      resetTokenExpiry: { $gt: Date.now() },
+    });
 
-  if (!user) {
-    return res.status(400).json({ error: 'Invalid or expired token' });
+    if (!user) {
+      return res.status(400).json({ error: 'Invalid or expired token' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 12);
+    user.password = hashedPassword;
+    user.resetToken = undefined;
+    user.resetTokenExpiry = undefined;
+    await user.save();
+
+    console.log("✅ Password reset successfully for:", user.username);
+    res.status(200).json({ message: 'Password reset successfully' });
+  } catch (err) {
+    console.error('❌ Unexpected server error:', err);
+    res.status(500).json({ error: 'Internal server error', details: err.message });
   }
-
-  user.password = await bcrypt.hash(newPassword, 10);
-  user.resetToken = undefined;
-  user.resetTokenExpiry = undefined;
-  await user.save();
-
-  res.json({ message: 'Password reset successful' });
 });
 
+// Forgot Password Form Route
+app.get('/api/forgot-password', (req, res) => {
+  res.send('<form action="/api/request-password-reset" method="POST"><label>Username</label><input type="email" name="username" placeholder="Enter your username" required/><button type="submit">Request Reset</button></form>');
+});
+
+// Start Server
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
+  console.log('✅ Connected to local MongoDB');
 });

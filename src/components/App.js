@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HMISForm from './components/HMISForm';
 import HMISDashboard from './components/HMISDashboard';
 import DiagnosticsDashboard from './components/DiagnosticsDashboard';
@@ -9,6 +10,7 @@ import AdmissionsDashboard from './components/AdmissionDashboard';
 import FeedbackDashboard from './components/FeedbackDashboard';
 import DepartmentDashboard from './components/DepartmentDashboard';
 import OverviewDashboard from './components/OverviewDashboard';
+import ResetPasswordForm from './components/ResetPasswordForm';
 import './index.css';
 
 const App = () => {
@@ -18,6 +20,9 @@ const App = () => {
   const [credentials, setCredentials] = useState({ username: '', password: '', confirmPassword: '', role: '' });
   const [error, setError] = useState('');
   const [patientType, setPatientType] = useState('existing');
+  const [showResetForm, setShowResetForm] = useState(false);
+  const [resetUsername, setResetUsername] = useState('');
+  const [resetMessage, setResetMessage] = useState('');
 
   const toggleSubmenu = (menu) => {
     setOpenSubmenus((prev) => ({ ...prev, [menu]: !prev[menu] }));
@@ -101,132 +106,146 @@ const App = () => {
     }
   };
 
-  if (!isLoggedIn) {
-    return (
-      <div className="flex h-screen">
-        <div className="w-1/2 bg-blue-100 flex flex-col justify-center items-center p-10">
-          <h2 className="text-2xl font-normal text-center mb-2 text-gray-800">
-            Empowering Smarter Healthcare Decisions
-          </h2>
-          <p className="text-gray-600 text-center mb-6">One Platform for Stakeholders and Staff</p>
-          <img src="/doctor2.jpg" alt="Doctor" className="w-full h-full object-cover rounded-2xl mb-22" />
-        </div>
-
-        <div className="w-1/2 bg-white flex flex-col justify-center items-center shadow-lg px-10">
-          <div className="w-full max-w-md flex flex-col items-center">
-            <form onSubmit={handleLogin} className="w-full">
-              <h2 className="text-l font-normal mb-6 text-gray-700 text-center">
-                Make Informed HealthCare Decisions<br />Sign In
-              </h2>
-              {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
-
-              <div className="mb-4 text-left">
-                <label className="block text-sm font-medium text-black text-left">Username</label>
-                <input type="text" value={credentials.username} onChange={(e) => setCredentials({ ...credentials, username: e.target.value })} className="w-full px-3 py-2 border border-gray-300 rounded outline-none text-black text-left" placeholder="Enter username" required />
-              </div>
-
-              {patientType === 'new' && (
-                <div className="mb-4 text-left">
-                  <label className="block text-sm font-medium text-black text-left">Role</label>
-                  <select value={credentials.role} onChange={(e) => setCredentials({ ...credentials, role: e.target.value })} className="w-full px-12 py-2 border border-gray-300 rounded outline-none text-black bg-white text-left" required>
-                    <option value="">Select role</option>
-                    <option value="admin">Stakeholder</option>
-                    <option value="doctor">Doctor</option>
-                    <option value="staff">Staff</option>
-                  </select>
-                </div>
-              )}
-
-              <div className="mb-6 text-left relative">
-                <label className="block text-sm font-medium text-black text-left">Password</label>
-                <input type="password" value={credentials.password} onChange={(e) => setCredentials({ ...credentials, password: e.target.value })} className="w-full px-3 py-2 border border-gray-300 rounded outline-none text-black text-left" placeholder="Enter password" required />
-                {patientType === 'existing' && (
-                  <div className="absolute right-0 mt-1 text-sm text-blue-600 hover:underline cursor-pointer">Forgot Password</div>
-                )}
-              </div>
-
-              {patientType === 'new' && (
-                <div className="mb-6 text-left">
-                  <label className="block text-sm font-medium text-black text-left">Confirm Password</label>
-                  <input type="password" value={credentials.confirmPassword} onChange={(e) => setCredentials({ ...credentials, confirmPassword: e.target.value })} className="w-full px-3 py-2 border border-gray-300 rounded outline-none text-black text-left" placeholder="Confirm password" required />
-                </div>
-              )}
-
-              <button type="submit" className="w-full bg-blue-700 text-white py-2 rounded-full hover:bg-blue-800 transition mb-6">
-                {patientType === 'new' ? 'Register' : 'Login'}
-              </button>
-            </form>
-
-            <div className="flex justify-center mb-4 w-full">
-              <button onClick={() => setPatientType('new')} className="px-6 py-2 rounded-l-full border w-1/2 bg-blue-600 text-white">New User</button>
-              <button onClick={() => setPatientType('existing')} className="px-6 py-2 rounded-r-full border w-1/2 bg-blue-600 text-white">Existing User</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const handlePasswordReset = async (e) => {
+    e.preventDefault();
+    if (!resetUsername) {
+      setResetMessage('Please enter your username');
+      return;
+    }
+    try {
+      const res = await fetch('http://localhost:5000/api/request-password-reset', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: resetUsername }),
+      });
+      const data = await res.json();
+      if (data.message) {
+        setResetMessage(data.message);
+      } else {
+        setResetMessage(data.error || 'Error sending reset email');
+      }
+    } catch (error) {
+      setResetMessage('Server error during password reset');
+    }
+  };
 
   return (
-    <div className="min-h-screen flex bg-gradient-to-br from-blue-50 to-white font-poppins">
-      <aside className="w-60 bg-blue-900 text-white h-screen fixed left-0 top-0 overflow-y-auto font-futura flex flex-col">
-        <div className="mt-6 mb-4 px-4">
-          <h1 className="text-white text-lg font-bold tracking-wide">HMIS</h1>
-          <hr className="border-white mt-2" />
-        </div>
+    <Router>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            !isLoggedIn ? (
+              <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gray-100">
+                <form
+                  onSubmit={handleLogin}
+                  className="bg-white p-6 rounded shadow-md w-full max-w-sm"
+                >
+                  <h2 className="text-lg font-bold mb-4">
+                    {patientType === 'new' ? 'Register' : 'Login'}
+                  </h2>
+                  <input
+                    type="text"
+                    placeholder="Username"
+                    value={credentials.username}
+                    onChange={(e) => setCredentials({ ...credentials, username: e.target.value })}
+                    className="w-full mb-2 p-2 border rounded"
+                  />
+                  <input
+                    type="password"
+                    placeholder="Password"
+                    value={credentials.password}
+                    onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
+                    className="w-full mb-2 p-2 border rounded"
+                  />
+                  {patientType === 'new' && (
+                    <>
+                      <input
+                        type="password"
+                        placeholder="Confirm Password"
+                        value={credentials.confirmPassword}
+                        onChange={(e) => setCredentials({ ...credentials, confirmPassword: e.target.value })}
+                        className="w-full mb-2 p-2 border rounded"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Role"
+                        value={credentials.role}
+                        onChange={(e) => setCredentials({ ...credentials, role: e.target.value })}
+                        className="w-full mb-2 p-2 border rounded"
+                      />
+                    </>
+                  )}
+                  {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
+                  <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">
+                    {patientType === 'new' ? 'Register' : 'Login'}
+                  </button>
+                  <p className="text-sm mt-2">
+                    {patientType === 'new' ? (
+                      <span>
+                        Already have an account?{' '}
+                        <button type="button" onClick={() => setPatientType('existing')} className="text-blue-600 underline">
+                          Login
+                        </button>
+                      </span>
+                    ) : (
+                      <>
+                        Don’t have an account?{' '}
+                        <button type="button" onClick={() => setPatientType('new')} className="text-blue-600 underline">
+                          Register
+                        </button>
+                        <br />
+                        <button
+                          type="button"
+                          onClick={() => setShowResetForm(true)}
+                          className="text-sm text-blue-600 underline mt-2"
+                        >
+                          Forgot Password?
+                        </button>
+                      </>
+                    )}
+                  </p>
+                </form>
 
-        <div className="flex flex-col justify-start h-full px-4 pb-4">
-          <nav className="flex flex-col justify-between flex-1 text-xxxs font-normal font-futura items-start">
-            <button onClick={() => setActivePage('home')} className="text-left hover:text-blue-300 mb-px">Home</button>
-            <div className="w-full mb-px">
-              <button onClick={() => toggleSubmenu('dashboard')} className="w-full text-left hover:text-blue-300 capitalize mb-px">Dashboard</button>
-              {openSubmenus['dashboard'] && (
-                <div className="pl-0.5 flex flex-col space-y-1 items-start text-blue-100 leading-relaxed">
-                  <button onClick={() => setActivePage('overview')} className="text-left">Overview</button>
-                  {[['finance', ['Finance Overview', 'finance-overview'], ['Expected vs Actual', 'finance-expected-vs-actual']],
-                    ['diagnostics', ['Diagnostics Overview', 'diagnostics-overview'], ['Expected vs Actual', 'diagnostics-performance']],
-                    ['HR', ['HR Overview', 'hr-overview'], ['Expected vs Actual', 'hr-analytics']],
-                    ['pharmacy', ['Pharmacy Overview', 'pharmacy-overview'], ['Expected vs Actual', 'pharmacy-inventory']],
-                    ['maintenance', ['Maintenance Overview', 'maintenance-overview'], ['Expected vs Actual', 'maintenance-requests']],
-                    ['IPD', ['Admissions Overview', 'ipd-admissions'], ['Expected vs Actual', 'ipd-expected-vs-actual']],
-                    ['feedback', ['Feedback Overview', 'feedback-overview'], ['Expected vs Actual', 'feedback-expected-vs-actual']],
-                    ['department', ['Department Overview', 'department-overview'], ['Expected vs Actual', 'department-expected-vs-actual'], ['Patient Volume Overview', 'department-volume-overview'], ['Expected vs Actual Patient Volume', 'department-volume-expected-vs-actual'], ['Profit Overview', 'department-profit-overview'], ['Expected vs Actual Profitability', 'department-profit-expected-vs-actual']]
-                  ].map(([key, ...buttons]) => (
-                    <div key={key} className="w-full items-start">
-                      <button onClick={() => toggleSubmenu(key)} className="w-full text-left hover:text-blue-300 capitalize leading-tight">{key}</button>
-                      {openSubmenus[key] && (
-                        <div className="ml-2 flex flex-col space-y-1 items-start text-blue-100 leading-tight">
-                          {buttons.map(([label, id]) => (
-                            <button key={id} onClick={() => setActivePage(id)} className="text-left w-full leading-tight">{label}</button>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  ))}
+                {showResetForm && (
+                  <form
+                    onSubmit={handlePasswordReset}
+                    className="bg-white p-4 mt-6 rounded shadow-md w-full max-w-sm"
+                  >
+                    <h3 className="font-semibold mb-2">Reset Password</h3>
+                    <label className="block text-sm font-medium mb-1">Username</label>
+                    <input
+                      type="text"
+                      placeholder="Enter Username"
+                      value={resetUsername}
+                      onChange={(e) => setResetUsername(e.target.value)}
+                      className="w-full mb-2 p-2 border rounded"
+                    />
+                    <button type="submit" className="w-full bg-green-500 text-white p-2 rounded">
+                      Send Reset Link
+                    </button>
+                    {resetMessage && <p className="text-sm mt-2">{resetMessage}</p>}
+                  </form>
+                )}
+              </div>
+            ) : (
+              <div className="flex">
+                <div className="w-64 bg-gray-800 text-white min-h-screen">
+                  <HMISForm
+                    setActivePage={setActivePage}
+                    toggleSubmenu={toggleSubmenu}
+                    openSubmenus={openSubmenus}
+                    setIsLoggedIn={setIsLoggedIn}
+                  />
                 </div>
-              )}
-            </div>
-            <button onClick={() => setActivePage('reporting')} className="text-left hover:text-blue-300 mb-px">Reporting</button>
-            <button onClick={() => setActivePage('forecasting')} className="text-left hover:text-blue-300 mb-px">Forecasting</button>
-            <button onClick={() => setActivePage('alerts')} className="text-left hover:text-blue-300 mb-px">Alerts</button>
-            <button onClick={() => setActivePage('settings')} className="text-left hover:text-blue-300 mb-px">Settings</button>
-            <button onClick={() => setIsLoggedIn(false)} className="mt-4 text-left text-white hover:text-white-500">Logout</button>
-          </nav>
-        </div>
-      </aside>
-
-      <main className="flex-grow ml-60 pt-4 pb-32 px-4 overflow-y-auto h-screen">
-        {renderContent()}
-      </main>
-
-      <footer className="w-full bg-blue-600 text-white text-sm px-6 py-3 fixed bottom-0 left-0 ml-60 flex justify-center items-center z-10 font-futura">
-        <div className="flex gap-4 text-center">
-          <span>Email: info@hmis.com</span>
-          <span>Phone: +91 123 456 7890</span>
-          <span>Address: 5th Main Street</span>
-        </div>
-      </footer>
-    </div>
+                <div className="flex-1 p-6 bg-gray-50">{renderContent()}</div>
+              </div>
+            )
+          }
+        />
+        <Route path="/reset-password/:token" element={<ResetPasswordForm />} />
+      </Routes>
+    </Router>
   );
 };
 

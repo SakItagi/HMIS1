@@ -185,12 +185,16 @@ const HRDashboard = ({ chartType = 'overview' }) => {
       </div>
 
       <div
-        ref={pdfRef}
-        style={{
-          backgroundColor: '#fff',
-          padding: '10px'
-        }}
-      >
+  ref={pdfRef}
+  style={{
+    backgroundColor: '#fff',
+    padding: '20px',
+    maxWidth: '95vw',         // Allow wide layout
+    width: '100%',
+    margin: '0 auto',          // Center the container
+    boxSizing: 'border-box',   // Prevent overflow
+  }}
+>
         {view === 'expected-vs-actual' ? (
           <>
             <h1 style={{ color: 'black', fontSize: '22px', marginBottom: '10px', fontWeight: 'normal' }}>
@@ -229,7 +233,7 @@ const HRDashboard = ({ chartType = 'overview' }) => {
             <h4 style={{ fontSize: '16px', color: '#000', marginBottom: '10px', fontWeight: 'normal' }}>
               Monthly Workforce Summary
             </h4>
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="101%" height={400}>
               <LineChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="month" tick={{ fill: '#000' }} />

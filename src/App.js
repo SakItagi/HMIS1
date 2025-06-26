@@ -21,7 +21,7 @@ const App = () => {
   const [error, setError] = useState('');
   const [patientType, setPatientType] = useState('existing');
   const [showResetForm, setShowResetForm] = useState(false);
-  const [resetEmail, setResetEmail] = useState('');
+  const [resetUsername, setResetUsername] = useState('');
   const [resetMessage, setResetMessage] = useState('');
 
   const toggleSubmenu = (menu) => {
@@ -108,27 +108,30 @@ const App = () => {
 
   const handlePasswordReset = async (e) => {
     e.preventDefault();
-    if (!resetEmail) {
-      setResetMessage('Please enter your email');
+    if (!resetUsername) {
+      setResetMessage('Please enter your username');
       return;
     }
     try {
-      const res = await fetch('http://localhost:5000/api/reset-password-request', {
+      const res = await fetch('http://localhost:5000/api/request-password-reset', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: resetEmail }),
+        body: JSON.stringify({ username: resetUsername }),
       });
+  
       const data = await res.json();
+      console.log('📨 Response from server:', data);
+  
       if (data.message) {
         setResetMessage(data.message);
       } else {
-        setResetMessage(data.error || 'Error sending reset email');
+        setResetMessage(data.error || 'Error sending reset link');
       }
     } catch (error) {
+      console.error('❌ Client error:', error);
       setResetMessage('Server error during password reset');
     }
   };
-
   return (
     <Router>
       <Routes>
@@ -194,15 +197,20 @@ const App = () => {
                       </form>
                     ) : (
                       <form onSubmit={handlePasswordReset} className="w-full">
-                        <h2 className="text-l font-normal mb-6 text-gray-700 text-center">Reset Your Password</h2>
+                        <h2 className="text-xl font-normal mb-6 text-black text-center">Reset Your Password</h2>
                         {resetMessage && <p className="text-center text-blue-600 mb-4">{resetMessage}</p>}
 
                         <div className="mb-4 text-left">
-                          <label className="block text-sm font-medium text-black text-left">Email</label>
-                          <input type="email" value={resetEmail} onChange={(e) => setResetEmail(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded outline-none text-black" placeholder="Enter your email" required />
-                        </div>
+                          <label className="block text-sm font-medium text-black text-left">Username</label>
+                          <input
+                      type="text"
+                      placeholder="Enter Username"
+                      value={resetUsername}
+                      onChange={(e) => setResetUsername(e.target.value)}
+                      className="w-full mb-2 p-2 border rounded"
+                    />                        </div>
 
-                        <button type="submit" className="w-full bg-blue-700 text-white py-2 rounded-full hover:bg-blue-800 transition mb-6">
+                        <button type="submit" className="w-full bg-blue-700 text-white py-2 rounded-md hover:bg-blue-800 transition mb-6">
                           Send Reset Link
                         </button>
 
@@ -230,13 +238,13 @@ const App = () => {
                     <hr className="border-white mt-2" />
                   </div>
                   <div className="flex flex-col justify-start h-full px-4 pb-4">
-                    <nav className="flex flex-col justify-between flex-1 text-xxxs font-normal font-futura items-start">
-                      <button onClick={() => setActivePage('home')} className="text-left hover:text-blue-300 mb-px">Home</button>
+                  <nav className="flex flex-col gap-2 flex-1 text-sm font-normal font-futura items-start">
+                  <button onClick={() => setActivePage('home')} className="text-left hover:text-blue-300 mb-px">Home</button>
                       <div className="w-full mb-px">
                         <button onClick={() => toggleSubmenu('dashboard')} className="w-full text-left hover:text-blue-300 capitalize mb-px">Dashboard</button>
                         {openSubmenus['dashboard'] && (
-                          <div className="pl-0.5 flex flex-col space-y-1 items-start text-blue-100 leading-relaxed">
-                            <button onClick={() => setActivePage('overview')} className="text-left">Overview</button>
+                          <div className="pl-0 flex flex-col w-full text-left items-start space-y-1 text-blue-100 leading-relaxed">
+                          <button onClick={() => setActivePage('overview')} className="text-left">Overview</button>
                             {[['finance', ['Finance Overview', 'finance-overview'], ['Expected vs Actual', 'finance-expected-vs-actual']],
                               ['diagnostics', ['Diagnostics Overview', 'diagnostics-overview'], ['Expected vs Actual', 'diagnostics-performance']],
                               ['HR', ['HR Overview', 'hr-overview'], ['Expected vs Actual', 'hr-analytics']],
@@ -251,7 +259,7 @@ const App = () => {
                                 {openSubmenus[key] && (
                                   <div className="ml-2 flex flex-col space-y-1 items-start text-blue-100 leading-tight">
                                     {buttons.map(([label, id]) => (
-                                      <button key={id} onClick={() => setActivePage(id)} className="text-left w-full leading-tight">{label}</button>
+                                      <button key={id} onClick={() => setActivePage(id)} className="text-left w-full px-2 hover:text-blue-300">{label}</button>
                                     ))}
                                   </div>
                                 )}
@@ -264,7 +272,7 @@ const App = () => {
                       <button onClick={() => setActivePage('forecasting')} className="text-left hover:text-blue-300 mb-px">Forecasting</button>
                       <button onClick={() => setActivePage('alerts')} className="text-left hover:text-blue-300 mb-px">Alerts</button>
                       <button onClick={() => setActivePage('settings')} className="text-left hover:text-blue-300 mb-px">Settings</button>
-                      <button onClick={() => setIsLoggedIn(false)} className="mt-4 text-left text-white hover:text-white-500">Logout</button>
+                      <button onClick={() => setIsLoggedIn(false)} className="mt-4 text-left text-white hover:text-white-500">Logout</button>    
                     </nav>
                   </div>
                 </aside>

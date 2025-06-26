@@ -143,7 +143,7 @@ const DiagnosticsDashboard = ({ view = 'overview' }) => {
           : 'Expected vs Actual Lab & Radiology Tests'}
       </div>
 
-      <ResponsiveContainer width="100%" height={view === 'overview' ? 400 : 400}>
+      <ResponsiveContainer width="101%" height={view === 'overview' ? 400 : 400}>
         {view === 'overview' ? (
           <LineChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" />

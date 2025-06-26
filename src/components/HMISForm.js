@@ -10,16 +10,11 @@ const HMISPage = () => {
     inputs: {},
   });
 
-  const inputClass =
-    "w-72 border border-gray-300 rounded-md px-3 py-2 bg-gray-50 text-sm h-10 box-border";
-  const selectClass =
-    "w-72 border border-gray-300 rounded-md px-3 py-2 bg-gray-50 text-sm h-10 box-border";
+  const inputClass = "w-72 border border-gray-300 rounded-md px-3 py-2 bg-gray-50 text-sm h-10 box-border";
+  const selectClass = "w-72 border border-gray-300 rounded-md px-3 py-2 bg-gray-50 text-sm h-10 box-border";
 
   const normalizeMetricKey = (label) =>
-    label
-      .toLowerCase()
-      .replace(/[^a-z0-9]+(.)/g, (_, chr) => chr.toUpperCase())
-      .replace(/\s+/g, "");
+    label.toLowerCase().replace(/[^a-z0-9]+(.)/g, (_, chr) => chr.toUpperCase()).replace(/\s+/g, "");
 
   const metricLabelMap = {};
   const departmentInputs = {
@@ -31,11 +26,7 @@ const HMISPage = () => {
       Pharmacy: ["Expected Issued", "Expected Expired"],
       Maintenance: ["Expected Repair Cost", "Expected Purchase Cost"],
       "Patient Feedback": ["Expected IPD Score", "Expected OPD Score"],
-      "Departmental Metrics": [
-        "Expected Revenue",
-        "Expected Patients",
-        "Expected Profitability",
-      ],
+      "Departmental Metrics": ["Expected Revenue", "Expected Patients", "Expected Profitability"],
     },
     Staff: {
       General: ["Actual Revenue", "Actual Expense"],
@@ -45,11 +36,7 @@ const HMISPage = () => {
       Pharmacy: ["Actual Issued", "Actual Expired"],
       Maintenance: ["Actual Repair Cost", "Actual Purchase Cost"],
       "Patient Feedback": ["Actual IPD Score", "Actual OPD Score"],
-      "Departmental Metrics": [
-        "Actual Revenue",
-        "Actual Patients",
-        "Actual Profitability",
-      ],
+      "Departmental Metrics": ["Actual Revenue", "Actual Patients", "Actual Profitability"],
     },
   };
 
@@ -181,31 +168,36 @@ const HMISPage = () => {
     (formData.department !== "Departmental Metrics" || formData.subDepartment);
 
   return (
-    <div className="flex min-h-screen bg-[#EAF6FF]">
-      <aside className="w-[90px] bg-[#1F3C88] flex flex-col items-center py-10 text-white space-y-10">
-        {/* Sidebar content here */}
-      </aside>
+    <div className="flex min-h-screen w-screen bg-[#EAF6FF]">
+      <aside className="w-[90px] bg-[#1F3C88] flex flex-col items-center py-10 text-white space-y-10" />
 
-      <main className="flex-1 grid grid-cols-2 relative overflow-hidden">
-        {/* LEFT FORM SECTION */}
-        <div className="flex flex-col justify-start items-start px-16 overflow-y-auto max-h-screen pr-4">
-          <h1 className="text-4xl font-normal text-black leading-tight pt-4 font-futura">
-            Hospital Management
-            <br />
-            <span className="text-[#3399FF] font-futura">Information System</span>
-          </h1>
-
-          <p className="mt-3 text-black max-w-md text-sm ml-1">
-            Our HMIS system helps you track, manage, and monitor<br />
-            hospital metrics seamlessly and efficiently.
-          </p>
+      <main className="w-full grid grid-cols-2 relative overflow-hidden">
+        <div className="flex flex-col justify-center items-start px-10 overflow-y-auto max-h-screen ml-60 -mt-10">
+          <div className="text-left w-full max-w-sm">
+            <h1 className="text-4xl font-normal text-black leading-tight pt-4 font-futura">
+              Hospital Management
+              <br />
+              <span className="text-[#3399FF] font-futura">Information System</span>
+            </h1>
+            <p className="mt-3 text-black max-w-md text-sm">
+              Our HMIS system helps you track, manage, and monitor
+              <br />
+              hospital metrics seamlessly and efficiently.
+            </p>
+          </div>
 
           <form onSubmit={handleSubmit} className="font-futura mt-8 space-y-4 w-full max-w-sm bg-white p-6 rounded-md shadow text-black">
             <h2 className="text-xl text-black font-normal mb-2">Enter Monthly Hospital Metrics</h2>
 
             <div>
               <label className="block font-medium text-black text-left">Month</label>
-              <select name="month" value={formData.month} onChange={handleChange} className={selectClass} required>
+              <select
+                name="month"
+                value={formData.month}
+                onChange={handleChange}
+                className={`${selectClass} ${formData.month === "" ? "text-gray-400" : "text-black"}`}
+                required
+              >
                 <option value="">Select Month</option>
                 {[
                   "January", "February", "March", "April", "May", "June",
@@ -218,7 +210,13 @@ const HMISPage = () => {
 
             <div>
               <label className="block font-medium text-black text-left">Year</label>
-              <select name="year" value={formData.year} onChange={handleChange} className={selectClass} required>
+              <select
+                name="year"
+                value={formData.year}
+                onChange={handleChange}
+                className={`${selectClass} ${formData.year === "" ? "text-gray-400" : "text-black"}`}
+                required
+              >
                 <option value="">Select Year</option>
                 {Array.from({ length: 10 }, (_, i) => {
                   const year = new Date().getFullYear() - i;
@@ -229,7 +227,13 @@ const HMISPage = () => {
 
             <div>
               <label className="block font-medium text-black text-left">Role</label>
-              <select name="role" value={formData.role} onChange={handleChange} className={selectClass} required>
+              <select
+                name="role"
+                value={formData.role}
+                onChange={handleChange}
+                className={`${selectClass} ${formData.role === "" ? "text-gray-400" : "text-black"}`}
+                required
+              >
                 <option value="">Select Role</option>
                 <option value="Stakeholder">Stakeholder</option>
                 <option value="Staff">Staff</option>
@@ -239,7 +243,13 @@ const HMISPage = () => {
             {formData.role && (
               <div>
                 <label className="block font-medium text-black text-left">Department</label>
-                <select name="department" value={formData.department} onChange={handleChange} className={selectClass} required>
+                <select
+                  name="department"
+                  value={formData.department}
+                  onChange={handleChange}
+                  className={`${selectClass} ${formData.department === "" ? "text-gray-400" : "text-black"}`}
+                  required
+                >
                   <option value="">Select Department</option>
                   {Object.keys(departmentInputs[formData.role]).map((dept) => (
                     <option key={dept} value={dept}>{dept}</option>
@@ -251,7 +261,13 @@ const HMISPage = () => {
             {formData.department === "Departmental Metrics" && (
               <div>
                 <label className="block font-medium text-black">Sub Department</label>
-                <select name="subDepartment" value={formData.subDepartment} onChange={handleChange} className={selectClass} required>
+                <select
+                  name="subDepartment"
+                  value={formData.subDepartment}
+                  onChange={handleChange}
+                  className={`${selectClass} ${formData.subDepartment === "" ? "text-gray-400" : "text-black"}`}
+                  required
+                >
                   <option value="">Select Sub Department</option>
                   {subDepartments.map((sub) => (
                     <option key={sub} value={sub}>{sub}</option>
@@ -287,28 +303,23 @@ const HMISPage = () => {
           </form>
         </div>
 
-        {/* RIGHT IMAGE SECTION */}
-        <div className="relative flex justify-center items-center">
-          <div className="absolute top-8 left-16 w-[400px] h-[400px] rounded-[300px] border-[6px] border-[#3399FF] opacity-70 z-0"></div>
+{/* RIGHT IMAGE SECTION */}
+<div className="relative flex justify-center items-center right-[-400px] ml-10">
+  <div className="absolute top-8 left-16 w-[400px] h-[400px] rounded-[300px] border-[6px] border-[#3399FF] opacity-70 z-0"></div>
 
-          <div className="w-[720px] h-[360px] bg-white rounded-b-full overflow-hidden shadow-md flex items-center justify-center -mt-4 transform rotate-90 z-10">
-            <img
-              src="/Doctor1.jpg"
-              alt="Doctors"
-              className="w-full h-full object-cover transform -rotate-90"
-            />
-          </div>
+  <div className="w-[720px] h-[360px] bg-white rounded-b-full overflow-hidden shadow-md flex items-center justify-center -mt-4 transform rotate-90 z-10">
+    <img src="/Doctor1.jpg" alt="Doctors" className="w-full h-full object-cover transform -rotate-90" />
+  </div>
 
-          <div className="absolute top-[10%] left-[5%] w-[180px] h-[180px] bg-[#1F3C88] rounded-full opacity-20 rotate-45"></div>
+  {/* 🟡 MOVED CIRCLE BELOW USING TRANSLATE */}
+  <div className="absolute top-[50%] left-[10%] transform translate-y-[130px] translate-x-[40px] w-[180px] h-[180px] bg-[#1F3C88] rounded-full opacity-20 rotate-45 z-20"></div>
 
-          <div
-            className="absolute bottom-20 right-80 p-4 rounded-md shadow-lg max-w-xs text-sm leading-snug z-50"
-            style={{ backgroundColor: "#1F3C88", color: "#ffffff" }}
-          >
-            <p className="font-normal text-white font-futura">Seamless hospital insights</p>
-            <p className="text-[#85C1FF] text-xs mt-1 text-white font-futura">Smarter patient outcomes</p>
-          </div>
-        </div>
+  <div className="absolute bottom-[10px] right-[10px] p-4 rounded-md shadow-lg max-w-xs text-sm leading-snug z-50" style={{ backgroundColor: "#1F3C88", color: "#ffffff" }}>
+    <p className="font-normal text-white font-futura">Seamless hospital insights</p>
+    <p className="text-[#85C1FF] text-xs mt-1 text-white font-futura">Smarter patient outcomes</p>
+  </div>
+</div>
+
       </main>
     </div>
   );

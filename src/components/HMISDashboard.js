@@ -5,6 +5,9 @@ import {
 } from 'recharts';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/500.css';
+import '@fontsource/inter/700.css';
 
 const formatNumber = (num) => {
   if (!num && num !== 0) return '';
@@ -117,112 +120,116 @@ const FinancialDashboard = ({ chartType = 'overview' }) => {
   };
 
   return (
-    <div className="w-full px-4 py-6 font-sans relative" ref={dashboardRef}>
-      {/* Download Button */}
-      <div className="absolute top-4 right-4 z-50">
-        <button
-          ref={buttonRef}
-          onClick={handleDownloadPDF}
-          className="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700"
-        >
-          Download PDF
-        </button>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white py-8 px-4 font-sans w-full" ref={dashboardRef} style={{ fontFamily: 'Inter, sans-serif' }}>
+      <div className="w-full">
+        {/* Header + Download Button */}
+        <div className="flex justify-between items-center mb-6 relative w-full">
+          <h2 className="text-2xl font-normal text-gray-800 text-center w-full">Financial Dashboard</h2>
+          <div className="absolute right-4" ref={buttonRef}>
+            <button
+              onClick={handleDownloadPDF}
+              className="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700"
+            >
+              Download PDF
+            </button>
+          </div>
+        </div>
 
-      <h2 className="text-2xl font-normal text-gray-800 mb-2 text-center">Financial Dashboard</h2>
+        <div className="text-lg font-normal text-gray-800 mb-4">
+          {chartType === 'overview'
+            ? 'Monthly Expenses and Revenue'
+            : 'Monthly Expenses and Revenue: Expected vs Actual'}
+        </div>
 
-      <div className="text-lg font-normal text-gray-800 mb-2 text-left">
-        {chartType === 'overview'
-          ? 'Monthly Expenses and Revenue'
-          : 'Monthly Expenses and Revenue: Expected vs Actual'}
-      </div>
+        {/* Chart Container with extra spacing for overview */}
+        <div className={chartType === 'overview' ? 'mb-8' : ''}>
+          <ResponsiveContainer width="101%" height={chartType === 'overview' ? 300 : 400}>
+            {chartType === 'overview' ? (
+              <LineChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="month" tick={{ fill: 'black' }} />
+                <YAxis
+                  tickFormatter={formatNumber}
+                  domain={[0, dataMax => Math.ceil(dataMax * 1.1)]}
+                  tick={{ fill: 'black' }}
+                />
+                <Tooltip formatter={val => `${val.toLocaleString()}`} />
+                <Legend />
+                <Line
+                  type="linear"
+                  dataKey="Expenses"
+                  stroke="#1E88E5"
+                  name="Expenses"
+                  label={renderLineLabel}
+                  strokeWidth={2}
+                />
+                <Line
+                  type="linear"
+                  dataKey="Revenue"
+                  stroke="#D32F2F"
+                  name="Revenue"
+                  label={renderLineLabel}
+                  strokeWidth={2}
+                />
+              </LineChart>
+            ) : (
+              <BarChart data={data} margin={{ top: 30, right: 30, left: 20, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="month" tick={{ fill: 'black' }} />
+                <YAxis tickFormatter={formatNumber} tick={{ fill: 'black' }} />
+                <Tooltip formatter={val => `${val.toLocaleString()}`} />
+                <Legend />
+                <Bar dataKey="ExpectedExpense" fill="#42A5F5" name="Expected Expense">
+                  <LabelList content={renderBarLabel} />
+                </Bar>
+                <Bar dataKey="Expenses" fill="#4CAF50" name="Expenses">
+                  <LabelList content={renderBarLabel} />
+                </Bar>
+                <Bar dataKey="ExpectedRevenue" fill="#FFB300" name="Expected Revenue">
+                  <LabelList content={renderBarLabel} />
+                </Bar>
+                <Bar dataKey="Revenue" fill="#E53935" name="Revenue">
+                  <LabelList content={renderBarLabel} />
+                </Bar>
+              </BarChart>
+            )}
+          </ResponsiveContainer>
+        </div>
 
-      <ResponsiveContainer width="100%" height={chartType === 'overview' ? 300 : 400}>
-        {chartType === 'overview' ? (
-          <LineChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="month" tick={{ fill: 'black' }} />
-            <YAxis
-              tickFormatter={formatNumber}
-              domain={[0, dataMax => Math.ceil(dataMax * 1.1)]}
-              tick={{ fill: 'black' }}
-            />
-            <Tooltip formatter={val => `${val.toLocaleString()}`} />
-            <Legend />
-            <Line
-              type="linear"
-              dataKey="Expenses"
-              stroke="#1E88E5"
-              name="Expenses"
-              label={renderLineLabel}
-              strokeWidth={2}
-            />
-            <Line
-              type="linear"
-              dataKey="Revenue"
-              stroke="#D32F2F"
-              name="Revenue"
-              label={renderLineLabel}
-              strokeWidth={2}
-            />
-          </LineChart>
-        ) : (
-          <BarChart data={data} margin={{ top: 30, right: 30, left: 20, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="month" tick={{ fill: 'black' }} />
-            <YAxis tickFormatter={formatNumber} tick={{ fill: 'black' }} />
-            <Tooltip formatter={val => `${val.toLocaleString()}`} />
-            <Legend />
-            <Bar dataKey="ExpectedExpense" fill="#42A5F5" name="Expected Expense">
-              <LabelList content={renderBarLabel} />
-            </Bar>
-            <Bar dataKey="Expenses" fill="#4CAF50" name="Expenses">
-              <LabelList content={renderBarLabel} />
-            </Bar>
-            <Bar dataKey="ExpectedRevenue" fill="#FFB300" name="Expected Revenue">
-              <LabelList content={renderBarLabel} />
-            </Bar>
-            <Bar dataKey="Revenue" fill="#E53935" name="Revenue">
-              <LabelList content={renderBarLabel} />
-            </Bar>
-          </BarChart>
-        )}
-      </ResponsiveContainer>
-
-      <div className="mt-10 overflow-x-auto">
-        <table className="min-w-full text-sm border text-center">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="p-2 border">Category</th>
-              {data.map(item => (
-                <th key={item.month} className="p-2 border">{item.month}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {(chartType === 'overview'
-              ? ['Expenses', 'Revenue']
-              : ['ExpectedExpense', 'Expenses', 'ExpectedRevenue', 'Revenue']
-            ).map(k => (
-              <tr key={k}>
-                <td className="p-2 border font-bold">{k.replace(/([A-Z])/g, ' $1')}</td>
+        <div className="mt-10 overflow-x-auto w-full">
+          <table className="min-w-full text-sm border text-center w-full">
+            <thead className="bg-gray-100">
+              <tr>
+                <th className="p-2 border">Category</th>
                 {data.map(item => (
-                  <td key={`${item.month}-${k}`} className="p-2 border">
-                    {item[k]?.toLocaleString(undefined, { maximumFractionDigits: 2 }) ?? '0'}
-                  </td>
+                  <th key={item.month} className="p-2 border">{item.month}</th>
                 ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {(chartType === 'overview'
+                ? ['Expenses', 'Revenue']
+                : ['ExpectedExpense', 'Expenses', 'ExpectedRevenue', 'Revenue']
+              ).map(k => (
+                <tr key={k}>
+                  <td className="p-2 border font-bold">{k.replace(/([A-Z])/g, ' $1')}</td>
+                  {data.map(item => (
+                    <td key={`${item.month}-${k}`} className="p-2 border">
+                      {item[k]?.toLocaleString(undefined, { maximumFractionDigits: 2 }) ?? '0'}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
-      <div className="mt-8">
-        <h4 className="text-xl font-normal text-black mb-2 text-center">Summary</h4>
-        <p className="text-black text-base leading-relaxed">
-          Actual expenses largely aligned with budget, while consistent revenue shortfalls highlight the need for improved 
-          forecasting or new revenue strategies.
-        </p>
+        <div className="mt-8 text-center">
+          <h4 className="text-xl font-normal text-black mb-2">Summary</h4>
+          <p className="text-black text-base leading-relaxed mx-auto">
+            Actual expenses largely aligned with budget, while consistent revenue shortfalls highlight the need for improved forecasting or new revenue strategies.
+          </p>
+        </div>
       </div>
     </div>
   );
