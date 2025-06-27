@@ -273,9 +273,26 @@ const App = () => {
                       <button onClick={() => setActivePage('alerts')} className="text-left hover:text-blue-300 mb-px">Alerts</button>
                       <button onClick={() => setActivePage('settings')} className="text-left hover:text-blue-300 mb-px">Settings</button>
                       <button onClick={() => setIsLoggedIn(false)} className="mt-4 text-left text-white hover:text-white-500">Logout</button>    
+                      
+                      <div className="w-full flex flex-col items-center justify-center mt-4 space-y-1">
+  <img src="/ambulance3.png" alt="Ambulance Icon" className="w-14 h-14" />
+  <span className="text-sm text-white font-futura">Emergency </span>
+</div>
+<hr className="border-white mt-2 w-1/2 mx-auto" />
+<div className="w-full flex flex-col items-center justify-center mt-4 space-y-1">
+  <img src="/Medical_files.png" alt="Services" className="w-16 h-16" />  
+  <span className="text-sm text-white font-futura">Reports </span>
+</div>
+<hr className="border-white mt-2 w-1/2 mx-auto" />
+<div className="w-full flex flex-col items-center justify-center mt-4 space-y-1">
+  <img src="/stethoscope1.png" alt="Services" className="w-16 h-16" />  
+  <span className="text-sm text-white font-futura">Services</span>
+</div>
+
                     </nav>
                   </div>
                 </aside>
+                
 
                 {/* Main Content */}
                 <main className="flex-grow ml-60 pt-4 pb-32 px-4 overflow-y-auto h-screen">

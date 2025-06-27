@@ -305,23 +305,32 @@ const HMISPage = () => {
 
 {/* RIGHT IMAGE SECTION */}
 <div className="relative flex justify-center items-center right-[-400px] ml-10">
+  
   <div className="absolute top-8 left-16 w-[400px] h-[400px] rounded-[300px] border-[6px] border-[#3399FF] opacity-70 z-0"></div>
-
+  
+  <div className="absolute top-8 left-16 w-[400px] h-[400px] rounded-[300px] border-[6px] border-[#3399FF] opacity-70 z-0"></div>
+  
   <div className="w-[720px] h-[360px] bg-white rounded-b-full overflow-hidden shadow-md flex items-center justify-center -mt-4 transform rotate-90 z-10">
     <img src="/Doctor1.jpg" alt="Doctors" className="w-full h-full object-cover transform -rotate-90" />
   </div>
 
   {/* 🟡 MOVED CIRCLE BELOW USING TRANSLATE */}
-  <div className="absolute top-[50%] left-[10%] transform translate-y-[130px] translate-x-[40px] w-[180px] h-[180px] bg-[#1F3C88] rounded-full opacity-20 rotate-45 z-20"></div>
-
-  <div className="absolute bottom-[10px] right-[10px] p-4 rounded-md shadow-lg max-w-xs text-sm leading-snug z-50" style={{ backgroundColor: "#1F3C88", color: "#ffffff" }}>
-    <p className="font-normal text-white font-futura">Seamless hospital insights</p>
-    <p className="text-[#85C1FF] text-xs mt-1 text-white font-futura">Smarter patient outcomes</p>
-  </div>
-</div>
-
+  <div
+  className="absolute p-4 rounded-md shadow-lg max-w-xs text-sm leading-snug z-50"
+  style={{
+    backgroundColor: "#1F3C88",
+    color: "#ffffff",
+    bottom: "220px",
+    left: "100px",
+  }}
+>
+  <p className="font-normal text-white font-futura">Seamless hospital insights</p>
+  <p className="text-[#85C1FF] text-xs mt-1 text-white font-futura">Smarter patient outcomes</p>
+      </div>
+      </div>
       </main>
     </div>
+  
   );
 };
 
