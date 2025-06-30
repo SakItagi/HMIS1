@@ -169,3 +169,11 @@ month,year,category,subCategory,metric,value
 02,2025,Pharmacy,Actual,Actual Expired,8900
 03,2025,Diagnostic,Actual,Actual Lab Tests,8900
 03,2025,Diagnostic,Actual,Actual Radiology Tests,670
+03,2025,Admissions and Discharges,Expected,Expected Admissions,25000
+03,2025,Admissions and Discharges,Expected,Expected Discharges,8700
+03,2025,Admissions and Discharges,Actual,Actual Admissions,8700
+03,2025,Admissions and Discharges,Actual,Actual Discharges,3200
+03,2025,Pharmacy,Expected,Expected Issued,35000
+03,2025,Pharmacy,Expected,Expected Expired,10000
+03,2025,Pharmacy,Actual,Actual Issued,23000
+03,2025,Pharmacy,Actual,Actual Expired,4500

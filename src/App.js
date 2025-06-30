@@ -11,6 +11,7 @@ import FeedbackDashboard from './components/FeedbackDashboard';
 import DepartmentDashboard from './components/DepartmentDashboard';
 import OverviewDashboard from './components/OverviewDashboard';
 import ResetPasswordForm from './components/ResetPasswordForm';
+import ReportGenerator from './components/ReportingDashboard';
 import './index.css';
 
 const App = () => {
@@ -51,6 +52,7 @@ const App = () => {
       case 'department-profit-overview': return <DepartmentDashboard view="profitOverview" />;
       case 'department-profit-expected-vs-actual': return <DepartmentDashboard view="profitComparison" />;
       case 'overview': return <OverviewDashboard />;
+      case 'reporting': return <ReportGenerator />;
       case 'home':
       default: return <HMISForm />;
     }
@@ -118,20 +120,19 @@ const App = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: resetUsername }),
       });
-  
+
       const data = await res.json();
-      console.log('📨 Response from server:', data);
-  
+
       if (data.message) {
         setResetMessage(data.message);
       } else {
         setResetMessage(data.error || 'Error sending reset link');
       }
     } catch (error) {
-      console.error('❌ Client error:', error);
       setResetMessage('Server error during password reset');
     }
   };
+
   return (
     <Router>
       <Routes>
@@ -140,7 +141,6 @@ const App = () => {
           element={
             !isLoggedIn ? (
               <div className="flex h-screen">
-                {/* Left Side */}
                 <div className="w-1/2 bg-blue-100 flex flex-col justify-center items-center p-10">
                   <h2 className="text-2xl font-normal text-center mb-2 text-black">
                     Empowering Smarter Healthcare Decisions
@@ -148,8 +148,6 @@ const App = () => {
                   <p className="text-black text-center mb-6">One Platform for Stakeholders and Staff</p>
                   <img src="/doctor2.jpg" alt="Doctor" className="w-full h-full object-cover rounded-2xl mb-22" />
                 </div>
-
-                {/* Right Side */}
                 <div className="w-1/2 bg-white flex flex-col justify-center items-center shadow-lg px-10">
                   <div className="w-full max-w-md flex flex-col items-center">
                     {!showResetForm ? (
@@ -158,12 +156,10 @@ const App = () => {
                           Make Informed HealthCare Decisions<br />Sign In
                         </h1>
                         {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
-
                         <div className="mb-4 text-left">
                           <label className="block text-sm font-medium text-black text-left">Username</label>
                           <input type="text" value={credentials.username} onChange={(e) => setCredentials({ ...credentials, username: e.target.value })} className="w-full px-3 py-2 border border-gray-300 rounded outline-none text-black text-left" placeholder="Enter username" required />
                         </div>
-
                         {patientType === 'new' && (
                           <div className="mb-4 text-left">
                             <label className="block text-sm font-medium text-black text-left">Role</label>
@@ -175,7 +171,6 @@ const App = () => {
                             </select>
                           </div>
                         )}
-
                         <div className="mb-6 text-left relative">
                           <label className="block text-sm font-medium text-black text-left">Password</label>
                           <input type="password" value={credentials.password} onChange={(e) => setCredentials({ ...credentials, password: e.target.value })} className="w-full px-3 py-2 border border-gray-300 rounded outline-none text-black text-left" placeholder="Enter password" required />
@@ -183,14 +178,12 @@ const App = () => {
                             <div className="absolute right-0 mt-1 text-sm text-blue-600 hover:underline cursor-pointer" onClick={() => setShowResetForm(true)}>Forgot Password</div>
                           )}
                         </div>
-
                         {patientType === 'new' && (
                           <div className="mb-6 text-left">
                             <label className="block text-sm font-medium text-black text-left">Confirm Password</label>
                             <input type="password" value={credentials.confirmPassword} onChange={(e) => setCredentials({ ...credentials, confirmPassword: e.target.value })} className="w-full px-3 py-2 border border-gray-300 rounded outline-none text-black text-left" placeholder="Confirm password" required />
                           </div>
                         )}
-
                         <button type="submit" className="w-full bg-blue-700 text-white py-2 rounded-full hover:bg-blue-800 transition mb-6">
                           {patientType === 'new' ? 'Register' : 'Login'}
                         </button>
@@ -199,27 +192,18 @@ const App = () => {
                       <form onSubmit={handlePasswordReset} className="w-full">
                         <h2 className="text-xl font-normal mb-6 text-black text-center">Reset Your Password</h2>
                         {resetMessage && <p className="text-center text-blue-600 mb-4">{resetMessage}</p>}
-
                         <div className="mb-4 text-left">
                           <label className="block text-sm font-medium text-black text-left">Username</label>
-                          <input
-                      type="text"
-                      placeholder="Enter Username"
-                      value={resetUsername}
-                      onChange={(e) => setResetUsername(e.target.value)}
-                      className="w-full mb-2 p-2 border rounded"
-                    />                        </div>
-
+                          <input type="text" placeholder="Enter Username" value={resetUsername} onChange={(e) => setResetUsername(e.target.value)} className="w-full mb-2 p-2 border rounded" />
+                        </div>
                         <button type="submit" className="w-full bg-blue-700 text-white py-2 rounded-md hover:bg-blue-800 transition mb-6">
                           Send Reset Link
                         </button>
-
                         <button type="button" onClick={() => { setShowResetForm(false); setResetMessage(''); }} className="text-white bg-blue-800 text-sm py-1 px-4 rounded-full hover:opacity-90 transition">
                           Back to Login
                         </button>
                       </form>
                     )}
-
                     {!showResetForm && (
                       <div className="flex justify-center mb-4 w-full">
                         <button onClick={() => setPatientType('new')} className="px-6 py-2 rounded-l-full border w-1/2 bg-blue-600 text-white">New User</button>
@@ -231,20 +215,19 @@ const App = () => {
               </div>
             ) : (
               <div className="min-h-screen flex bg-gradient-to-br from-blue-50 to-white font-poppins">
-                {/* Sidebar */}
                 <aside className="w-60 bg-blue-900 text-white h-screen fixed left-0 top-0 overflow-y-auto font-futura flex flex-col">
                   <div className="mt-6 mb-4 px-4">
                     <h1 className="text-white text-lg font-bold tracking-wide">HMIS</h1>
                     <hr className="border-white mt-2" />
                   </div>
                   <div className="flex flex-col justify-start h-full px-4 pb-4">
-                  <nav className="flex flex-col gap-2 flex-1 text-sm font-normal font-futura items-start">
-                  <button onClick={() => setActivePage('home')} className="text-left hover:text-blue-300 mb-px">Home</button>
+                    <nav className="flex flex-col gap-2 flex-1 text-sm font-normal font-futura items-start">
+                      <button onClick={() => setActivePage('home')} className="text-left hover:text-blue-300 mb-px">Home</button>
                       <div className="w-full mb-px">
                         <button onClick={() => toggleSubmenu('dashboard')} className="w-full text-left hover:text-blue-300 capitalize mb-px">Dashboard</button>
                         {openSubmenus['dashboard'] && (
                           <div className="pl-0 flex flex-col w-full text-left items-start space-y-1 text-blue-100 leading-relaxed">
-                          <button onClick={() => setActivePage('overview')} className="text-left">Overview</button>
+                            <button onClick={() => setActivePage('overview')} className="text-left">Overview</button>
                             {[['finance', ['Finance Overview', 'finance-overview'], ['Expected vs Actual', 'finance-expected-vs-actual']],
                               ['diagnostics', ['Diagnostics Overview', 'diagnostics-overview'], ['Expected vs Actual', 'diagnostics-performance']],
                               ['HR', ['HR Overview', 'hr-overview'], ['Expected vs Actual', 'hr-analytics']],
@@ -272,34 +255,27 @@ const App = () => {
                       <button onClick={() => setActivePage('forecasting')} className="text-left hover:text-blue-300 mb-px">Forecasting</button>
                       <button onClick={() => setActivePage('alerts')} className="text-left hover:text-blue-300 mb-px">Alerts</button>
                       <button onClick={() => setActivePage('settings')} className="text-left hover:text-blue-300 mb-px">Settings</button>
-                      <button onClick={() => setIsLoggedIn(false)} className="mt-4 text-left text-white hover:text-white-500">Logout</button>    
-                      
+                      <button onClick={() => setIsLoggedIn(false)} className="mt-4 text-left text-white hover:text-white-500">Logout</button>
                       <div className="w-full flex flex-col items-center justify-center mt-4 space-y-1">
-  <img src="/ambulance3.png" alt="Ambulance Icon" className="w-14 h-14" />
-  <span className="text-sm text-white font-futura">Emergency </span>
-</div>
-<hr className="border-white mt-2 w-1/2 mx-auto" />
-<div className="w-full flex flex-col items-center justify-center mt-4 space-y-1">
-  <img src="/Medical_files.png" alt="Services" className="w-16 h-16" />  
-  <span className="text-sm text-white font-futura">Reports </span>
-</div>
-<hr className="border-white mt-2 w-1/2 mx-auto" />
-<div className="w-full flex flex-col items-center justify-center mt-4 space-y-1">
-  <img src="/stethoscope1.png" alt="Services" className="w-16 h-16" />  
-  <span className="text-sm text-white font-futura">Services</span>
-</div>
-
+                        <img src="/ambulance3.png" alt="Ambulance Icon" className="w-14 h-14" />
+                        <span className="text-sm text-white font-futura">Emergency </span>
+                      </div>
+                      <hr className="border-white mt-2 w-1/2 mx-auto" />
+                      <div className="w-full flex flex-col items-center justify-center mt-4 space-y-1">
+                        <img src="/Medical_files.png" alt="Services" className="w-16 h-16" />
+                        <span className="text-sm text-white font-futura">Reports </span>
+                      </div>
+                      <hr className="border-white mt-2 w-1/2 mx-auto" />
+                      <div className="w-full flex flex-col items-center justify-center mt-4 space-y-1">
+                        <img src="/stethoscope1.png" alt="Services" className="w-16 h-16" />
+                        <span className="text-sm text-white font-futura">Services</span>
+                      </div>
                     </nav>
                   </div>
                 </aside>
-                
-
-                {/* Main Content */}
                 <main className="flex-grow ml-60 pt-4 pb-32 px-4 overflow-y-auto h-screen">
                   {renderContent()}
                 </main>
-
-                {/* Footer */}
                 <footer className="w-full bg-blue-600 text-white text-sm px-6 py-3 fixed bottom-0 left-0 ml-60 flex justify-center items-center z-10 font-futura">
                   <div className="flex gap-4 text-center">
                     <span>Email: info@hmis.com</span>
