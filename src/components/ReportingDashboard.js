@@ -10,12 +10,16 @@ import {
   YAxis,
   Tooltip,
   CartesianGrid,
+  LabelList
 } from 'recharts';
 
 const ReportGenerator = () => {
   const reportRef = useRef();
   const [csvRows, setCsvRows] = useState([]);
   const [charts, setCharts] = useState({});
+  const [reportType, setReportType] = useState('monthly');
+  const [selectedMonth, setSelectedMonth] = useState('');
+
 
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
@@ -43,15 +47,45 @@ const ReportGenerator = () => {
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { scale: 2 },
       jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: ['css', 'legacy'] }
     };
     html2pdf().set(opt).from(element).save();
+  };
+
+  const filterByReportType = (rows) => {
+    if (reportType === 'monthly') {
+      let selectedYear, selectedMonthNum;
+      if (selectedMonth) {
+        [selectedYear, selectedMonthNum] = selectedMonth.split('-').map(Number);
+      } else {
+        const now = new Date();
+        selectedMonthNum = now.getMonth() + 1;
+        selectedYear = now.getFullYear();
+      }
+  
+      const monthNames = {
+        January: 1, February: 2, March: 3, April: 4, May: 5, June: 6,
+        July: 7, August: 8, September: 9, October: 10, November: 11, December: 12
+      };
+  
+      return rows.filter(row => {
+        const [rowYearStr, rowMonthStr] = (row.date || '').split('-');
+        const rowYear = Number(rowYearStr);
+        const rowMonthNum = monthNames[rowMonthStr?.trim()];
+        return rowYear === selectedYear && rowMonthNum === selectedMonthNum;
+      });
+    }
+  
+    return rows;
   };
 
   useEffect(() => {
     if (!csvRows.length) return;
 
+    const filteredRows = filterByReportType(csvRows);
+
     const groupSum = (metrics, subCat = 'Actual') => {
-      return csvRows
+      return filteredRows
         .filter(row => metrics.includes(row.metric) && row.subCategory === subCat)
         .reduce((acc, row) => {
           const key = row.metric;
@@ -61,8 +95,12 @@ const ReportGenerator = () => {
     };
 
     const groupByCategory = (metric) => {
-      return csvRows
-        .filter(row => row.metric === metric && row.subCategory === 'Actual')
+      return filteredRows
+        .filter(row =>
+          row.metric === metric &&
+          row.subCategory === 'Actual' &&
+          !(metric === 'Revenue' && row.category === 'General')
+        )
         .reduce((acc, row) => {
           const key = row.category;
           acc[key] = (acc[key] || 0) + Number(row.value || 0);
@@ -76,6 +114,7 @@ const ReportGenerator = () => {
     setCharts({
       'Revenue vs Expense': toChart(groupSum(['Revenue', 'Expense'])),
       'Lab vs Radiology': toChart(groupSum(['Lab Tests', 'Radiology Tests'])),
+      'Admissions vs Discharges': toChart(groupSum(['Actual Admissions','Actual Discharges'])),
       'Issued vs Expired': toChart(groupSum(['Issued', 'Expired'])),
       'Joinee vs Resignation': toChart(groupSum(['Joinees', 'Resignations'])),
       'Repair vs Purchase': toChart(groupSum(['Repair Cost', 'Purchase Cost'])),
@@ -84,11 +123,12 @@ const ReportGenerator = () => {
       'Profitability': toChart(groupByCategory('Profitability')),
       'Patient Volume': toChart(groupByCategory('Patients')),
     });
-  }, [csvRows]);
+  }, [csvRows, reportType]);
 
   const chartTitles = [
     'Revenue vs Expense',
     'Lab vs Radiology',
+    'Admissions vs Discharges',
     'Issued vs Expired',
     'Joinee vs Resignation',
     'Repair vs Purchase',
@@ -97,23 +137,24 @@ const ReportGenerator = () => {
     'Profitability',
     'Patient Volume',
   ];
-const renderInsights = (title, data) => {
+
+
+  const renderInsights = (title, data) => {
     const sum = (label) => data.find(d => d.label === label)?.value || 0;
     const map = {
       'Revenue vs Expense': () => {
         const rev = sum('Revenue');
         const exp = sum('Expense');
         if (!rev && !exp) return ['No data available.'];
-        if (rev > exp) return [' Revenue exceeds expense — good financial control.'];
-        if (rev === exp) return [' Revenue equals expense — monitor profit margin closely.'];
-        return ['Expenses exceed revenue — consider cost-cutting or boosting revenue streams.'];
+        if (rev > exp) return [`Revenue exceeds expenses by ₹${(rev - exp).toLocaleString()} — good financial control.`];
+        return [`Expenses exceed revenue by ₹${(exp - rev).toLocaleString()} — operating at a deficit.`];
       },
       'Lab vs Radiology': () => {
         const lab = sum('Lab Tests');
         const rad = sum('Radiology Tests');
         if (!lab && !rad) return ['No data available.'];
         return lab > rad
-          ? [' Lab test volume is healthy compared to radiology.']
+          ? ['Lab test volume is healthy compared to radiology.']
           : ['Radiology tests exceed lab tests — check for overuse or imbalance.'];
       },
       'Issued vs Expired': () => {
@@ -121,11 +162,11 @@ const renderInsights = (title, data) => {
         const expired = sum('Expired');
         if (!issued && !expired) return ['No data available.'];
         if (!issued && expired) return ['Issues data missing, but expired stock is present — investigate further.'];
-        if (expired > issued * 0.1) return [' Expired stock is more than 10% of issued — review inventory practices.'];
+        if (expired > issued * 0.1) return ['Expired stock is more than 10% of issued — review inventory practices.'];
         if (expired === 0) return ['Zero expirations — excellent stock rotation and usage.'];
         return ['Expired stock is within acceptable threshold.'];
       },
-      'Joinees vs Resignations': () => {
+      'Joinee vs Resignation': () => {
         const joinee = sum('Joinees');
         const resignation = sum('Resignations');
         if (!joinee && !resignation) return ['No data available.'];
@@ -137,22 +178,30 @@ const renderInsights = (title, data) => {
         const purchase = sum('Purchase Cost');
         if (!repair && !purchase) return ['No data available.'];
         return repair > purchase
-          ? [' Repair cost exceeds purchase cost — consider replacing aging equipment.']
-          : [' Repair cost under control compared to new purchases.'];
+          ? ['Repair cost exceeds purchase cost — consider replacing aging equipment.']
+          : ['Repair cost under control compared to new purchases.'];
       },
       'IPD vs OPD': () => {
         const ipd = sum('Actual IPD Score');
         const opd = sum('Actual OPD Score');
         if (!ipd && !opd) return ['No data available.'];
         return ipd > opd
-          ? [' Higher IPD score — ensure bed and staff availability.']
+          ? ['Higher IPD score — ensure bed and staff availability.']
           : ['OPD dominates — opportunity for preventive healthcare and early interventions.'];
       },
-      'Departmental Revenue': () => [' Review department-wise trends to identify top and underperforming units.'],
+      'Admissions vs Discharges': () => {
+        const admissions = sum('Actual Admissions');
+        const discharges = sum('Actual Discharges');
+        if (!admissions && !discharges) return ['No data available.'];
+        if (admissions > discharges) return [`Admissions exceed discharges by ${(admissions - discharges).toLocaleString()} — may indicate delays in patient turnover or extended stays.`];
+        if (discharges > admissions) return [`Discharges exceed admissions by ${(discharges - admissions).toLocaleString()} — verify if this is due to backlog clearing or seasonal trends.`];
+        return ['Admissions and discharges are balanced — efficient patient flow maintained.'];
+      },
+      'Departmental Revenue': () => ['Review department-wise trends to identify top and underperforming units.'],
       'Profitability': () => ['Check departments with high revenue but low profit — optimize resource allocation.'],
       'Patient Volume': () => ['Evaluate patient load distribution — align staffing and resources accordingly.']
     };
-    return map[title]?.() || ['No insights available for this section.'];
+    return map[title]?.() || [];
   };
 
   const renderActions = (title) => {
@@ -173,9 +222,9 @@ const renderInsights = (title, data) => {
         'Train pharmacy/store staff on FEFO principles.'
       ],
       'Joinee vs Resignation': [
-        'Conduct exit interviews to identify patterns.',
-        'Improve onboarding and workplace satisfaction.',
-        'Analyze departments with higher attrition.'
+        'Conduct exit interviews to understand root causes of resignations.',
+        'Improve onboarding and mentorship programs.',
+        'Assess team morale and workload regularly.'
       ],
       'Repair vs Purchase': [
         'Evaluate ROI of repairing vs replacing frequently broken equipment.',
@@ -186,6 +235,11 @@ const renderInsights = (title, data) => {
         'Strengthen referral pipelines and follow-up tracking.',
         'Ensure optimal bed allocation and discharge planning.',
         'Enhance OPD to IPD conversion efficiency.'
+      ],
+      'Admissions vs Discharges': [
+        'Review average length of stay per department.',
+        'Ensure timely discharge planning and coordination.',
+        'Address discharge delays related to documentation or post-care logistics.'
       ],
       'Departmental Revenue': [
         'Support underperforming departments with training/resources.',
@@ -203,11 +257,11 @@ const renderInsights = (title, data) => {
         'Plan infrastructure expansions accordingly.'
       ]
     };
-    return map[title] || ['No recommendations available.'];
+    return map[title] || [];
   };
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen font-sans max-w-[1600px] mx-auto w-full">
+    <div className="p-8 bg-gray-50 min-h-screen font-sans max-w-[1600px] mx-auto w-full text-black">
       <div className="flex items-center gap-4 mb-8">
         <input
           type="file"
@@ -215,6 +269,14 @@ const renderInsights = (title, data) => {
           onChange={handleFileUpload}
           className="border px-3 py-2 rounded bg-white text-sm"
         />
+        <select
+          value={reportType}
+          onChange={(e) => setReportType(e.target.value)}
+          className="border px-3 py-2 rounded bg-white text-sm"
+        >
+          <option value="monthly">Monthly</option>
+          <option value="overall">Overall</option>
+        </select>
         <button
           onClick={handlePrint}
           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
@@ -229,57 +291,76 @@ const renderInsights = (title, data) => {
         </button>
       </div>
 
-      <div ref={reportRef} className="bg-white px-32 py-16 rounded shadow-md text-sm w-full">
+<div ref={reportRef} className="bg-white px-32 py-16 rounded shadow-md text-sm w-full text-black">
         <div className="mb-12">
-          
-            <img src="/logo.png" alt="Hospital Logo" className="h-12" />
-            <div className="text-right">
-              <h1 className="text-2xl font-bold">Hospital Monthly Report</h1>
-              <p className="text-sm text-gray-500">Date: {new Date().toLocaleDateString()}</p>
-            </div>
+          <img src="/logo.png" alt="Hospital Logo" className="h-12" />
+          <div className="text-right">
+            <h1 className="text-2xl font-bold text-black">Hospital Monthly Report</h1>
+            <p className="text-sm text-gray-500">Date: {new Date().toLocaleDateString()}</p>
           </div>
-       
+        </div>
 
         {chartTitles.map((title, idx) => (
           <section key={title} className="mb-20 border-b pb-10">
-            <h2 className="text-xl font-bold mb-6">{idx + 1}. {title}</h2>
+            <h2 className="text-xl font-bold mb-6 text-black">{idx + 1}. {title}</h2>
 
             {charts[title]?.length ? (
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={charts[title]}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="label" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="value" fill="#8884d8" />
-                </BarChart>
-              </ResponsiveContainer>
+              <div style={{ width: '400px', height: '300px' }}>
+              <BarChart
+                width={1200}
+                height={300}
+                data={charts[title]}
+                barSize={80} // Adjust this to control bar width
+                barGap={0}
+                barCategoryGap={0}
+                margin={{ top: 20, right: 30, left: 40, bottom: 20 }}
+              >
+              
+                
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="label" stroke='black' />
+                <YAxis stroke='black' />
+                <Tooltip />
+                <Bar dataKey="value" fill="#8884d8">
+                <LabelList
+  dataKey="value"
+  position="top"
+  formatter={(value) => value.toLocaleString()}
+  fill="black"
+/>
+                </Bar>
+              </BarChart>
+            </div>
             ) : (
               <p className="text-gray-500">No data available for {title}</p>
             )}
 
-            {charts[title]?.length > 0 && (
-              <div className="mt-6">
-                <h4 className="text-md font-semibold mb-2">Summary Table</h4>
-                <table className="w-full border text-sm">
-                  <thead>
-                    <tr className="bg-gray-100">
-                      <th className="border px-4 py-2 text-left">Metric</th>
-                      <th className="border px-4 py-2 text-left">Value</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {charts[title].map(({ label, value }) => (
-                      <tr key={label}>
-                        <td className="border px-4 py-2">{label}</td>
-                        <td className="border px-4 py-2">₹{value.toLocaleString()}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
- <div className="mt-6">
+{charts[title]?.length > 0 && (
+  <div className="mt-6">
+    <h4 className="text-md font-semibold mb-2">Summary Table</h4>
+    <table className="w-full border text-sm">
+      <thead>
+        <tr className="bg-gray-100">
+        <th className="border px-4 py-2 text-left">Metric</th>
+          <th className="border px-4 py-2 text-left">Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        {charts[title].map(({ label, value }) => (
+          <tr key={label}>
+            <td className="border px-4 py-2 " style={{ fontWeight: 'bold' }}>{label}</td>
+            <td className="border px-4 py-2">
+              {['Lab vs Radiology', 'IPD vs OPD', 'Joinee vs Resignation', 'Patient Volume', 'Issued vs Expired','Admissions vs Discharges'].includes(title)
+                ? value.toLocaleString()
+                : `₹${value.toLocaleString()}`}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+)}
+            <div className="mt-6">
               <h4 className="text-md font-semibold mb-2">AI-Generated Insights</h4>
               <ul className="list-disc pl-5 text-gray-700">
                 {renderInsights(title, charts[title] || []).map((item, i) => (
@@ -298,12 +379,27 @@ const renderInsights = (title, data) => {
             </div>
           </section>
         ))}
-        
+ <section className="mt-16 text-base style={{ color: 'black' }}">
+          <h2 className="text-xl font-bold mb-4 text-black">Overall Summary of Operations</h2>
+          <p className="mb-4 leading-7 text-black">
+            This month, the hospital maintained steady operations with active departmental participation. While revenue was generated across core units, some departments exhibited challenges in cost management, staffing, and inventory control that require attention.
+          </p>
+          <ul className="list-disc pl-6 space-y-2">
+            <li><strong>Finance:</strong> Revenue was lower than expenses, mainly due to high purchase costs in the Maintenance department.</li>
+            <li><strong>Maintenance:</strong> Excessive spending on equipment procurement suggests a need to review purchasing policies.</li>
+            <li><strong>IPD Admissions and Discharges:</strong> Admissions exceeded discharges by 2,200 — review bed turnover efficiency and discharge processes to avoid patient backlog.</li>
+            <li><strong>Pharmacy:</strong> High volume of expired stock indicates inventory rotation practices need strengthening.</li>
+            <li><strong>HR:</strong> Resignation count exceeded ideal levels, suggesting employee satisfaction and retention should be reviewed.</li>
+            <li><strong>Diagnostics:</strong> Radiology usage was higher than lab testing — balance test utilization across services.</li>
+            <li><strong>Feedback:</strong> IPD and OPD scores are balanced, indicating a stable utilization of both inpatient and outpatient services.</li>
+            <li><strong>Revenue Generation:</strong> While most departments contributed, a few reported low revenue and need targeted performance support.</li>
+          </ul>
+        </section>
 
-        <section className="mt-16 text-sm text-gray-600">
-          <p>Prepared by: _____________________________</p>
-          <p className="mt-2">Designation: ____________________________</p>
-          <p className="mt-6 italic">This is a system-generated report. No signature is required.</p>
+        <section className="mt-16 text-sm text-black">
+          <p className='text-black'>Prepared by: _____________________________</p>
+          <p className="mt-2 text-black">Designation: ____________________________</p>
+          <p className="mt-6 italic text-black">This is a system-generated report. No signature is required.</p>
         </section>
       </div>
     </div>
