@@ -177,3 +177,12 @@ month,year,category,subCategory,metric,value
 03,2025,Pharmacy,Expected,Expected Expired,10000
 03,2025,Pharmacy,Actual,Actual Issued,23000
 03,2025,Pharmacy,Actual,Actual Expired,4500
+02,2025,Departmental Metrics,General Medicine,Actual Revenue,7425000
+02,2025,Departmental Metrics,General Medicine,Actual Patients,13900
+02,2025,Departmental Metrics,General Medicine,Actual Profitability,2943000
+02,2025,Departmental Metrics,Orthopaedic,Actual Revenue,1967000
+02,2025,Departmental Metrics,Orthopaedic,Actual Patients,3600
+02,2025,Departmental Metrics,Orthopaedic,Actual Profitability,584000
+02,2025,Departmental Metrics,Dialysis,Actual Revenue,785000
+02,2025,Departmental Metrics,Dialysis,Actual Patients,1200
+02,2025,Departmental Metrics,Dialysis,Actual Profitability,194000

@@ -3,7 +3,6 @@ import Papa from 'papaparse';
 import { useReactToPrint } from 'react-to-print';
 import html2pdf from 'html2pdf.js';
 import {
-  ResponsiveContainer,
   BarChart,
   Bar,
   XAxis,
@@ -18,8 +17,13 @@ const ReportGenerator = () => {
   const [csvRows, setCsvRows] = useState([]);
   const [charts, setCharts] = useState({});
   const [reportType, setReportType] = useState('monthly');
-  const [selectedMonth, setSelectedMonth] = useState('');
+  const [selectedMonth, setSelectedMonth] = useState('January');
+  const [selectedYear, setSelectedYear] = useState('2025');
 
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
 
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
@@ -29,8 +33,20 @@ const ReportGenerator = () => {
       header: true,
       skipEmptyLines: true,
       complete: (result) => {
-        setCsvRows(result.data);
-      },
+        const cleanedData = result.data.map(row => {
+          const metric = row.metric?.trim().replace(/^Actual /i, '') || '';
+          return {
+            ...row,
+            month: row.month?.toString().padStart(2, '0'),
+            year: row.year?.toString().trim(),
+            category: row.category?.trim(),
+            subCategory: row.subCategory?.trim(),
+            metric,
+            value: parseFloat(row.value) || 0
+          };
+        });
+        setCsvRows(cleanedData);
+      }
     });
   };
 
@@ -45,37 +61,32 @@ const ReportGenerator = () => {
       margin: 0.5,
       filename: 'HMIS_Report.pdf',
       image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2 },
+      html2canvas: {
+        scale: 2,
+        useCORS: true,       // Ensures images load correctly
+        logging: true,       // Helps debug layout issues
+        scrollX: 0,
+        scrollY: 0
+      },
       jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
-      pagebreak: { mode: ['css', 'legacy'] }
+      pagebreak: {
+        mode: ['avoid-all', 'css', 'legacy'] // ⛔ Prevents awkward page breaks
+      }
     };
     html2pdf().set(opt).from(element).save();
   };
 
+  const monthNameToNumberString = (monthName) => {
+    const index = monthNames.indexOf(monthName);
+    return index !== -1 ? (index + 1).toString().padStart(2, '0') : '01';
+  };
+
   const filterByReportType = (rows) => {
     if (reportType === 'monthly') {
-      let selectedYear, selectedMonthNum;
-      if (selectedMonth) {
-        [selectedYear, selectedMonthNum] = selectedMonth.split('-').map(Number);
-      } else {
-        const now = new Date();
-        selectedMonthNum = now.getMonth() + 1;
-        selectedYear = now.getFullYear();
-      }
-  
-      const monthNames = {
-        January: 1, February: 2, March: 3, April: 4, May: 5, June: 6,
-        July: 7, August: 8, September: 9, October: 10, November: 11, December: 12
-      };
-  
-      return rows.filter(row => {
-        const [rowYearStr, rowMonthStr] = (row.date || '').split('-');
-        const rowYear = Number(rowYearStr);
-        const rowMonthNum = monthNames[rowMonthStr?.trim()];
-        return rowYear === selectedYear && rowMonthNum === selectedMonthNum;
-      });
+      const monthStr = monthNameToNumberString(selectedMonth);
+      const yearStr = selectedYear.toString();
+      return rows.filter(row => row.month === monthStr && row.year === yearStr);
     }
-  
     return rows;
   };
 
@@ -96,11 +107,7 @@ const ReportGenerator = () => {
 
     const groupByCategory = (metric) => {
       return filteredRows
-        .filter(row =>
-          row.metric === metric &&
-          row.subCategory === 'Actual' &&
-          !(metric === 'Revenue' && row.category === 'General')
-        )
+        .filter(row => row.metric === metric && row.subCategory === 'Actual' && row.category !== 'General')
         .reduce((acc, row) => {
           const key = row.category;
           acc[key] = (acc[key] || 0) + Number(row.value || 0);
@@ -114,18 +121,18 @@ const ReportGenerator = () => {
     setCharts({
       'Revenue vs Expense': toChart(groupSum(['Revenue', 'Expense'])),
       'Lab vs Radiology': toChart(groupSum(['Lab Tests', 'Radiology Tests'])),
-      'Admissions vs Discharges': toChart(groupSum(['Actual Admissions','Actual Discharges'])),
+      'Admissions vs Discharges': toChart(groupSum(['Admissions', 'Discharges'])),
       'Issued vs Expired': toChart(groupSum(['Issued', 'Expired'])),
       'Joinee vs Resignation': toChart(groupSum(['Joinees', 'Resignations'])),
       'Repair vs Purchase': toChart(groupSum(['Repair Cost', 'Purchase Cost'])),
-      'IPD vs OPD': toChart(groupSum(['Actual IPD Score', 'Actual OPD Score'])),
+      'IPD vs OPD': toChart(groupSum(['IPD Score', 'OPD Score'])),
       'Departmental Revenue': toChart(groupByCategory('Revenue')),
       'Profitability': toChart(groupByCategory('Profitability')),
-      'Patient Volume': toChart(groupByCategory('Patients')),
+      'Patient Volume': toChart(groupByCategory('Patients'))
     });
-  }, [csvRows, reportType]);
+  }, [csvRows, reportType, selectedMonth, selectedYear]);
 
-  const chartTitles = [
+const chartTitles = [
     'Revenue vs Expense',
     'Lab vs Radiology',
     'Admissions vs Discharges',
@@ -137,7 +144,6 @@ const ReportGenerator = () => {
     'Profitability',
     'Patient Volume',
   ];
-
 
   const renderInsights = (title, data) => {
     const sum = (label) => data.find(d => d.label === label)?.value || 0;
@@ -259,7 +265,6 @@ const ReportGenerator = () => {
     };
     return map[title] || [];
   };
-
   return (
     <div className="p-8 bg-gray-50 min-h-screen font-sans max-w-[1600px] mx-auto w-full text-black">
       <div className="flex items-center gap-4 mb-8">
@@ -277,6 +282,28 @@ const ReportGenerator = () => {
           <option value="monthly">Monthly</option>
           <option value="overall">Overall</option>
         </select>
+        {reportType === 'monthly' && (
+          <>
+            <select
+              value={selectedMonth}
+              onChange={(e) => setSelectedMonth(e.target.value)}
+              className="border px-3 py-2 rounded bg-white text-sm"
+            >
+              {monthNames.map((m) => (
+                <option key={m} value={m}>{m}</option>
+              ))}
+            </select>
+            <select
+              value={selectedYear}
+              onChange={(e) => setSelectedYear(e.target.value)}
+              className="border px-3 py-2 rounded bg-white text-sm"
+            >
+              {[2025, 2024, 2023].map((y) => (
+                <option key={y} value={y}>{y}</option>
+              ))}
+            </select>
+          </>
+        )}
         <button
           onClick={handlePrint}
           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
@@ -290,8 +317,7 @@ const ReportGenerator = () => {
           ⬇️ Download PDF
         </button>
       </div>
-
-<div ref={reportRef} className="bg-white px-32 py-16 rounded shadow-md text-sm w-full text-black">
+      <div ref={reportRef} className="bg-white px-12 py-8 rounded shadow-md text-sm w-full text-black">
         <div className="mb-12">
           <img src="/logo.png" alt="Hospital Logo" className="h-12" />
           <div className="text-right">
