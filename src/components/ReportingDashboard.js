@@ -145,25 +145,50 @@ const chartTitles = [
     'Patient Volume',
   ];
 
-  const renderInsights = (title, data) => {
+  const renderInsights = (title, data, charts = {}) => {
     const sum = (label) => data.find(d => d.label === label)?.value || 0;
-    const map = {
-      'Revenue vs Expense': () => {
+    const allValues = (t) => charts?.[t]?.reduce((acc, curr) => acc + curr.value, 0) || 0;
+  
+    switch (title) {
+      case 'Revenue vs Expense': {
         const rev = sum('Revenue');
         const exp = sum('Expense');
+        const profitability = allValues('Profitability');
         if (!rev && !exp) return ['No data available.'];
-        if (rev > exp) return [`Revenue exceeds expenses by ₹${(rev - exp).toLocaleString()} — good financial control.`];
-        return [`Expenses exceed revenue by ₹${(exp - rev).toLocaleString()} — operating at a deficit.`];
-      },
-      'Lab vs Radiology': () => {
-        const lab = sum('Lab Tests');
-        const rad = sum('Radiology Tests');
-        if (!lab && !rad) return ['No data available.'];
-        return lab > rad
-          ? ['Lab test volume is healthy compared to radiology.']
-          : ['Radiology tests exceed lab tests — check for overuse or imbalance.'];
-      },
-      'Issued vs Expired': () => {
+        if (rev < exp && profitability < 0) {
+          return [`Expenses exceed revenue by ₹${(exp - rev).toLocaleString()} — operating at a deficit likely due to low profitability.`];
+        }
+        return rev > exp
+          ? [`Revenue exceeds expenses by ₹${(rev - exp).toLocaleString()} — good financial control.`]
+          : [`Expenses exceed revenue by ₹${(exp - rev).toLocaleString()} — operating at a deficit.`];
+      }
+      case 'Joinee vs Resignation': {
+        const joinees = sum('Joinees');
+        const resigns = sum('Resignations');
+        const patientLoad = allValues('Patient Volume');
+        if (!joinees && !resigns) return ['No data available.'];
+        if (resigns > joinees && patientLoad > 1000) {
+          return ['More resignations than joinees — possibly due to high patient volume and staff burnout.'];
+        }
+        return resigns > joinees
+          ? ['More resignations than joinees — assess employee satisfaction and retention strategies.']
+          : ['Healthy hiring trend over resignations.'];
+      }
+      case 'Admissions vs Discharges': {
+        const adm = sum('Admissions');
+        const dis = sum('Discharges');
+        const ipdScore = sum('IPD Score');
+        if (!adm && !dis) return ['No data available.'];
+        if (adm > dis && ipdScore > 500) {
+          return [`Admissions exceed discharges by ${(adm - dis).toLocaleString()} — possibly due to longer IPD stays.`];
+        }
+        return adm > dis
+          ? [`Admissions exceed discharges by ${(adm - dis).toLocaleString()} — may indicate delays in patient turnover or extended stays.`]
+          : dis > adm
+          ? [`Discharges exceed admissions by ${(dis - adm).toLocaleString()} — verify if this is due to backlog clearing or seasonal trends.`]
+          : ['Admissions and discharges are balanced — efficient patient flow maintained.'];
+      }
+      case 'Issued vs Expired': {
         const issued = sum('Issued');
         const expired = sum('Expired');
         if (!issued && !expired) return ['No data available.'];
@@ -171,45 +196,62 @@ const chartTitles = [
         if (expired > issued * 0.1) return ['Expired stock is more than 10% of issued — review inventory practices.'];
         if (expired === 0) return ['Zero expirations — excellent stock rotation and usage.'];
         return ['Expired stock is within acceptable threshold.'];
-      },
-      'Joinee vs Resignation': () => {
-        const joinee = sum('Joinees');
-        const resignation = sum('Resignations');
-        if (!joinee && !resignation) return ['No data available.'];
-        if (resignation > joinee) return ['More resignations than joinees — assess employee satisfaction and retention strategies.'];
-        return ['Healthy hiring trend over resignations.'];
-      },
-      'Repair vs Purchase': () => {
+      }
+      case 'Lab vs Radiology': {
+        const lab = sum('Lab Tests');
+        const rad = sum('Radiology Tests');
+        if (!lab && !rad) return ['No data available.'];
+        if (rad > lab && allValues('Profitability') < 0) {
+          return ['Radiology tests exceed lab tests — consider reviewing diagnostic cost efficiency.'];
+        }
+        return lab > rad
+          ? ['Lab test volume is healthy compared to radiology.']
+          : ['Radiology tests exceed lab tests — check for overuse or imbalance.'];
+      }
+      case 'Repair vs Purchase': {
         const repair = sum('Repair Cost');
         const purchase = sum('Purchase Cost');
         if (!repair && !purchase) return ['No data available.'];
+        if (repair > purchase && allValues('Revenue vs Expense') < 0) {
+          return ['Repair cost exceeds purchase cost and revenue is low — suggests outdated infrastructure draining resources.'];
+        }
         return repair > purchase
           ? ['Repair cost exceeds purchase cost — consider replacing aging equipment.']
           : ['Repair cost under control compared to new purchases.'];
-      },
-      'IPD vs OPD': () => {
-        const ipd = sum('Actual IPD Score');
-        const opd = sum('Actual OPD Score');
+      }
+      case 'IPD vs OPD': {
+        const ipd = sum('IPD Score');
+        const opd = sum('OPD Score');
         if (!ipd && !opd) return ['No data available.'];
         return ipd > opd
           ? ['Higher IPD score — ensure bed and staff availability.']
           : ['OPD dominates — opportunity for preventive healthcare and early interventions.'];
-      },
-      'Admissions vs Discharges': () => {
-        const admissions = sum('Actual Admissions');
-        const discharges = sum('Actual Discharges');
-        if (!admissions && !discharges) return ['No data available.'];
-        if (admissions > discharges) return [`Admissions exceed discharges by ${(admissions - discharges).toLocaleString()} — may indicate delays in patient turnover or extended stays.`];
-        if (discharges > admissions) return [`Discharges exceed admissions by ${(discharges - admissions).toLocaleString()} — verify if this is due to backlog clearing or seasonal trends.`];
-        return ['Admissions and discharges are balanced — efficient patient flow maintained.'];
-      },
-      'Departmental Revenue': () => ['Review department-wise trends to identify top and underperforming units.'],
-      'Profitability': () => ['Check departments with high revenue but low profit — optimize resource allocation.'],
-      'Patient Volume': () => ['Evaluate patient load distribution — align staffing and resources accordingly.']
-    };
-    return map[title]?.() || [];
+      }
+      case 'Departmental Revenue': {
+        const total = data.reduce((acc, curr) => acc + curr.value, 0);
+        return [`Total departmental revenue: ₹${total.toLocaleString()}. Focus on underperforming departments.`];
+      }
+      case 'Profitability': {
+        const total = data.reduce((acc, curr) => acc + curr.value, 0);
+        const revenue = allValues('Revenue vs Expense');
+        if (total < 0 && revenue < 0) {
+          return [`Negative profitability and revenue deficit — urgent review of department-wise budgeting needed.`];
+        }
+        return [`Overall profitability: ₹${total.toLocaleString()}. Evaluate low-profit departments.`];
+      }
+      case 'Patient Volume': {
+        const total = data.reduce((acc, curr) => acc + curr.value, 0);
+        const hrTurnover = allValues('Joinee vs Resignation');
+        if (total > 2000 && hrTurnover < 0) {
+          return [`High patient volume: ${total.toLocaleString()} — likely stressing staff, review HR allocations.`];
+        }
+        return [`Total patient volume: ${total.toLocaleString()} — plan staffing accordingly.`];
+      }
+      default:
+        return ['No specific insights available.'];
+    }
   };
-
+  
   const renderActions = (title) => {
     const map = {
       'Revenue vs Expense': [
@@ -263,8 +305,10 @@ const chartTitles = [
         'Plan infrastructure expansions accordingly.'
       ]
     };
-    return map[title] || [];
+    return map[title] || ['No recommended actions available.'];
   };
+  
+
   return (
     <div className="p-8 bg-gray-50 min-h-screen font-sans max-w-[1600px] mx-auto w-full text-black">
       <div className="flex items-center gap-4 mb-8">
@@ -308,13 +352,13 @@ const chartTitles = [
           onClick={handlePrint}
           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
         >
-          📄 Generate Report
+          Generate Report
         </button>
         <button
           onClick={handleDownloadPDF}
           className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
         >
-          ⬇️ Download PDF
+          Download PDF
         </button>
       </div>
       <div ref={reportRef} className="bg-white px-12 py-8 rounded shadow-md text-sm w-full text-black">
@@ -344,7 +388,14 @@ const chartTitles = [
               
                 
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="label" stroke='black' />
+                <XAxis
+  dataKey="label"
+  stroke="black"
+  angle={-45}
+  textAnchor="end"
+  interval={0}
+  
+/>
                 <YAxis stroke='black' />
                 <Tooltip />
                 <Bar dataKey="value" fill="#8884d8">

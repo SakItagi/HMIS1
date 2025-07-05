@@ -186,3 +186,15 @@ month,year,category,subCategory,metric,value
 02,2025,Departmental Metrics,Dialysis,Actual Revenue,785000
 02,2025,Departmental Metrics,Dialysis,Actual Patients,1200
 02,2025,Departmental Metrics,Dialysis,Actual Profitability,194000
+04,2025,Admissions and Discharges,Actual,Actual Admissions,9500
+04,2025,Admissions and Discharges,Actual,Actual Discharges,6500
+04,2025,Admissions and Discharges,Expected,Expected Admissions,8500
+04,2025,Admissions and Discharges,Expected,Expected Discharges,4500
+05,2025,General,Actual,Actual Revenue,850000
+05,2025,General,Actual,Actual Expense,1100000
+05,2025,General,Expected,Expected Revenue,1800000
+05,2025,General,Expected,Expected Expense,1200000
+05,2025,Admissions and Discharges,Actual,Actual Admissions,3200
+05,2025,Admissions and Discharges,Actual,Actual Discharges,2100
+05,2025,Admissions and Discharges,Expected,Expected Admissions,9500
+05,2025,Admissions and Discharges,Expected,Expected Discharges,7600
