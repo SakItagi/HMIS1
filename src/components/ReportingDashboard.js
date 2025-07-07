@@ -375,39 +375,44 @@ const chartTitles = [
             <h2 className="text-xl font-bold mb-6 text-black">{idx + 1}. {title}</h2>
 
             {charts[title]?.length ? (
-              <div style={{ width: '400px', height: '300px' }}>
-              <BarChart
-                width={1200}
-                height={300}
-                data={charts[title]}
-                barSize={80} // Adjust this to control bar width
-                barGap={0}
-                barCategoryGap={0}
-                margin={{ top: 20, right: 30, left: 40, bottom: 20 }}
-              >
-              
-                
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis
-  dataKey="label"
-  stroke="black"
-  angle={-45}
-  textAnchor="end"
-  interval={0}
-  
-/>
-                <YAxis stroke='black' />
-                <Tooltip />
-                <Bar dataKey="value" fill="#8884d8">
-                <LabelList
-  dataKey="value"
-  position="top"
-  formatter={(value) => value.toLocaleString()}
-  fill="black"
-/>
-                </Bar>
-              </BarChart>
-            </div>
+              <div className="overflow-x-auto max-w-full">
+                <BarChart
+                  width={Math.max(charts[title].length * 100, 1200)}
+                  height={300}
+                  data={charts[title]}
+                  barSize={80}
+                  margin={{ top: 20, right: 30, left: 40, bottom: 100 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis
+                    dataKey="label"
+                    interval={0}
+                    stroke="black"
+                    tick={({ x, y, payload }) => (
+                      <text
+                        x={x}
+                        y={y + 30}
+                        textAnchor="end"
+                        transform={`rotate(-45, ${x}, ${y + 30})`}
+                        fontSize={13}
+                        fill="black"
+                      >
+                        {payload.value}
+                      </text>
+                    )}
+                  />
+                  <YAxis stroke="black" />
+                  <Tooltip />
+                  <Bar dataKey="value" fill="#8884d8">
+                    <LabelList
+                      dataKey="value"
+                      position="top"
+                      formatter={(value) => value.toLocaleString()}
+                      fill="black"
+                    />
+                  </Bar>
+                </BarChart>
+              </div>
             ) : (
               <p className="text-gray-500">No data available for {title}</p>
             )}
@@ -415,6 +420,7 @@ const chartTitles = [
 {charts[title]?.length > 0 && (
   <div className="mt-6">
     <h4 className="text-md font-semibold mb-2">Summary Table</h4>
+    
     <table className="w-full border text-sm">
       <thead>
         <tr className="bg-gray-100">
