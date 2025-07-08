@@ -91,18 +91,20 @@ app.post('/api/hmis', (req, res) => {
       record.subCategory = 'Expected';
     }
   }
-
-  const linesToAppend = data.map(record =>
-    [
-      escapeCsvValue(getMonthNumber(record.month)),
-      escapeCsvValue(record.year),
-      escapeCsvValue(record.category),
-      escapeCsvValue(record.subCategory),
-      escapeCsvValue(record.metric),
-      escapeCsvValue(record.value),
-    ].join(',')
-  ).join('\n') + '\n';
-
+  const linesToAppend = data.map(record => {
+    const cleanedRecord = {
+      month: getMonthNumber((record.month || '').trim()),
+      year: (record.year || '').trim(),
+      category: (record.category || '').trim(),
+      subCategory: (record.subCategory || '').trim(),
+      metric: (record.metric || '').trim(),
+      value: (record.value || record['value\r'] || '').toString().trim(),
+    };
+  
+    return csvHeaders.map(header =>
+      escapeCsvValue(cleanedRecord[header])
+    ).join(',');
+  }).join('\n') + '\n';
   try {
     fs.appendFileSync(csvFilePath, linesToAppend, 'utf8');
     console.log('✅ Data appended to CSV:\n', linesToAppend);
@@ -122,8 +124,7 @@ app.get('/api/hmis/summary', (req, res) => {
 
     const content = fs.readFileSync(csvFilePath, 'utf8');
     const lines = content.trim().split('\n');
-    const header = lines.shift().split(',');
-
+    const header = lines.shift().split(',').map(h => h.trim().toLowerCase());
     const results = lines.map(line => {
       const values = line.split(',');
       const obj = {};
@@ -140,20 +141,32 @@ app.get('/api/hmis/summary', (req, res) => {
   }
 });
 
-// === CSV Export Endpoint ===
-app.get('/api/hmis/export', (req, res) => {
+// === HMIS CSV Summary Endpoint ===
+app.get('/api/hmis/summary', (req, res) => {
   try {
     if (!fs.existsSync(csvFilePath)) {
-      return res.status(404).json({ error: 'CSV file not found' });
+      return res.json([]);
     }
 
-    res.download(csvFilePath, 'hmis_data.csv', (err) => {
-      if (err) console.error('❌ Error during CSV download:', err);
-      else console.log('📤 CSV file sent to client');
+    const content = fs.readFileSync(csvFilePath, 'utf8');
+    const lines = content.trim().split('\n');
+    const header = lines.shift().split(',').map(h => h.replace(/[\r\n]+/g, '').trim());
+
+    const results = lines.map(line => {
+      const values = line.split(',');
+      const obj = {};
+      header.forEach((h, i) => {
+        const cleanKey = h;
+        const cleanValue = values[i]?.replace(/[\r\n]+/g, '').trim() || '';
+        obj[cleanKey] = cleanValue;
+      });
+      return obj;
     });
+
+    res.json(results);
   } catch (err) {
-    console.error('❌ Error exporting CSV:', err);
-    res.status(500).json({ error: 'Failed to export CSV' });
+    console.error('❌ Error reading CSV summary:', err);
+    res.status(500).json({ error: 'Failed to read summary' });
   }
 });
 

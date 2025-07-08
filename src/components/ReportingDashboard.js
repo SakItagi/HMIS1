@@ -19,83 +19,43 @@ const ReportGenerator = () => {
   const [reportType, setReportType] = useState('monthly');
   const [selectedMonth, setSelectedMonth] = useState('January');
   const [selectedYear, setSelectedYear] = useState('2025');
+  const [parsedData, setParsedData] = useState([]);
 
   const monthNames = [
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
   ];
 
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    Papa.parse(file, {
-      header: true,
-      skipEmptyLines: true,
-      complete: (result) => {
-        const cleanedData = result.data.map(row => {
-          const metric = row.metric?.trim().replace(/^Actual /i, '') || '';
-          return {
-            ...row,
-            month: row.month?.toString().padStart(2, '0'),
-            year: row.year?.toString().trim(),
-            category: row.category?.trim(),
-            subCategory: row.subCategory?.trim(),
-            metric,
-            value: parseFloat(row.value) || 0
-          };
-        });
-        setCsvRows(cleanedData);
-      }
-    });
-  };
-
-  const handlePrint = useReactToPrint({
-    content: () => reportRef.current,
-    documentTitle: 'HMIS_Report',
-  });
-
-  const handleDownloadPDF = () => {
-    const element = reportRef.current;
-    const opt = {
-      margin: 0.5,
-      filename: 'HMIS_Report.pdf',
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: {
-        scale: 2,
-        useCORS: true,       // Ensures images load correctly
-        logging: true,       // Helps debug layout issues
-        scrollX: 0,
-        scrollY: 0
-      },
-      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
-      pagebreak: {
-        mode: ['avoid-all', 'css', 'legacy'] // ⛔ Prevents awkward page breaks
-      }
-    };
-    html2pdf().set(opt).from(element).save();
-  };
-
-  const monthNameToNumberString = (monthName) => {
-    const index = monthNames.indexOf(monthName);
-    return index !== -1 ? (index + 1).toString().padStart(2, '0') : '01';
-  };
-
-  const filterByReportType = (rows) => {
-    if (reportType === 'monthly') {
-      const monthStr = monthNameToNumberString(selectedMonth);
-      const yearStr = selectedYear.toString();
-      return rows.filter(row => row.month === monthStr && row.year === yearStr);
-    }
-    return rows;
-  };
-
   useEffect(() => {
-    if (!csvRows.length) return;
+    fetch('http://localhost:5000/api/hmis/summary')
+      .then(res => res.json())
+      .then(data => {
+        const cleanedData = data.map(row => ({
+          ...row,
+          month: parseInt(row.month?.trim(), 10),  // ✅ This fixes your matching issue
+          year: parseInt(row.year?.trim(), 10),
+          category: row.category?.trim(),
+          subCategory: row.subCategory?.trim(),
+          metric: row.metric?.trim(),
+          value: parseFloat(row.value?.replace(/[\r\n]/g, '').trim()) || 0,
+        }));
 
-    const filteredRows = filterByReportType(csvRows);
+        console.log("✅ Cleaned data:", cleanedData);
+        setParsedData(cleanedData);
+        setCsvRows(cleanedData);
+      })
+      .catch(err => console.error("❌ Error loading CSV summary:", err));
+  }, []);
 
-    const groupSum = (metrics, subCat = 'Actual') => {
+  
+  useEffect(() => {
+    const monthNumber = monthNameToNumber(selectedMonth);
+    const yearNumber = parseInt(selectedYear);
+    const filteredRows = parsedData.filter(
+      row => row.month === monthNumber && row.year === yearNumber
+    );
+
+    const groupSum = (metrics, subCat = 'Expected') => {
       return filteredRows
         .filter(row => metrics.includes(row.metric) && row.subCategory === subCat)
         .reduce((acc, row) => {
@@ -107,7 +67,7 @@ const ReportGenerator = () => {
 
     const groupByCategory = (metric) => {
       return filteredRows
-        .filter(row => row.metric === metric && row.subCategory === 'Actual' && row.category !== 'General')
+        .filter(row => row.metric === metric && row.subCategory === 'Expected' && row.category !== 'General')
         .reduce((acc, row) => {
           const key = row.category;
           acc[key] = (acc[key] || 0) + Number(row.value || 0);
@@ -130,7 +90,108 @@ const ReportGenerator = () => {
       'Profitability': toChart(groupByCategory('Profitability')),
       'Patient Volume': toChart(groupByCategory('Patients'))
     });
-  }, [csvRows, reportType, selectedMonth, selectedYear]);
+  }, [parsedData, reportType, selectedMonth, selectedYear]);
+
+  const handlePrint = useReactToPrint({
+    content: () => reportRef.current,
+    documentTitle: 'HMIS_Report',
+  });
+
+  const handleDownloadPDF = () => {
+    const element = reportRef.current;
+    const opt = {
+      margin: 0.5,
+      filename: 'HMIS_Report.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true, logging: true, scrollX: 0, scrollY: 0 },
+      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+    };
+    html2pdf().set(opt).from(element).save();
+  };
+
+ const monthNameToNumber = (name) => {
+    const monthMap = {
+      January: 1,
+      February: 2,
+      March: 3,
+      April: 4,
+      May: 5,
+      June: 6,
+      July: 7,
+      August: 8,
+      September: 9,
+      October: 10,
+      November: 11,
+      December: 12,
+    };
+    return monthMap[name] || null;
+  };
+
+  const filterByReportType = (rows) => {
+    if (reportType === 'monthly') {
+      const monthNumber = monthNameToNumber(selectedMonth);
+      const yearNumber = parseInt(selectedYear);
+      return rows.filter(row => row.month === monthNumber && row.year === yearNumber);
+    }
+    return rows;
+  };
+
+  useEffect(() => {
+    const monthNumber = monthNameToNumber(selectedMonth);
+    const yearNumber = parseInt(selectedYear);
+
+    const filteredRows = reportType === 'monthly'
+  ? parsedData.filter(row => row.month === monthNumber && row.year === yearNumber)
+  : parsedData;
+
+    console.log("✅ Selected Month/Year:", monthNumber, yearNumber);
+    console.log("🧪 Matching Rows:", filtered);
+  }, [parsedData, selectedMonth, selectedYear, reportType]);
+
+  useEffect(() => {
+    const monthNumber = monthNameToNumber(selectedMonth);
+    const yearNumber = parseInt(selectedYear);
+    const filteredRows = parsedData.filter( 
+      row => row.month === monthNumber && row.year === yearNumber
+    );
+  
+    const groupSum = (metrics, subCat = 'Expected') => {
+      return filteredRows
+        .filter(row => metrics.includes(row.metric) && row.subCategory === subCat)
+        .reduce((acc, row) => {
+          const key = row.metric;
+          acc[key] = (acc[key] || 0) + Number(row.value || 0);
+          return acc;
+        }, {});
+    };
+  
+    const groupByCategory = (metric) => {
+      return filteredRows
+        .filter(row => row.metric === metric && row.subCategory === 'Expected' && row.category !== 'General')
+        .reduce((acc, row) => {
+          const key = row.category;
+          acc[key] = (acc[key] || 0) + Number(row.value || 0);
+          return acc;
+        }, {});
+    };
+  
+    const toChart = (obj) =>
+      Object.entries(obj).map(([label, value]) => ({ label, value }));
+  
+    setCharts({
+      'Revenue vs Expense': toChart(groupSum(['Revenue', 'Expense'])),
+      'Lab vs Radiology': toChart(groupSum(['Lab Tests', 'Radiology Tests'])),
+      'Admissions vs Discharges': toChart(groupSum(['Admissions', 'Discharges'])),
+      'Issued vs Expired': toChart(groupSum(['Issued', 'Expired'])),
+      'Joinee vs Resignation': toChart(groupSum(['Joinees', 'Resignations'])),
+      'Repair vs Purchase': toChart(groupSum(['Repair Cost', 'Purchase Cost'])),
+      'IPD vs OPD': toChart(groupSum(['IPD Score', 'OPD Score'])),
+      'Departmental Revenue': toChart(groupByCategory('Revenue')),
+      'Profitability': toChart(groupByCategory('Profitability')),
+      'Patient Volume': toChart(groupByCategory('Patients'))
+    });
+  }, [parsedData, reportType, selectedMonth, selectedYear]);
 
 const chartTitles = [
     'Revenue vs Expense',
@@ -312,12 +373,6 @@ const chartTitles = [
   return (
     <div className="p-8 bg-gray-50 min-h-screen font-sans max-w-[1600px] mx-auto w-full text-black">
       <div className="flex items-center gap-4 mb-8">
-        <input
-          type="file"
-          accept=".csv"
-          onChange={handleFileUpload}
-          className="border px-3 py-2 rounded bg-white text-sm"
-        />
         <select
           value={reportType}
           onChange={(e) => setReportType(e.target.value)}
@@ -420,27 +475,50 @@ const chartTitles = [
 {charts[title]?.length > 0 && (
   <div className="mt-6">
     <h4 className="text-md font-semibold mb-2">Summary Table</h4>
-    
-    <table className="w-full border text-sm">
-      <thead>
-        <tr className="bg-gray-100">
-        <th className="border px-4 py-2 text-left">Metric</th>
-          <th className="border px-4 py-2 text-left">Value</th>
-        </tr>
-      </thead>
-      <tbody>
-        {charts[title].map(({ label, value }) => (
-          <tr key={label}>
-            <td className="border px-4 py-2 " style={{ fontWeight: 'bold' }}>{label}</td>
-            <td className="border px-4 py-2">
-              {['Lab vs Radiology', 'IPD vs OPD', 'Joinee vs Resignation', 'Patient Volume', 'Issued vs Expired','Admissions vs Discharges'].includes(title)
-                ? value.toLocaleString()
-                : `₹${value.toLocaleString()}`}
-            </td>
+
+    {['Departmental Revenue', 'Profitability', 'Patient Volume'].includes(title) ? (
+      <table className="w-full border text-sm">
+        <thead>
+          <tr className="bg-gray-100">
+            {charts[title].map(({ label }) => (
+              <th key={label} className="border px-4 py-2 text-left">{label}</th>
+            ))}
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <tr>
+            {charts[title].map(({ value }) => (
+              <td key={value} className="border px-4 py-2">
+                {title === 'Patient Volume'
+                  ? value.toLocaleString()
+                  : `₹${value.toLocaleString()}`}
+              </td>
+            ))}
+          </tr>
+        </tbody>
+      </table>
+    ) : (
+      <table className="w-full border text-sm">
+        <thead>
+          <tr className="bg-gray-100">
+            <th className="border px-4 py-2 text-left">Metric</th>
+            <th className="border px-4 py-2 text-left">Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          {charts[title].map(({ label, value }) => (
+            <tr key={label}>
+              <td className="border px-4 py-2 font-bold">{label}</td>
+              <td className="border px-4 py-2">
+                {['Lab vs Radiology', 'IPD vs OPD', 'Joinee vs Resignation', 'Patient Volume', 'Issued vs Expired', 'Admissions vs Discharges'].includes(title)
+                  ? value.toLocaleString()
+                  : `₹${value.toLocaleString()}`}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    )}
   </div>
 )}
             <div className="mt-6">
