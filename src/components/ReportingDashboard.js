@@ -141,9 +141,9 @@ const ReportGenerator = () => {
     const monthNumber = monthNameToNumber(selectedMonth);
     const yearNumber = parseInt(selectedYear);
 
-    const filteredRows = reportType === 'monthly'
-  ? parsedData.filter(row => row.month === monthNumber && row.year === yearNumber)
-  : parsedData;
+    const filtered = parsedData.filter(
+      row => row.month === monthNumber && row.year === yearNumber
+    );
 
     console.log("✅ Selected Month/Year:", monthNumber, yearNumber);
     console.log("🧪 Matching Rows:", filtered);
@@ -152,7 +152,7 @@ const ReportGenerator = () => {
   useEffect(() => {
     const monthNumber = monthNameToNumber(selectedMonth);
     const yearNumber = parseInt(selectedYear);
-    const filteredRows = parsedData.filter( 
+    const filteredRows = parsedData.filter(
       row => row.month === monthNumber && row.year === yearNumber
     );
   
