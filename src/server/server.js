@@ -118,37 +118,16 @@ app.post('/api/hmis', (req, res) => {
 // === HMIS CSV Summary Endpoint ===
 app.get('/api/hmis/summary', (req, res) => {
   try {
+    console.log("✅ CSV exists? ", fs.existsSync(csvFilePath));
+    console.log("📄 CSV Path:", csvFilePath);
+
     if (!fs.existsSync(csvFilePath)) {
       return res.json([]);
     }
 
     const content = fs.readFileSync(csvFilePath, 'utf8');
-    const lines = content.trim().split('\n');
-    const header = lines.shift().split(',').map(h => h.trim().toLowerCase());
-    const results = lines.map(line => {
-      const values = line.split(',');
-      const obj = {};
-      header.forEach((h, i) => {
-        obj[h] = values[i];
-      });
-      return obj;
-    });
+    console.log("📦 Raw CSV Content:\n", content);
 
-    res.json(results);
-  } catch (err) {
-    console.error('❌ Error reading CSV summary:', err);
-    res.status(500).json({ error: 'Failed to read summary' });
-  }
-});
-
-// === HMIS CSV Summary Endpoint ===
-app.get('/api/hmis/summary', (req, res) => {
-  try {
-    if (!fs.existsSync(csvFilePath)) {
-      return res.json([]);
-    }
-
-    const content = fs.readFileSync(csvFilePath, 'utf8');
     const lines = content.trim().split('\n');
     const header = lines.shift().split(',').map(h => h.replace(/[\r\n]+/g, '').trim());
 
@@ -304,6 +283,26 @@ app.post('/api/reset-password/:token', async (req, res) => {
 // Forgot Password Form Route
 app.get('/api/forgot-password', (req, res) => {
   res.send('<form action="/api/request-password-reset" method="POST"><label>Username</label><input type="email" name="username" placeholder="Enter your username" required/><button type="submit">Request Reset</button></form>');
+});
+// ✅ Register Route
+app.post('/api/register', async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+      return res.status(400).json({ error: 'User already exists' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 12);
+    const newUser = new User({ username, password: hashedPassword });
+    await newUser.save();
+
+    console.log("🆕 New user registered:", username);
+    res.status(201).json({ message: 'User registered successfully' });
+  } catch (err) {
+    console.error('❌ Registration error:', err);
+    res.status(500).json({ error: 'Server error during registration' });
+  }
 });
 
 // Start Server

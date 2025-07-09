@@ -14,12 +14,16 @@ import {
 
 const ReportGenerator = () => {
   const reportRef = useRef();
+  const [data, setData] = useState([]);
   const [csvRows, setCsvRows] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('');
   const [charts, setCharts] = useState({});
   const [reportType, setReportType] = useState('monthly');
   const [selectedMonth, setSelectedMonth] = useState('January');
   const [selectedYear, setSelectedYear] = useState('2025');
   const [parsedData, setParsedData] = useState([]);
+  const [summaryData, setSummaryData] = useState([]);
+
 
   const monthNames = [
     "January", "February", "March", "April", "May", "June",
@@ -28,31 +32,37 @@ const ReportGenerator = () => {
 
   useEffect(() => {
     fetch('http://localhost:5000/api/hmis/summary')
-      .then(res => res.json())
-      .then(data => {
-        const cleanedData = data.map(row => ({
+      .then(res => res.text())
+      .then(csvText => {
+        const { data } = Papa.parse(csvText, {
+          header: true,
+          skipEmptyLines: true
+        });
+  
+        // ✅ Normalize month to "01", "02", etc.
+        const normalized = data.map(row => ({
           ...row,
-          month: parseInt(row.month?.trim(), 10),  // ✅ This fixes your matching issue
-          year: parseInt(row.year?.trim(), 10),
+          month: row.month?.padStart(2, '0'),
+          year: row.year?.trim(),
+          metric: row.metric?.trim(),
           category: row.category?.trim(),
           subCategory: row.subCategory?.trim(),
-          metric: row.metric?.trim(),
-          value: parseFloat(row.value?.replace(/[\r\n]/g, '').trim()) || 0,
+          value: Number(row.value || 0)
         }));
-
-        console.log("✅ Cleaned data:", cleanedData);
-        setParsedData(cleanedData);
-        setCsvRows(cleanedData);
+  
+        console.log("✅ Normalized CSV Data:", normalized);
+        setParsedData(normalized);
       })
-      .catch(err => console.error("❌ Error loading CSV summary:", err));
+      .catch(error => {
+        console.error("❌ Error fetching or parsing summary data:", error);
+      });
   }, []);
-
   
   useEffect(() => {
     const monthNumber = monthNameToNumber(selectedMonth);
     const yearNumber = parseInt(selectedYear);
     const filteredRows = parsedData.filter(
-      row => row.month === monthNumber && row.year === yearNumber
+      row => row.month === monthNumber && row.year === String(yearNumber)
     );
 
     const groupSum = (metrics, subCat = 'Expected') => {
@@ -110,29 +120,32 @@ const ReportGenerator = () => {
     html2pdf().set(opt).from(element).save();
   };
 
- const monthNameToNumber = (name) => {
+  const monthNameToNumber = (name) => {
     const monthMap = {
-      January: 1,
-      February: 2,
-      March: 3,
-      April: 4,
-      May: 5,
-      June: 6,
-      July: 7,
-      August: 8,
-      September: 9,
-      October: 10,
-      November: 11,
-      December: 12,
+      January: '01',
+      February: '02',
+      March: '03',
+      April: '04',
+      May: '05',
+      June: '06',
+      July: '07',
+      August: '08',
+      September: '09',
+      October: '10',
+      November: '11',
+      December: '12',
     };
     return monthMap[name] || null;
   };
 
   const filterByReportType = (rows) => {
     if (reportType === 'monthly') {
-      const monthNumber = monthNameToNumber(selectedMonth);
-      const yearNumber = parseInt(selectedYear);
-      return rows.filter(row => row.month === monthNumber && row.year === yearNumber);
+      const monthNumber = monthNameToNumber(selectedMonth); // returns "01"
+const yearNumber = selectedYear; // string like "2025"
+
+return rows.filter(
+  row => row.month === monthNumber && row.year === yearNumber
+);
     }
     return rows;
   };
@@ -142,8 +155,12 @@ const ReportGenerator = () => {
     const yearNumber = parseInt(selectedYear);
 
     const filtered = parsedData.filter(
-      row => row.month === monthNumber && row.year === yearNumber
+      (item) =>
+        item.month === selectedMonth &&
+        item.year === selectedYear &&
+        item.category === selectedCategory
     );
+    
 
     console.log("✅ Selected Month/Year:", monthNumber, yearNumber);
     console.log("🧪 Matching Rows:", filtered);
