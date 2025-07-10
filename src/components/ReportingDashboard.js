@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Papa from 'papaparse';
-import { useReactToPrint } from 'react-to-print';
 import html2pdf from 'html2pdf.js';
 import {
   BarChart,
@@ -23,7 +22,7 @@ const ReportGenerator = () => {
   const [selectedYear, setSelectedYear] = useState('2025');
   const [parsedData, setParsedData] = useState([]);
   const [summaryData, setSummaryData] = useState([]);
-
+  const [selectedSubCategory, setSelectedSubCategory] = useState('Expected');
 
   const monthNames = [
     "January", "February", "March", "April", "May", "June",
@@ -32,41 +31,44 @@ const ReportGenerator = () => {
 
   useEffect(() => {
     fetch('http://localhost:5000/api/hmis/summary')
-      .then(res => res.text())
-      .then(csvText => {
-        const { data } = Papa.parse(csvText, {
-          header: true,
-          skipEmptyLines: true
-        });
-  
-        // ✅ Normalize month to "01", "02", etc.
-        const normalized = data.map(row => ({
+      .then(res => res.json())
+      .then(data => {
+        const cleanRow = (row) => ({
           ...row,
-          month: row.month?.padStart(2, '0'),
+          month: row.month?.trim(),
           year: row.year?.trim(),
           metric: row.metric?.trim(),
           category: row.category?.trim(),
           subCategory: row.subCategory?.trim(),
-          value: Number(row.value || 0)
-        }));
-  
-        console.log("✅ Normalized CSV Data:", normalized);
+          value: Number(row.value?.replace(/,/g, '') || 0)
+        });
+
+        const normalized = data.map(cleanRow);
+        console.log("✅ Normalized JSON Data:", normalized);
         setParsedData(normalized);
       })
       .catch(error => {
         console.error("❌ Error fetching or parsing summary data:", error);
       });
   }, []);
-  
+
   useEffect(() => {
     const monthNumber = monthNameToNumber(selectedMonth);
     const yearNumber = parseInt(selectedYear);
-    const filteredRows = parsedData.filter(
-      row => row.month === monthNumber && row.year === String(yearNumber)
-    );
 
-    const groupSum = (metrics, subCat = 'Expected') => {
-      return filteredRows
+    const filteredRows = parsedData.filter((row) => {
+      if (reportType === 'monthly') {
+        return row.month === monthNumber && parseInt(row.year) === yearNumber;
+      } else {
+        return true;
+      }
+    });
+
+    const generalRows = filteredRows.filter(row => row.category === 'General' || row.category === '');
+    const categoryRows = filteredRows.filter(row => row.category && row.category !== 'General');
+
+    const groupSum = (rows, metrics, subCat = selectedSubCategory) => {
+      return rows
         .filter(row => metrics.includes(row.metric) && row.subCategory === subCat)
         .reduce((acc, row) => {
           const key = row.metric;
@@ -75,9 +77,9 @@ const ReportGenerator = () => {
         }, {});
     };
 
-    const groupByCategory = (metric) => {
-      return filteredRows
-        .filter(row => row.metric === metric && row.subCategory === 'Expected' && row.category !== 'General')
+    const groupByCategory = (rows, metric) => {
+      return rows
+        .filter(row => row.metric === metric && row.subCategory === selectedSubCategory)
         .reduce((acc, row) => {
           const key = row.category;
           acc[key] = (acc[key] || 0) + Number(row.value || 0);
@@ -89,127 +91,18 @@ const ReportGenerator = () => {
       Object.entries(obj).map(([label, value]) => ({ label, value }));
 
     setCharts({
-      'Revenue vs Expense': toChart(groupSum(['Revenue', 'Expense'])),
-      'Lab vs Radiology': toChart(groupSum(['Lab Tests', 'Radiology Tests'])),
-      'Admissions vs Discharges': toChart(groupSum(['Admissions', 'Discharges'])),
-      'Issued vs Expired': toChart(groupSum(['Issued', 'Expired'])),
-      'Joinee vs Resignation': toChart(groupSum(['Joinees', 'Resignations'])),
-      'Repair vs Purchase': toChart(groupSum(['Repair Cost', 'Purchase Cost'])),
-      'IPD vs OPD': toChart(groupSum(['IPD Score', 'OPD Score'])),
-      'Departmental Revenue': toChart(groupByCategory('Revenue')),
-      'Profitability': toChart(groupByCategory('Profitability')),
-      'Patient Volume': toChart(groupByCategory('Patients'))
+      'Revenue vs Expense': toChart(groupSum(generalRows, ['Revenue', 'Expense'])),
+      'Lab vs Radiology': toChart(groupSum(filteredRows, ['Lab Tests', 'Radiology Tests'])),
+      'Admissions vs Discharges': toChart(groupSum(filteredRows, ['Admissions', 'Discharges'])),
+      'Issued vs Expired': toChart(groupSum(filteredRows, ['Issued', 'Expired'])),
+      'Joinee vs Resignation': toChart(groupSum(filteredRows, ['Joinees', 'Resignations'])),
+      'Repair vs Purchase': toChart(groupSum(filteredRows, ['Repair Cost', 'Purchase Cost'])),
+      'IPD vs OPD': toChart(groupSum(filteredRows, ['IPD Score', 'OPD Score'])),
+      'Departmental Revenue': toChart(groupByCategory(categoryRows, 'Revenue')),
+      'Profitability': toChart(groupByCategory(categoryRows, 'Profitability')),
+      'Patient Volume': toChart(groupByCategory(categoryRows, 'Patients'))
     });
-  }, [parsedData, reportType, selectedMonth, selectedYear]);
-
-  const handlePrint = useReactToPrint({
-    content: () => reportRef.current,
-    documentTitle: 'HMIS_Report',
-  });
-
-  const handleDownloadPDF = () => {
-    const element = reportRef.current;
-    const opt = {
-      margin: 0.5,
-      filename: 'HMIS_Report.pdf',
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true, logging: true, scrollX: 0, scrollY: 0 },
-      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
-      pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-    };
-    html2pdf().set(opt).from(element).save();
-  };
-
-  const monthNameToNumber = (name) => {
-    const monthMap = {
-      January: '01',
-      February: '02',
-      March: '03',
-      April: '04',
-      May: '05',
-      June: '06',
-      July: '07',
-      August: '08',
-      September: '09',
-      October: '10',
-      November: '11',
-      December: '12',
-    };
-    return monthMap[name] || null;
-  };
-
-  const filterByReportType = (rows) => {
-    if (reportType === 'monthly') {
-      const monthNumber = monthNameToNumber(selectedMonth); // returns "01"
-const yearNumber = selectedYear; // string like "2025"
-
-return rows.filter(
-  row => row.month === monthNumber && row.year === yearNumber
-);
-    }
-    return rows;
-  };
-
-  useEffect(() => {
-    const monthNumber = monthNameToNumber(selectedMonth);
-    const yearNumber = parseInt(selectedYear);
-
-    const filtered = parsedData.filter(
-      (item) =>
-        item.month === selectedMonth &&
-        item.year === selectedYear &&
-        item.category === selectedCategory
-    );
-    
-
-    console.log("✅ Selected Month/Year:", monthNumber, yearNumber);
-    console.log("🧪 Matching Rows:", filtered);
-  }, [parsedData, selectedMonth, selectedYear, reportType]);
-
-  useEffect(() => {
-    const monthNumber = monthNameToNumber(selectedMonth);
-    const yearNumber = parseInt(selectedYear);
-    const filteredRows = parsedData.filter(
-      row => row.month === monthNumber && row.year === yearNumber
-    );
-  
-    const groupSum = (metrics, subCat = 'Expected') => {
-      return filteredRows
-        .filter(row => metrics.includes(row.metric) && row.subCategory === subCat)
-        .reduce((acc, row) => {
-          const key = row.metric;
-          acc[key] = (acc[key] || 0) + Number(row.value || 0);
-          return acc;
-        }, {});
-    };
-  
-    const groupByCategory = (metric) => {
-      return filteredRows
-        .filter(row => row.metric === metric && row.subCategory === 'Expected' && row.category !== 'General')
-        .reduce((acc, row) => {
-          const key = row.category;
-          acc[key] = (acc[key] || 0) + Number(row.value || 0);
-          return acc;
-        }, {});
-    };
-  
-    const toChart = (obj) =>
-      Object.entries(obj).map(([label, value]) => ({ label, value }));
-  
-    setCharts({
-      'Revenue vs Expense': toChart(groupSum(['Revenue', 'Expense'])),
-      'Lab vs Radiology': toChart(groupSum(['Lab Tests', 'Radiology Tests'])),
-      'Admissions vs Discharges': toChart(groupSum(['Admissions', 'Discharges'])),
-      'Issued vs Expired': toChart(groupSum(['Issued', 'Expired'])),
-      'Joinee vs Resignation': toChart(groupSum(['Joinees', 'Resignations'])),
-      'Repair vs Purchase': toChart(groupSum(['Repair Cost', 'Purchase Cost'])),
-      'IPD vs OPD': toChart(groupSum(['IPD Score', 'OPD Score'])),
-      'Departmental Revenue': toChart(groupByCategory('Revenue')),
-      'Profitability': toChart(groupByCategory('Profitability')),
-      'Patient Volume': toChart(groupByCategory('Patients'))
-    });
-  }, [parsedData, reportType, selectedMonth, selectedYear]);
-
+  }, [parsedData, reportType, selectedMonth, selectedYear, selectedSubCategory]);
 const chartTitles = [
     'Revenue vs Expense',
     'Lab vs Radiology',
@@ -387,6 +280,28 @@ const chartTitles = [
   };
   
 
+  const monthNameToNumber = (name) => {
+    const monthMap = {
+      January: '01', February: '02', March: '03', April: '04',
+      May: '05', June: '06', July: '07', August: '08',
+      September: '09', October: '10', November: '11', December: '12',
+    };
+    return monthMap[name] || name;
+  };
+
+  const handleDownloadPDF = () => {
+    const element = reportRef.current;
+    const opt = {
+      margin: 0.5,
+      filename: 'HMIS_Report.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true, logging: true, scrollX: 0, scrollY: 0 },
+      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+    };
+    html2pdf().set(opt).from(element).save();
+  };
+
   return (
     <div className="p-8 bg-gray-50 min-h-screen font-sans max-w-[1600px] mx-auto w-full text-black">
       <div className="flex items-center gap-4 mb-8">
@@ -420,12 +335,14 @@ const chartTitles = [
             </select>
           </>
         )}
-        <button
-          onClick={handlePrint}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        <select
+          value={selectedSubCategory}
+          onChange={(e) => setSelectedSubCategory(e.target.value)}
+          className="border px-3 py-2 rounded bg-white text-sm"
         >
-          Generate Report
-        </button>
+          <option value="Expected">Expected</option>
+          <option value="Actual">Actual</option>
+        </select>
         <button
           onClick={handleDownloadPDF}
           className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"

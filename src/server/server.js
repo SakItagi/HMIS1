@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model('User', userSchema);
 
 // === CSV Setup ===
-const csvFilePath = path.join(process.cwd(), 'hmis_data.csv');
+const csvFilePath = path.join(__dirname, 'hmis_data.csv');
 const csvHeaders = ['Month', 'Year', 'Category', 'SubCategory', 'Metric', 'Value'];
 
 function createCsvIfNotExists() {
