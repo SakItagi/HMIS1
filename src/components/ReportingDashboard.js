@@ -57,39 +57,47 @@ const ReportGenerator = () => {
     const yearNumber = parseInt(selectedYear);
 
     const filteredRows = parsedData.filter((row) => {
-      if (reportType === 'monthly') {
-        return row.month === monthNumber && parseInt(row.year) === yearNumber;
-      } else {
-        return true;
-      }
+      const cleanedMonth = (row.month || '').trim().toLowerCase();
+      const cleanedYear = (row.year || '').trim();
+      const selectedMonthNormalized = selectedMonth.toLowerCase();
+      const monthMatch = cleanedMonth === selectedMonthNormalized || cleanedMonth === monthNameToNumber(selectedMonth);
+      const yearMatch = cleanedYear === selectedYear;
+      return reportType === 'monthly' ? monthMatch && yearMatch : true;
     });
+    
+    
 
     const generalRows = filteredRows.filter(row => row.category === 'General' || row.category === '');
     const categoryRows = filteredRows.filter(row => row.category && row.category !== 'General');
 
-    const groupSum = (rows, metrics, subCat = selectedSubCategory) => {
+    const groupSum = (rows, metrics) => {
       return rows
-        .filter(row => metrics.includes(row.metric) && row.subCategory === subCat)
+        .filter(row =>
+          metrics.some(m => row.metric.toLowerCase().includes(m.toLowerCase())) &&
+          row.subCategory?.toLowerCase() === selectedSubCategory.toLowerCase()
+        )
         .reduce((acc, row) => {
-          const key = row.metric;
+          const key = metrics.find(m => row.metric.toLowerCase().includes(m.toLowerCase())) || row.metric;
           acc[key] = (acc[key] || 0) + Number(row.value || 0);
           return acc;
         }, {});
     };
-
-    const groupByCategory = (rows, metric) => {
+    const groupByCategory = (rows, targetMetric) => {
       return rows
-        .filter(row => row.metric === metric && row.subCategory === selectedSubCategory)
+        .filter(row =>
+          row.metric?.toLowerCase().includes(targetMetric.toLowerCase()) &&
+          row.subCategory?.toLowerCase() === selectedSubCategory.toLowerCase() &&
+          row.category && row.category.toLowerCase() !== 'general'
+        )
         .reduce((acc, row) => {
           const key = row.category;
           acc[key] = (acc[key] || 0) + Number(row.value || 0);
           return acc;
         }, {});
     };
-
+    
     const toChart = (obj) =>
       Object.entries(obj).map(([label, value]) => ({ label, value }));
-
     setCharts({
       'Revenue vs Expense': toChart(groupSum(generalRows, ['Revenue', 'Expense'])),
       'Lab vs Radiology': toChart(groupSum(filteredRows, ['Lab Tests', 'Radiology Tests'])),
@@ -99,8 +107,8 @@ const ReportGenerator = () => {
       'Repair vs Purchase': toChart(groupSum(filteredRows, ['Repair Cost', 'Purchase Cost'])),
       'IPD vs OPD': toChart(groupSum(filteredRows, ['IPD Score', 'OPD Score'])),
       'Departmental Revenue': toChart(groupByCategory(categoryRows, 'Revenue')),
-      'Profitability': toChart(groupByCategory(categoryRows, 'Profitability')),
-      'Patient Volume': toChart(groupByCategory(categoryRows, 'Patients'))
+  'Profitability': toChart(groupByCategory(categoryRows, 'Profitability')),
+  'Patient Volume': toChart(groupByCategory(categoryRows, 'Patients'))
     });
   }, [parsedData, reportType, selectedMonth, selectedYear, selectedSubCategory]);
 const chartTitles = [
@@ -125,170 +133,323 @@ const chartTitles = [
         const rev = sum('Revenue');
         const exp = sum('Expense');
         const profitability = allValues('Profitability');
-        if (!rev && !exp) return ['No data available.'];
+        if (!rev && !exp) return ['Observation: No data available.'];
+  
         if (rev < exp && profitability < 0) {
-          return [`Expenses exceed revenue by ₹${(exp - rev).toLocaleString()} — operating at a deficit likely due to low profitability.`];
+          return [
+            `Observation: Expenses exceed revenue by ₹${(exp - rev).toLocaleString()}.`,
+            `RCA: Likely due to negative profitability from underperforming departments or rising fixed costs.`
+          ];
         }
-        return rev > exp
-          ? [`Revenue exceeds expenses by ₹${(rev - exp).toLocaleString()} — good financial control.`]
-          : [`Expenses exceed revenue by ₹${(exp - rev).toLocaleString()} — operating at a deficit.`];
+  
+        return [
+          `Observation: Revenue exceeds expenses by ₹${(rev - exp).toLocaleString()}.`,
+          `RCA: Indicates sound financial control and operational efficiency.`
+        ];
       }
+  
       case 'Joinee vs Resignation': {
         const joinees = sum('Joinees');
         const resigns = sum('Resignations');
         const patientLoad = allValues('Patient Volume');
-        if (!joinees && !resigns) return ['No data available.'];
+        if (!joinees && !resigns) return ['Observation: No data available.'];
+  
         if (resigns > joinees && patientLoad > 1000) {
-          return ['More resignations than joinees — possibly due to high patient volume and staff burnout.'];
+          return [
+            'Observation: Resignations exceed joinees under high patient load.',
+            'RCA: Possible staff burnout or inadequate HR planning.'
+          ];
         }
-        return resigns > joinees
-          ? ['More resignations than joinees — assess employee satisfaction and retention strategies.']
-          : ['Healthy hiring trend over resignations.'];
+  
+        if (resigns > joinees) {
+          return [
+            'Observation: Resignations exceed joinees.',
+            'RCA: Likely causes include dissatisfaction, lack of engagement, or poor work culture.'
+          ];
+        }
+  
+        return [
+          'Observation: More joinees than resignations.',
+          'RCA: Effective recruitment and retention practices are in place.'
+        ];
       }
+  
       case 'Admissions vs Discharges': {
         const adm = sum('Admissions');
         const dis = sum('Discharges');
         const ipdScore = sum('IPD Score');
-        if (!adm && !dis) return ['No data available.'];
+        if (!adm && !dis) return ['Observation: No data available.'];
+  
         if (adm > dis && ipdScore > 500) {
-          return [`Admissions exceed discharges by ${(adm - dis).toLocaleString()} — possibly due to longer IPD stays.`];
+          return [
+            `Observation: Admissions exceed discharges by ${(adm - dis).toLocaleString()}.`,
+            `RCA: Indicates longer patient stays possibly due to critical cases or discharge delays.`
+          ];
         }
-        return adm > dis
-          ? [`Admissions exceed discharges by ${(adm - dis).toLocaleString()} — may indicate delays in patient turnover or extended stays.`]
-          : dis > adm
-          ? [`Discharges exceed admissions by ${(dis - adm).toLocaleString()} — verify if this is due to backlog clearing or seasonal trends.`]
-          : ['Admissions and discharges are balanced — efficient patient flow maintained.'];
+  
+        if (dis > adm) {
+          return [
+            `Observation: Discharges exceed admissions by ${(dis - adm).toLocaleString()}.`,
+            `RCA: Might be backlog clearing, seasonal variation, or reduced admission rates.`
+          ];
+        }
+  
+        return ['Observation: Admissions and discharges are balanced.', 'RCA: Reflects efficient patient flow and care transitions.'];
       }
+  
       case 'Issued vs Expired': {
         const issued = sum('Issued');
         const expired = sum('Expired');
-        if (!issued && !expired) return ['No data available.'];
-        if (!issued && expired) return ['Issues data missing, but expired stock is present — investigate further.'];
-        if (expired > issued * 0.1) return ['Expired stock is more than 10% of issued — review inventory practices.'];
-        if (expired === 0) return ['Zero expirations — excellent stock rotation and usage.'];
-        return ['Expired stock is within acceptable threshold.'];
+        if (!issued && !expired) return ['Observation: No data available.'];
+  
+        if (expired > issued * 0.1) {
+          return [
+            'Observation: Expired stock is more than 10% of issued.',
+            'RCA: Poor inventory rotation or excess ordering leading to wastage.'
+          ];
+        }
+  
+        return [
+          'Observation: Expired stock is within acceptable limits.',
+          'RCA: Inventory is managed well with timely usage.'
+        ];
+      }
+  
+      case 'Lab vs Radiology': {
+        const lab = sum('Lab Tests');
+        const rad = sum('Radiology Tests');
+        if (!lab && !rad) return ['Observation: No data available.'];
+  
+        if (rad > lab && allValues('Profitability') < 0) {
+          return [
+            'Observation: Radiology tests exceed lab tests.',
+            'RCA: Potential overuse of imaging without cost-effective results.'
+          ];
+        }
+  
+        return [
+          lab > rad
+            ? 'Observation: Lab tests are higher than radiology.'
+            : 'Observation: Radiology tests are higher than lab.',
+          'RCA: Reflects service focus or physician ordering patterns.'
+        ];
+      }
+  
+      case 'Repair vs Purchase': {
+        const repair = sum('Repair Cost');
+        const purchase = sum('Purchase Cost');
+        if (!repair && !purchase) return ['Observation: No data available.'];
+  
+        return [
+          `Observation: ${repair > purchase ? 'Repairs' : 'Purchases'} dominate.`,
+          repair > purchase
+            ? 'RCA: Indicates aging equipment or deferred replacements.'
+            : 'RCA: Investment in new infrastructure or capital upgrades.'
+        ];
+      }
+  
+      case 'IPD vs OPD': {
+        const ipd = sum('IPD Score');
+        const opd = sum('OPD Score');
+        if (!ipd && !opd) return ['Observation: No data available.'];
+  
+        return [
+          `Observation: ${ipd > opd ? 'IPD' : 'OPD'} dominates.`,
+          ipd > opd
+            ? 'RCA: Indicates complex inpatient care or longer stays.'
+            : 'RCA: Strong outpatient care possibly reducing admissions.'
+        ];
+      }
+  
+      case 'Departmental Revenue': {
+        const total = data.reduce((acc, curr) => acc + curr.value, 0);
+        return [
+          `Observation: Total departmental revenue is ₹${total.toLocaleString()}.`,
+          'RCA: Evaluate departments with below-average contribution.'
+        ];
+      }
+  
+      case 'Profitability': {
+        const total = data.reduce((acc, curr) => acc + curr.value, 0);
+        const revenue = allValues('Revenue vs Expense');
+        return [
+          `Observation: Overall profitability is ₹${total.toLocaleString()}.`,
+          total < 0 && revenue < 0
+            ? 'RCA: System-wide financial inefficiencies — urgent review required.'
+            : 'RCA: Profit varies by department, optimize low-margin areas.'
+        ];
+      }
+  
+      case 'Patient Volume': {
+        const total = data.reduce((acc, curr) => acc + curr.value, 0);
+        const hrTurnover = allValues('Joinee vs Resignation');
+        return [
+          `Observation: Patient volume is ${total.toLocaleString()}.`,
+          total > 2000 && hrTurnover < 0
+            ? 'RCA: Staff may be under strain — review HR allocations.'
+            : 'RCA: Monitor volume to optimize scheduling and resource allocation.'
+        ];
+      }
+  
+      default:
+        return ['Observation: No specific insights available.'];
+    }
+  };
+  const renderActions = (title, data, charts = {}) => {
+    const sum = (label, titleOverride = title) => charts?.[titleOverride]?.find(d => d.label === label)?.value || 0;
+    const allValues = (t) => charts?.[t]?.reduce((acc, curr) => acc + curr.value, 0) || 0;
+  
+    switch (title) {
+      case 'Revenue vs Expense': {
+        const rev = sum('Revenue');
+        const exp = sum('Expense');
+        const rad = sum('Radiology Tests', 'Lab vs Radiology');
+        const lab = sum('Lab Tests', 'Lab vs Radiology');
+        const adm = sum('Admissions', 'Admissions vs Discharges');
+        const dis = sum('Discharges', 'Admissions vs Discharges');
+        const expired = sum('Expired', 'Issued vs Expired');
+        const issued = sum('Issued', 'Issued vs Expired');
+        const repair = sum('Repair Cost', 'Repair vs Purchase');
+        const purchase = sum('Purchase Cost', 'Repair vs Purchase');
+        const profitability = allValues('Profitability');
+  
+        let actions = [];
+        if (rev < exp) {
+          actions.push(`Hospital running at a deficit of ₹${(exp - rev).toLocaleString()} — initiate cross-departmental cost review.`);
+          if (rad < lab) actions.push(`Radiology test volume (${rad.toLocaleString()}) is lower than Lab (${lab.toLocaleString()}) — check clinician referral patterns and equipment utilization.`);
+          if (adm < dis) actions.push(`Admissions (${adm.toLocaleString()}) were lower than discharges (${dis.toLocaleString()}) — assess referral efficiency and patient inflow.`);
+          if (expired > issued * 0.1) actions.push(`Expired inventory (${expired.toLocaleString()}) exceeded 10% of issued (${issued.toLocaleString()}) — improve pharmacy rotation and forecasting.`);
+          if (repair > purchase) actions.push(`Repair cost (₹${repair.toLocaleString()}) exceeded purchase cost (₹${purchase.toLocaleString()}) — evaluate high-maintenance assets.`);
+          if (profitability < 0) actions.push('Negative profitability across departments — audit revenue leakages and cost inefficiencies.');
+          actions.push('Coordinate between finance, maintenance, diagnostics, and HR to optimize expenditure and performance.');
+        } else {
+          actions.push('Revenue exceeds expense — maintain discipline and audit for further optimization potential.');
+        }
+        return actions;
       }
       case 'Lab vs Radiology': {
         const lab = sum('Lab Tests');
         const rad = sum('Radiology Tests');
-        if (!lab && !rad) return ['No data available.'];
-        if (rad > lab && allValues('Profitability') < 0) {
-          return ['Radiology tests exceed lab tests — consider reviewing diagnostic cost efficiency.'];
+        const profit = allValues('Profitability');
+        const exp = sum('Expense', 'Revenue vs Expense');
+  
+        let actions = [];
+        if (rad > lab && profit < 0) {
+          actions.push(`Radiology volume (${rad.toLocaleString()}) exceeds Lab (${lab.toLocaleString()}) with low profitability — review diagnostic cost efficiency.`);
+        } else if (lab > rad) {
+          actions.push(`Lab volume (${lab.toLocaleString()}) dominates — evaluate whether imaging is underutilized.`);
         }
-        return lab > rad
-          ? ['Lab test volume is healthy compared to radiology.']
-          : ['Radiology tests exceed lab tests — check for overuse or imbalance.'];
+        actions.push('Balance diagnostic spend based on clinical need and ROI across departments.');
+        if (exp > 0) actions.push('Coordinate with finance to analyze test yield vs cost impact.');
+        return actions;
+      }
+      case 'Admissions vs Discharges': {
+        const adm = sum('Admissions');
+        const dis = sum('Discharges');
+        const ipd = sum('IPD Score', 'IPD vs OPD');
+  
+        let actions = [];
+        if (adm > dis) {
+          actions.push(`Admissions (${adm.toLocaleString()}) exceed discharges (${dis.toLocaleString()}) — review discharge planning and bed turnover.`);
+          if (ipd > 1000) actions.push(`High IPD score (${ipd}) — verify if prolonged stays are delaying discharges.`);
+        } else if (dis > adm) {
+          actions.push(`Discharges (${dis.toLocaleString()}) exceed admissions (${adm.toLocaleString()}) — may indicate seasonal clearance or reduced new admissions.`);
+        }
+        actions.push('Collaborate with OPD teams, diagnostics, and HR to improve patient flow.');
+        return actions;
+      }
+      case 'Issued vs Expired': {
+        const issued = sum('Issued');
+        const expired = sum('Expired');
+        const expPercent = ((expired / issued) * 100).toFixed(1);
+  
+        let actions = [];
+        if (expired > issued * 0.1) actions.push(`Expired stock (${expPercent}%) exceeds acceptable threshold — enforce FEFO and adjust purchase cycles.`);
+        else actions.push(`Expired stock within limits (${expPercent}%) — maintain current inventory practices.`);
+        actions.push('Link pharmacy alerts with clinical departments to avoid overstocking or underutilization.');
+        return actions;
+      }
+      case 'Joinee vs Resignation': {
+        const joinees = sum('Joinees');
+        const resigns = sum('Resignations');
+        const patients = allValues('Patient Volume');
+  
+        let actions = [];
+        if (resigns > joinees) {
+          actions.push(`Resignations (${resigns}) exceed joinees (${joinees}) — review exit feedback and staff morale.`);
+          if (patients > 2000) actions.push(`High patient volume (${patients.toLocaleString()}) may be contributing to burnout.`);
+        }
+        actions.push('HR, Admin, and Department Heads must jointly plan staffing aligned to load and retention.');
+        return actions;
       }
       case 'Repair vs Purchase': {
         const repair = sum('Repair Cost');
         const purchase = sum('Purchase Cost');
-        if (!repair && !purchase) return ['No data available.'];
-        if (repair > purchase && allValues('Revenue vs Expense') < 0) {
-          return ['Repair cost exceeds purchase cost and revenue is low — suggests outdated infrastructure draining resources.'];
+        const profit = allValues('Profitability');
+  
+        let actions = [];
+        if (repair > purchase) {
+          actions.push(`Repair cost (₹${repair.toLocaleString()}) exceeded purchase (₹${purchase.toLocaleString()}) — assess if older assets need replacement.`);
+          if (profit < 0) actions.push('Low profitability may be due to recurring equipment downtimes — check asset performance logs.');
+        } else {
+          actions.push('Equipment maintenance within reasonable limits — continue preventive checks.');
         }
-        return repair > purchase
-          ? ['Repair cost exceeds purchase cost — consider replacing aging equipment.']
-          : ['Repair cost under control compared to new purchases.'];
+        actions.push('Finance and Maintenance teams should jointly evaluate lifecycle cost of critical equipment.');
+        return actions;
       }
       case 'IPD vs OPD': {
         const ipd = sum('IPD Score');
         const opd = sum('OPD Score');
-        if (!ipd && !opd) return ['No data available.'];
-        return ipd > opd
-          ? ['Higher IPD score — ensure bed and staff availability.']
-          : ['OPD dominates — opportunity for preventive healthcare and early interventions.'];
+  
+        return [
+          ipd > opd
+            ? `IPD score (${ipd}) exceeds OPD (${opd}) — review bed utilization, referral rates, and resource load.`
+            : `OPD footfall (${opd}) is higher than IPD (${ipd}) — opportunity to strengthen preventive care.`,
+          'Coordinate between OPD physicians and inpatient teams for seamless transitions.'
+        ];
       }
       case 'Departmental Revenue': {
-        const total = data.reduce((acc, curr) => acc + curr.value, 0);
-        return [`Total departmental revenue: ₹${total.toLocaleString()}. Focus on underperforming departments.`];
+        const total = allValues(title);
+        return [
+          `Total departmental revenue: ₹${total.toLocaleString()}`,
+          'Support underperforming units with marketing, resources, or diagnostic alignment.'
+        ];
       }
       case 'Profitability': {
-        const total = data.reduce((acc, curr) => acc + curr.value, 0);
-        const revenue = allValues('Revenue vs Expense');
-        if (total < 0 && revenue < 0) {
-          return [`Negative profitability and revenue deficit — urgent review of department-wise budgeting needed.`];
-        }
-        return [`Overall profitability: ₹${total.toLocaleString()}. Evaluate low-profit departments.`];
+        const total = allValues(title);
+        const rev = allValues('Revenue vs Expense');
+        return [
+          `Total profitability: ₹${total.toLocaleString()}`,
+          total < 0 && rev < 0
+            ? 'Both revenue and profit are negative — urgent inter-departmental performance review needed.'
+            : 'Maintain focus on improving margins via service mix and efficiency.'
+        ];
       }
       case 'Patient Volume': {
-        const total = data.reduce((acc, curr) => acc + curr.value, 0);
-        const hrTurnover = allValues('Joinee vs Resignation');
-        if (total > 2000 && hrTurnover < 0) {
-          return [`High patient volume: ${total.toLocaleString()} — likely stressing staff, review HR allocations.`];
-        }
-        return [`Total patient volume: ${total.toLocaleString()} — plan staffing accordingly.`];
+        const total = allValues(title);
+        const hrTurnover = sum('Resignations', 'Joinee vs Resignation') - sum('Joinees', 'Joinee vs Resignation');
+  
+        return [
+          `Total patient volume: ${total.toLocaleString()}`,
+          hrTurnover > 0 && total > 2000
+            ? 'High patient load with net staff loss — adjust manpower planning immediately.'
+            : 'Use footfall trends to fine-tune appointment scheduling and staff allocation.'
+        ];
       }
       default:
-        return ['No specific insights available.'];
+        return ['No dynamic recommendations available.'];
     }
-  };
-  
-  const renderActions = (title) => {
-    const map = {
-      'Revenue vs Expense': [
-        'Audit major expense heads and identify optimization areas.',
-        'Explore new revenue channels or improve billing efficiency.',
-        'Benchmark against previous months to spot financial drifts.'
-      ],
-      'Lab vs Radiology': [
-        'Ensure clinical guidelines are followed for test requisitions.',
-        'Analyze diagnostic yield of radiology tests.',
-        'Balance lab and imaging budgets proportionally.'
-      ],
-      'Issued vs Expired': [
-        'Tighten inventory checks and rotation schedules.',
-        'Implement expiry alerts and reorder tracking.',
-        'Train pharmacy/store staff on FEFO principles.'
-      ],
-      'Joinee vs Resignation': [
-        'Conduct exit interviews to understand root causes of resignations.',
-        'Improve onboarding and mentorship programs.',
-        'Assess team morale and workload regularly.'
-      ],
-      'Repair vs Purchase': [
-        'Evaluate ROI of repairing vs replacing frequently broken equipment.',
-        'Introduce maintenance schedules to reduce breakdowns.',
-        'Reassess procurement strategy based on usage.'
-      ],
-      'IPD vs OPD': [
-        'Strengthen referral pipelines and follow-up tracking.',
-        'Ensure optimal bed allocation and discharge planning.',
-        'Enhance OPD to IPD conversion efficiency.'
-      ],
-      'Admissions vs Discharges': [
-        'Review average length of stay per department.',
-        'Ensure timely discharge planning and coordination.',
-        'Address discharge delays related to documentation or post-care logistics.'
-      ],
-      'Departmental Revenue': [
-        'Support underperforming departments with training/resources.',
-        'Promote high-performing services.',
-        'Review inter-departmental referrals and their impact.'
-      ],
-      'Profitability': [
-        'Revisit pricing for low-margin departments.',
-        'Improve operational efficiency in resource-heavy units.',
-        'Benchmark against industry profitability standards.'
-      ],
-      'Patient Volume': [
-        'Distribute staffing based on footfall trends.',
-        'Use this data to optimize appointment scheduling.',
-        'Plan infrastructure expansions accordingly.'
-      ]
-    };
-    return map[title] || ['No recommended actions available.'];
   };
   
 
   const monthNameToNumber = (name) => {
     const monthMap = {
-      January: '01', February: '02', March: '03', April: '04',
-      May: '05', June: '06', July: '07', August: '08',
-      September: '09', October: '10', November: '11', December: '12',
+      january: '01', february: '02', march: '03', april: '04',
+      may: '05', june: '06', july: '07', august: '08',
+      september: '09', october: '10', november: '11', december: '12',
     };
-    return monthMap[name] || name;
+    return monthMap[name?.toLowerCase()] || name;
   };
-
   const handleDownloadPDF = () => {
     const element = reportRef.current;
     const opt = {
